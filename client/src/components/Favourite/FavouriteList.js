@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
-import Title from "../Title";
+// import Title from "../Title";
 // import Link from "@mui/material/Link";
 import FavouriteItem from "./FavouriteItem";
 
@@ -33,9 +33,7 @@ export default function FavouriteList({ favCoinsLists }) {
   }, [favCoinsLists]);
 
   return (
-    <div>
-      <Title>Favourite Coins</Title>
-
+    <>
       {favCoinsList.length > 0 ? (
         <FavouriteItem coins={favCoinsList} />
       ) : (
@@ -43,6 +41,6 @@ export default function FavouriteList({ favCoinsLists }) {
           empty
         </Typography>
       )}
-    </div>
+    </>
   );
 }

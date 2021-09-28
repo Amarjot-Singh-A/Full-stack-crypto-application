@@ -1,41 +1,44 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-
-// import { Link } from "react-router-dom";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import { Link } from "react-router-dom";
+import Title from "../Title";
 
 export default function FavouriteItem({ coins }) {
   return (
-    <div className="fav-items">
+    // <div className="fav-items">
+    <>
       {coins &&
         coins.map((obj, i) => {
           return (
-            <div className="favourite_item">
-              <Typography component="p" variant="h4">
-                {Object.keys(obj)}
-              </Typography>
-              <Typography color="text.secondary" sx={{ flex: 1 }}>
-                {Object.values(obj)}
-              </Typography>
-              <Link
-                href={{ pathname: `/coin/${Object.keys(obj).join("")}` }}
-                key={i}
-                color="primary"
+            <Grid item xs={12} md={4} lg={2} key={Object.keys(obj)}>
+              <Paper
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  height: 240,
+                }}
               >
-                More Details
-              </Link>
-            </div>
+                  <Title>Favourite Coins</Title>
+                  <Typography component="p" variant="h6">
+                    {Object.keys(obj).toString().toUpperCase()}
+                  </Typography>
+                  <Typography color="text.secondary" sx={{ flex: 1 }}>
+                    {`${Object.values(obj)} CAD` }
+                  </Typography>
+                  <Link
+                    to={{ pathname: `/coin/${Object.keys(obj).join("")}` }}
+                    key={i}
+                  >
+                    More Details
+                  </Link>
+              </Paper>
+            </Grid>
           );
         })}
-    </div>
+        </>
+    // </div>
   );
 }
-
-// {coins && coins.map((obj, i) => {
-//     return <Link to = {{pathname : `/coin/${Object.keys(obj).join('')}`}} key={i}>
-//     <div className='favourite_item'  >
-//         <p>{Object.keys(obj)}</p>
-//         <p>{Object.values(obj)}</p>
-//     </div>
-//     </Link>
-// })}

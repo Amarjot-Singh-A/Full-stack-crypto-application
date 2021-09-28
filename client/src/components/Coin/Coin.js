@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   AreaChart,
   Area,
@@ -17,6 +17,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
+import Title from "../Title";
 // import "./Coin.css";
 
 
@@ -26,8 +27,8 @@ export default function Coin() {
   const [coin, setCoin] = useState("");
   const [crypto, setCrypto] = useState(0);
   const [price, setPrice] = useState(0);
-//   const { id } = useParams();
-  const id = 'bitcoin'
+  const { id } = useParams();
+  // const id = 'bitcoin'
   const [stats, setStats] = useState("");
   const [moneyInput, setMoneyInput] = useState(() => {
     let moneyInputLocal = JSON.parse(localStorage.getItem("moneyInput"));
@@ -226,11 +227,17 @@ export default function Coin() {
     );
   };
 
+
+  /**
+   * TODO - change the table structure to remove repitition
+   */
+
   const displayStats = (stats) => {
     return (
       Object.keys(stats).length !== 0 && (
         <TableContainer component={Paper}>
-          <Table aria-label="stats table">
+          <Title>Statistics</Title>
+          <Table size="small" aria-label="stats table">
             <TableHead>
               <TableRow>
                 <TableCell>Title</TableCell>
@@ -306,7 +313,7 @@ export default function Coin() {
   const displayDescription = (stats) => {
     return (
       <div className="desc_coin">
-        <h3>Description</h3>
+        <Title>Description</Title>
         <p>
           {Object.keys(stats).length > 0 &&
             stats.description.en.replace(/[^\w\s]/gi, "")}
