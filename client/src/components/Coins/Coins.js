@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import Paper from "@mui/material/Paper";
+import Grid from '@mui/material/Grid';
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -52,169 +54,143 @@ export default function Coins() {
 
   const renderTable = (coins) => {
     return (
+      <Grid item xs={12}>
       <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
         <TableContainer>
           <Table stickyHeader aria-label="coins table">
             <TableHead>
               <TableRow>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="1"
                 >
                   Image
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="2"
                 >
                   Symbol
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="3"
                 >
                   Name
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="4"
                 >
                   Id
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="5"
                 >
                   Price
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="6"
                 >
                   Ath
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="7"
                 >
                   Market cap
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="8"
                 >
                   24h
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="9"
                 >
                   Volume
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="10"
                 >
                   High 24h
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="11"
                 >
                   Low 24h
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="12"
                 >
                   Ath change percentage
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="13"
                 >
                   Ath date
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="14"
                 >
                   Atl
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="15"
                 >
                   Atl change percentage
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="16"
                 >
                   Atl date
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="17"
                 >
                   Circulating supply
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="18"
                 >
                   Fully diluted valuation
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="19"
                 >
                   Last updated
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="20"
                 >
                   Market cap change 24h
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="21"
                 >
                   Market cap change percentage 24h
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="22"
                 >
                   Market cap rank
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="23"
                 >
                   Max supply
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="24"
                 >
                   Price change percentage 24h
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="25"
                 >
                   Price change percentage 24h in currency
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="26"
                 >
                   ROI
                 </TableCell>
                 <TableCell
-                  style={{ backgroundColor: "black", color: "white" }}
                   key="27"
                 >
                   Total supply
@@ -329,8 +305,9 @@ export default function Coins() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      </Grid>
     );
   };
 
-  return <div>{renderTable(coins)}</div>;
+  return renderTable(coins)
 }
