@@ -1,6 +1,12 @@
 import * as React from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useRouteMatch,
+  useHistory,
+} from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -16,11 +22,14 @@ import Grid from "@mui/material/Grid";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import ListItems from "./ListItems";
-import Trending from "./Trending/Trending";
-import Coins from "./Coins/Coins";
-import Coin from "./Coin/Coin";
-import Favourite from "./Favourite/Favourite";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ListItems from "../ListItems/ListItems";
+import Trending from "../Trending/Trending";
+import Coins from "../Coins/Coins";
+import Coin from "../Coin/Coin";
+import Favourite from "../Favourite/Favourite";
+import Settings from "../Settings/Settings";
+import Swal from "sweetalert2";
 
 const drawerWidth = 240;
 
@@ -75,7 +84,64 @@ export default function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  let { path } = useRouteMatch();
+  const history = useHistory();
 
+  const handleLogOut = async (event) => {
+    event.preventDefault()
+    console.log("logout clicked");
+    await fetch('http://localhost:5000/logout', {
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("logoutdata", data);
+        if (data.isLogged) {
+          Swal.fire({
+            title: "Logout Attempt Failed",
+            icon: "error",
+            html: "Please try to logout again",
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+        } else {
+          if (!data.isLogged && Boolean(data.error)) {
+            Swal.fire({
+              title: "Logout Attempt Failed",
+              icon: "error",
+              html: "User session doesnt exist",
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            }).then((result) => {
+              history.push("/");
+            });
+          } else if (!data.isLogged) {
+            Swal.fire({
+              title: "Logout Successful",
+              icon: "success",
+              html: "Redirecting to Sign In ",
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            }).then((result) => {
+              history.push("/");
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("error fetching logout component", err);
+      });
+  };
 
   return (
     <Router>
@@ -114,6 +180,9 @@ export default function DashboardContent() {
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
+              <IconButton color="inherit" onClick={handleLogOut}>
+                <LogoutIcon />
+              </IconButton>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
@@ -130,7 +199,9 @@ export default function DashboardContent() {
               </IconButton>
             </Toolbar>
             <Divider />
-            <List><ListItems /></List>
+            <List>
+              <ListItems />
+            </List>
             <Divider />
           </Drawer>
           <Box
@@ -149,9 +220,7 @@ export default function DashboardContent() {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
               <Grid container spacing={3}>
                 <Switch>
-
-                  <Route path="/" exact>
-
+                  <Route path={path} exact>
                     {/* Favvourite Coins */}
 
                     <Favourite />
@@ -159,25 +228,25 @@ export default function DashboardContent() {
                     {/* Trending */}
 
                     <Trending />
-
                   </Route>
 
-                  <Route path="/Coins" exact>
-
+                  <Route path={`${path}/coins`} exact>
                     {/* List of Coins */}
 
                     <Coins />
-
                   </Route>
 
-                  <Route path="/Coin/:id" exact>
-
+                  <Route path={`${path}/coin/:id`} exact>
                     {/* Individual Coin */}
 
                     <Coin />
-
                   </Route>
+                  <Route path={`${path}/settings`} exact>
+                    {/* Settings page*/}
 
+                    <Settings />
+                  </Route>
+                
                 </Switch>
               </Grid>
             </Container>

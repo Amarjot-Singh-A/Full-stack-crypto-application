@@ -2,10 +2,10 @@
   "name": "cryptoapp",
   "version": "1.0.0",
   "description": "crypto app with user profiles and market data",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js "
+    "start": "nodemon server/server.js "
   },
   "keywords": [
     "crypto",

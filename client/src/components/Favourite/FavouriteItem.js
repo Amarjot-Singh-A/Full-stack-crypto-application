@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
-import Title from "../Title";
+import Title from "../Title/Title";
 
 export default function FavouriteItem({ coins }) {
   return (
@@ -29,7 +29,7 @@ export default function FavouriteItem({ coins }) {
                     {`${Object.values(obj)} CAD` }
                   </Typography>
                   <Link
-                    to={{ pathname: `/coin/${Object.keys(obj).join("")}` }}
+                    to={{ pathname: `dashboard/coin/${Object.keys(obj).join("")}` }}
                     key={i}
                   >
                     More Details

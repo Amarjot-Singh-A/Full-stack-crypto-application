@@ -6,7 +6,7 @@ import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Title from "../Title";
+import Title from "../Title/Title";
 import TrendingList from "./TrendingList";
 
 const axios = require("axios");
@@ -24,7 +24,6 @@ export default function Trending() {
       .get(url)
       .then((response) => {
         let allData = response.data.coins;
-        console.log(allData);
         setTrending(allData);
       })
       .catch((error) => console.error(`Error -> ${error}`));

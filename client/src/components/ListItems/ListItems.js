@@ -14,19 +14,19 @@ export default function ListItems() {
   const history = useHistory();
   return (
     <div>
-      <ListItem button onClick={() => history.push("/")}>
+      <ListItem button onClick={() => history.push("/dashboard")}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button onClick={() => history.push("/coins")}>
+      <ListItem button onClick={() => history.push("/dashboard/coins")}>
         <ListItemIcon>
           <AttachMoneyIcon />
         </ListItemIcon>
         <ListItemText primary="Coins" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => history.push("/dashboard/settings")}>
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>

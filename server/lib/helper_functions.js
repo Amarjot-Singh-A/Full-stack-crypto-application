@@ -1,3 +1,9 @@
+/**
+ * TODO - change sqlQuery format 
+ * `SELECT * FROM user_tbl WHERE username = ? AND 
+                      password = ?`, [username, password],        
+       (err, results, fields)
+ */
 
 const executeQuery = (connection, sqlQuery) => {
     return new Promise((resolve, reject) => {
@@ -55,8 +61,12 @@ const verifySignIn = async (connection, bcrypt, email, password) => {
     try {
         const query = `SELECT first_name,password FROM users WHERE email='${email}'`
         let queryResult = await executeQuery(connection, query)
-        let isPasswordMatch = await bcryptComparePassword(bcrypt, password, queryResult[0].password)
-        return { isPasswordMatch: isPasswordMatch, firstName: queryResult[0].first_name }
+        if(Object.keys(queryResult).length > 0 ){
+            let isPasswordMatch = await bcryptComparePassword(bcrypt, password, queryResult[0].password)
+            return { isPasswordMatch: isPasswordMatch, isEmailMatch: true ,firstName: queryResult[0].first_name }
+        }else{
+            return { isPasswordMatch : false , isEmailMatch : false}
+        }
     }
 
     catch (err) {
