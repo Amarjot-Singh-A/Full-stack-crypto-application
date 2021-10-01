@@ -12,7 +12,16 @@ const oneDay = 1000 * 60 * 60 * 24;
 
 /**
  * TODO : validate user credentials before inserting into db
+ * TODO : use checkAuth middleware for every user request, security
  */
+
+//  const checkAuth = (req, res, next) => {
+//   if (!req.session.isLogged) {
+//     res.redirect("/signin");
+//     return;
+//   }
+//   next();
+// }
 
 app.use(
   cors({
@@ -106,7 +115,7 @@ app.post("/signin", async (req, res) => {
     } else {
       console.log("email or password doesnt match");
       res.status(401).send({
-        result: false,
+        loggedIn: false,
         error: "email or password doesnt match",
       });
     }

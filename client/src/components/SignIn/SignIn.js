@@ -37,7 +37,7 @@ export default function SignIn() {
       const dataReturn = await sendData(values, signInURL);
       console.log("datareturn", dataReturn);
       if (Boolean(dataReturn.error)) {
-        setDataRetrieve(dataReturn.error);
+        setDataRetrieve(dataReturn.loggedIn.toString());
         Swal.fire({
           title: "Login Attempt Failed",
           icon: 'error',
@@ -60,7 +60,7 @@ export default function SignIn() {
             Swal.showLoading();
           }
         }).then((result) => {
-          history.push("/dashboard");
+          history.push("/dashboard",{ isLogged : `${dataReturn.loggedIn}`});
         });
       }
     },

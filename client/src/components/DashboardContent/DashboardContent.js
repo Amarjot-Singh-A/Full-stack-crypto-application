@@ -4,6 +4,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
   useRouteMatch,
   useHistory,
 } from "react-router-dom";
@@ -86,13 +87,17 @@ export default function DashboardContent() {
   };
   let { path } = useRouteMatch();
   const history = useHistory();
+  const isLogged = history.location.state?.isLogged
+    ? JSON.parse(history.location.state.isLogged)
+    : false;
+  console.log("islogged ", isLogged);
 
   const handleLogOut = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     console.log("logout clicked");
-    await fetch('http://localhost:5000/logout', {
-      method: 'GET',
-      credentials: 'include'
+    await fetch("http://localhost:5000/logout", {
+      method: "GET",
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
@@ -143,116 +148,125 @@ export default function DashboardContent() {
       });
   };
 
-  return (
-    <Router>
-      <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <AppBar position="absolute" open={open}>
-            <Toolbar
-              sx={{
-                pr: "24px", // keep right padding when drawer closed
-              }}
-            >
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer}
+  const dashBoardRender = () => {
+    if (isLogged) {
+      return (
+        <Router>
+          <ThemeProvider theme={mdTheme}>
+            <Box sx={{ display: "flex" }}>
+              <CssBaseline />
+              <AppBar position="absolute" open={open}>
+                <Toolbar
+                  sx={{
+                    pr: "24px", // keep right padding when drawer closed
+                  }}
+                >
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={toggleDrawer}
+                    sx={{
+                      marginRight: "36px",
+                      ...(open && { display: "none" }),
+                    }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    sx={{ flexGrow: 1 }}
+                  >
+                    Dashboard
+                  </Typography>
+                  <IconButton color="inherit">
+                    <Badge badgeContent={4} color="secondary">
+                      <NotificationsIcon />
+                    </Badge>
+                  </IconButton>
+                  <IconButton color="inherit" onClick={handleLogOut}>
+                    <LogoutIcon />
+                  </IconButton>
+                </Toolbar>
+              </AppBar>
+              <Drawer variant="permanent" open={open}>
+                <Toolbar
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    px: [1],
+                  }}
+                >
+                  <IconButton onClick={toggleDrawer}>
+                    <ChevronLeftIcon />
+                  </IconButton>
+                </Toolbar>
+                <Divider />
+                <List>
+                  <ListItems />
+                </List>
+                <Divider />
+              </Drawer>
+              <Box
+                component="main"
                 sx={{
-                  marginRight: "36px",
-                  ...(open && { display: "none" }),
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? theme.palette.grey[100]
+                      : theme.palette.grey[900],
+                  flexGrow: 1,
+                  height: "100vh",
+                  overflow: "auto",
                 }}
               >
-                <MenuIcon />
-              </IconButton>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
-              >
-                Dashboard
-              </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit" onClick={handleLogOut}>
-                <LogoutIcon />
-              </IconButton>
-            </Toolbar>
-          </AppBar>
-          <Drawer variant="permanent" open={open}>
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                px: [1],
-              }}
-            >
-              <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-            <Divider />
-            <List>
-              <ListItems />
-            </List>
-            <Divider />
-          </Drawer>
-          <Box
-            component="main"
-            sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-              flexGrow: 1,
-              height: "100vh",
-              overflow: "auto",
-            }}
-          >
-            <Toolbar />
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <Grid container spacing={3}>
-                <Switch>
-                  <Route path={path} exact>
-                    {/* Favvourite Coins */}
+                <Toolbar />
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                  <Grid container spacing={3}>
+                    <Switch>
+                      <Route path={path} exact>
+                        {/* Favvourite Coins */}
 
-                    <Favourite />
+                        <Favourite />
 
-                    {/* Trending */}
+                        {/* Trending */}
 
-                    <Trending />
-                  </Route>
+                        <Trending />
+                      </Route>
 
-                  <Route path={`${path}/coins`} exact>
-                    {/* List of Coins */}
+                      <Route path={`${path}/coins`} exact>
+                        {/* List of Coins */}
 
-                    <Coins />
-                  </Route>
+                        <Coins />
+                      </Route>
 
-                  <Route path={`${path}/coin/:id`} exact>
-                    {/* Individual Coin */}
+                      <Route path={`${path}/coin/:id`} exact>
+                        {/* Individual Coin */}
 
-                    <Coin />
-                  </Route>
-                  <Route path={`${path}/settings`} exact>
-                    {/* Settings page*/}
+                        <Coin />
+                      </Route>
+                      <Route path={`${path}/settings`} exact>
+                        {/* Settings page*/}
 
-                    <Settings />
-                  </Route>
-                
-                </Switch>
-              </Grid>
-            </Container>
-          </Box>
-        </Box>
-      </ThemeProvider>
-    </Router>
-  );
+                        <Settings />
+                      </Route>
+                    </Switch>
+                  </Grid>
+                </Container>
+              </Box>
+            </Box>
+          </ThemeProvider>
+        </Router>
+      );
+    }else{
+      return (
+        <Redirect to = '/' />
+      )
+    }
+  };
+
+  return <>{dashBoardRender()}</>;
 }
