@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
-// import Title from "../Title";
-// import Link from "@mui/material/Link";
 import FavouriteItem from "./FavouriteItem";
 
 const axios = require("axios");
 
 export default function FavouriteList({ favCoinsLists }) {
   const [favCoinsList, setFavCoinsList] = useState([]);
+
 
   useEffect(() => {
     function displayFavList(favCoinsLists) {

@@ -11,15 +11,13 @@ import {
 } from "recharts";
 
 import TableContainer from "@mui/material/TableContainer";
-import Paper from '@mui/material/Paper';
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import Title from "../Title/Title";
-// import "./Coin.css";
-
 
 const axios = require("axios");
 
@@ -28,13 +26,16 @@ export default function Coin() {
   const [crypto, setCrypto] = useState(0);
   const [price, setPrice] = useState(0);
   const { id } = useParams();
-  // const id = 'bitcoin'
   const [stats, setStats] = useState("");
   const [moneyInput, setMoneyInput] = useState(() => {
     let moneyInputLocal = JSON.parse(localStorage.getItem("moneyInput"));
     return moneyInputLocal || "";
   });
 
+  /**
+   * todo-fetch fav coins based on user email, and set them to local storage.
+   *
+   */
   const [isFav, setIsFav] = useState(() => {
     let checkLocalStorage = JSON.parse(localStorage.getItem("favouriteCoins"));
     if (checkLocalStorage) {
@@ -44,18 +45,18 @@ export default function Coin() {
     }
   });
 
-  const [graphInterval, setGraphInterval] = useState("daily")
+  const [graphInterval, setGraphInterval] = useState("daily");
 
   const graphIntervals = [
     { name: "Minute", value: "minutely" },
     { name: "Hourly", value: "hourly" },
     { name: "Daily", value: "daily" },
-    { name: "Weekly", value: "weekly" }
-  ]
+    { name: "Weekly", value: "weekly" },
+  ];
 
-  let graphUrl = `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=cad&days=90&interval=${graphInterval}`
-  const priceUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=cad`
-  const statsUrl = `https://api.coingecko.com/api/v3/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
+  let graphUrl = `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=cad&days=90&interval=${graphInterval}`;
+  const priceUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=cad`;
+  const statsUrl = `https://api.coingecko.com/api/v3/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`;
 
   const formatChartData = (data) => {
     return data.map((datapoint) => {
@@ -69,69 +70,108 @@ export default function Coin() {
   const fetchGraph = useCallback(async () => {
     try {
       let respone = await axios.get(graphUrl);
-      respone = await formatChartData(respone.data.prices)
+      respone = await formatChartData(respone.data.prices);
       setCoin(respone);
     } catch (err) {
-      console.error(`Error inside fetchGraph -> ${err}`)
+      console.error(`Error inside fetchGraph -> ${err}`);
     }
   }, [graphUrl]);
 
   const fetchStats = useCallback(async () => {
     try {
-      let response = await axios.get(statsUrl)
-      response = response.data
-      setStats(response)
+      let response = await axios.get(statsUrl);
+      response = response.data;
+      setStats(response);
     } catch (err) {
-      console.error(`Error inside fetchStats -> ${err}`)
+      console.error(`Error inside fetchStats -> ${err}`);
     }
   }, [statsUrl]);
 
   useEffect(() => {
-    fetchGraph()
-    fetchStats()
-    const fetchGraphTimer = setInterval(() => fetchGraph(), 86400000)
+    fetchGraph();
+    fetchStats();
+    const fetchGraphTimer = setInterval(() => fetchGraph(), 86400000);
     return () => {
-      clearInterval(fetchGraphTimer)
-    }
-  }, [fetchGraph, fetchStats])
+      clearInterval(fetchGraphTimer);
+    };
+  }, [fetchGraph, fetchStats]);
 
   useEffect(() => {
     function getCryptoPrice() {
       axios
         .get(priceUrl)
         .then((res) => {
-          let priceOfCoin = Object.values(res.data)[0].cad
-          setPrice(priceOfCoin)
+          let priceOfCoin = Object.values(res.data)[0].cad;
+          setPrice(priceOfCoin);
         })
-        .catch((err) => console.error(`Error inside getCryptoPrice -> ${err}`))
+        .catch((err) => console.error(`Error inside getCryptoPrice -> ${err}`));
     }
-    getCryptoPrice()
-    const getCryptoPriceTimer = setInterval(() => getCryptoPrice(), 200000)
+    getCryptoPrice();
+    const getCryptoPriceTimer = setInterval(() => getCryptoPrice(), 200000);
     return () => {
-      clearInterval(getCryptoPriceTimer)
+      clearInterval(getCryptoPriceTimer);
     };
   }, [priceUrl]);
 
   const moneyToCrypto = (event) => {
-    localStorage.setItem("moneyInput", event.target.value)
-    setMoneyInput(event.target.value)
-    setCrypto(Number.parseFloat((1 / price) * event.target.value).toFixed(7))
+    localStorage.setItem("moneyInput", event.target.value);
+    setMoneyInput(event.target.value);
+    setCrypto(Number.parseFloat((1 / price) * event.target.value).toFixed(7));
   };
 
-  const addToFavouriteHandler = () => {
+  const addCoinToList = async (data) => {
+    try {
+      let url = 'http://localhost:5000/favourite';
+      let result = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => {
+          let checkJson = res.headers
+            .get("content-type")
+            ?.includes("application/json");
+          if (res && checkJson) {
+            return res.json();
+          } else {
+            throw new Error("unknown server response");
+          }
+        })
+        .then((data) => data)
+        .catch((err) => console.error("error POST inside addCoinToList", err));
+
+      return result;
+    } catch (err) {
+      console.error("unexpected error inside addcointolist", err);
+    }
+  };
+
+/**
+ * todo - coin table link  is not working for non fav user - fix it
+ * todo - check fav button functionality for non fav user list
+ * todo - once you save the terminal isLogged on client side is getting false
+ */
+  const addToFavouriteHandler = async () => {
     if (!isFav) {
       if (JSON.parse(localStorage.getItem("favouriteCoins"))) {
         let favouriteCoinsArr = JSON.parse(
           localStorage.getItem("favouriteCoins")
         );
-        favouriteCoinsArr = [...favouriteCoinsArr, id]
+        favouriteCoinsArr = [...favouriteCoinsArr, id];
+        let result = await addCoinToList([...new Set(favouriteCoinsArr)])
+        console.log('result->',result)
         localStorage.setItem(
           "favouriteCoins",
           JSON.stringify([...new Set(favouriteCoinsArr)])
         );
+
         setIsFav(true);
       } else {
-        localStorage.setItem("favouriteCoins", JSON.stringify([id]));
+        //after adding update db here
+        localStorage.setItem("favouriteCoins", JSON.stringify([id]))
         setIsFav(true);
       }
     } else {
@@ -139,6 +179,8 @@ export default function Coin() {
         localStorage.getItem("favouriteCoins")
       );
       let arrayAfterFavRemoval = favouriteCoinsArr.filter((e) => e !== id);
+      let result = await addCoinToList(arrayAfterFavRemoval)
+        console.log('result->',result)
       localStorage.setItem(
         "favouriteCoins",
         JSON.stringify(arrayAfterFavRemoval)
@@ -189,7 +231,7 @@ export default function Coin() {
 
   const displayGraphInterval = () => {
     return (
-      <div className='graph_interval_div'>
+      <div className="graph_interval_div">
         <label htmlFor="interval"> Graph Interval</label>
         <select
           name="interval"
@@ -226,7 +268,6 @@ export default function Coin() {
       </div>
     );
   };
-
 
   /**
    * TODO - change the table structure to remove repitition
@@ -327,7 +368,7 @@ export default function Coin() {
       style={{
         width: "90%",
         height: 500,
-        margin:'7% auto'
+        margin: "7% auto",
       }}
     >
       {addToFavourite()}

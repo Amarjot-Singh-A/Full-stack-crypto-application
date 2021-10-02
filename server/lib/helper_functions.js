@@ -103,7 +103,7 @@ const getCoinsDb = async (connection, email) => {
  */
 const insertCoinsDb = async (connection, req) => {
   try {
-    let query = `update users set coins=('${req.body.coins}') WHERE email='${req.session.email}'`;
+    let query = `update users set coins=('${JSON.stringify(req.body)}') WHERE email='${req.session.email}'`;
     let resultofCoinInsertion = await executeQuery(connection,query)
     return resultofCoinInsertion;
   } catch (err) {

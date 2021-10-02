@@ -88,13 +88,11 @@ app.get("/favourite", checkAuth, async (req, res) => {
     );
     console.log("fetchedCoinsArr", fetchedCoinsArr);
     if (fetchedCoinsArr[0].coins) {
-      console.log('->',fetchedCoinsArr[0].coins);
       res.status(200).send({
         coins: fetchedCoinsArr,
         error: "",
       });
     } else {
-      console.log(Object.values(fetchedCoinsArr[0]));
       res.status(200).send({
         coins: fetchedCoinsArr[0].coins,
         error: "user have no favourite coins",
@@ -107,6 +105,9 @@ app.get("/favourite", checkAuth, async (req, res) => {
     });
   }
 });
+
+
+
 
 
 
@@ -133,6 +134,8 @@ app.get("/express", checkAuth, (req, res) => {
     express: `welcome ${req.session.userId}`,
   });
 });
+
+
 
 app.post("/signin", async (req, res) => {
   console.log("/signin body ->", req.body);

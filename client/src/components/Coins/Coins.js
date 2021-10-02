@@ -204,7 +204,7 @@ export default function Coins() {
                   .map((row) => (
                     <TableRow
                       hover
-                      onClick={() => history.push(`/coin/${row.id}`)}
+                      onClick={() => history.push(`../dashboard/coin/${row.id}`)}
                       role="checkbox"
                       tabIndex={-1}
                       key={JSON.stringify(row.symbol)}

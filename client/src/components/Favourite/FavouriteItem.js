@@ -7,7 +7,6 @@ import Title from "../Title/Title";
 
 export default function FavouriteItem({ coins }) {
   return (
-    // <div className="fav-items">
     <>
       {coins &&
         coins.map((obj, i) => {
@@ -39,6 +38,5 @@ export default function FavouriteItem({ coins }) {
           );
         })}
         </>
-    // </div>
   );
 }
