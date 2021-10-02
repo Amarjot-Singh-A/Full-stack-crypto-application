@@ -12,16 +12,7 @@ const oneDay = 1000 * 60 * 60 * 24;
 
 /**
  * TODO : validate user credentials before inserting into db
- * TODO : use checkAuth middleware for every user request, security
  */
-
-//  const checkAuth = (req, res, next) => {
-//   if (!req.session.isLogged) {
-//     res.redirect("/signin");
-//     return;
-//   }
-//   next();
-// }
 
 app.use(
   cors({
@@ -81,17 +72,66 @@ app.use(
 
 app.listen(port, () => console.log(`Listening to port ${port}`));
 
-app.get("/express", (req, res) => {
-  console.log("/express ->", req.session);
-  if (req.session.userId != null && req.session) {
-    res.status(200).send({
-      express: `welcome ${req.session.userId}`,
-    });
-  } else {
-    res.status(200).send({
-      express: `please sign in or sign up`,
+const checkAuth = (req, res, next) => {
+  if (!req.session.isLogged && !req.session.userId && !req.session.email) {
+    res.redirect("/signin");
+    return;
+  }
+  next();
+};
+
+app.get("/favourite", checkAuth, async (req, res) => {
+  try {
+    let fetchedCoinsArr = await helper.getCoinsDb(
+      connection,
+      req.session.email
+    );
+    console.log("fetchedCoinsArr", fetchedCoinsArr);
+    if (fetchedCoinsArr[0].coins) {
+      console.log('->',fetchedCoinsArr[0].coins);
+      res.status(200).send({
+        coins: fetchedCoinsArr,
+        error: "",
+      });
+    } else {
+      console.log(Object.values(fetchedCoinsArr[0]));
+      res.status(200).send({
+        coins: fetchedCoinsArr[0].coins,
+        error: "user have no favourite coins",
+      });
+    }
+  } catch (err) {
+    res.status(400).send({
+      coins: fetchedCoinsArr[0].coins,
+      error: "user have no favourite coins",
     });
   }
+});
+
+
+
+app.post("/favourite", checkAuth, async (req, res) => {
+  let resultOfCoinsQuery = await helper.insertCoinsDb(connection, req);
+  if (Object.keys(resultOfCoinsQuery).length > 0) {
+    res.status(200).send({
+      inserted: true,
+      error: "",
+    });
+  } else {
+    res.status(403).send({
+      inserted: false,
+      error: "error inserting coins",
+    });
+  }
+});
+
+
+
+app.get("/express", checkAuth, (req, res) => {
+  console.log("/express ->", req.session);
+  res.status(200).send({
+    express: `welcome ${req.session.userId}`,
+  });
 });
 
 app.post("/signin", async (req, res) => {
@@ -105,6 +145,7 @@ app.post("/signin", async (req, res) => {
     if (isPasswordMatch === true && isEmailMatch === true) {
       req.session.userId = firstName;
       req.session.isLogged = true;
+      req.session.email = formEmail;
       console.log("session signin-> ", req.session);
 
       console.log("password matched");
@@ -122,10 +163,6 @@ app.post("/signin", async (req, res) => {
   }
 });
 
-/**
- * TODO - sweetalerts and change result var to isLogged
- */
-
 app.post("/signup", async (req, res) => {
   if (req.body) {
     try {
@@ -138,15 +175,16 @@ app.post("/signup", async (req, res) => {
         let error = helper.mysqlErrorCodes(err);
         console.log(error);
         res.status(403).send({
-          result: "",
+          loggedIn: false,
           error: error,
         });
       } else {
         console.log("query executed", result);
         req.session.userId = req.body.firstName;
         req.session.isLogged = true;
+        req.session.email = req.body.email;
         res.status(200).send({
-          result: "User is Registered",
+          loggedIn: true,
           error: "",
         });
       }
@@ -155,7 +193,7 @@ app.post("/signup", async (req, res) => {
     }
   } else {
     res.status(500).send({
-      result: "",
+      loggedIn: false,
       error: "No data recieved from the form",
     });
   }

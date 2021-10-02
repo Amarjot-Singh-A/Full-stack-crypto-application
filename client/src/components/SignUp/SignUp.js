@@ -13,14 +13,18 @@ import { signUpSchema } from '../../schemas/SignUpSchema'
 import { useFormik } from 'formik'
 import { sendData } from '../../services/dataInteraction'
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link,useHistory } from 'react-router-dom';
+import Swal from "sweetalert2";
+
 
 const theme = createTheme();
 
 export default function SignUp() {
   const [dataResp, setDataResp] = useState('')
+  const [signUpError,setSignUpError] = useState('')
+  const history = useHistory();
 
-  const postUrl = 'http://localhost:5000/signup'
+  const SignUpURL = 'http://localhost:5000/signup'
 
   const formik = useFormik({
     initialValues: {
@@ -31,10 +35,35 @@ export default function SignUp() {
     },
     validationSchema: signUpSchema,
     onSubmit: async (values) => {
-      const dataReturn = await sendData(values, postUrl)
-
-      setDataResp(dataReturn.result ? dataReturn.result : dataReturn.error)
-      console.log('dataResp', dataReturn)
+      const dataReturn = await sendData(values, SignUpURL)
+      if (Boolean(dataReturn.error) && !dataReturn.loggedIn) {
+        setDataResp(dataReturn.loggedIn.toString())
+        setSignUpError(dataReturn.error)
+        Swal.fire({
+          title: "Sign Up Attempt Failed",
+          icon: 'error',
+          html: "Please sign up again",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        })
+      }else {
+        setDataResp(dataReturn.loggedIn.toString());
+        Swal.fire({
+          title: "Sign Up Successful",
+          icon: 'success',
+          html: "Redirecting to Home",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        }).then((result) => {
+          history.push("/dashboard",{ isLogged : `${dataReturn.loggedIn}`});
+        });
+      }
     }
   })
 
@@ -156,7 +185,7 @@ export default function SignUp() {
             </Grid>
           </Box>
           <Typography component="h5" variant="h5" style={{ color: 'green' }}>
-            {dataResp}
+            {signUpError}
           </Typography>
         </Box>
       </Container>
