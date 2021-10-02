@@ -11,12 +11,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { signUpSchema } from '../../schemas/SignUpSchema'
 import { useFormik } from 'formik'
-import { sendData } from '../../services/dataInteraction'
 import { useState } from 'react'
 import { Link,useHistory } from 'react-router-dom';
 import Swal from "sweetalert2";
 
-
+const interactions = require('../../services/dataInteraction')
 const theme = createTheme();
 
 export default function SignUp() {
@@ -35,7 +34,7 @@ export default function SignUp() {
     },
     validationSchema: signUpSchema,
     onSubmit: async (values) => {
-      const dataReturn = await sendData(values, SignUpURL)
+      const dataReturn = await interactions.sendData(values, SignUpURL)
       if (Boolean(dataReturn.error) && !dataReturn.loggedIn) {
         setDataResp(dataReturn.loggedIn.toString())
         setSignUpError(dataReturn.error)

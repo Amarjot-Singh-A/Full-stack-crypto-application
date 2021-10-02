@@ -13,12 +13,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useHistory } from "react-router";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { sendData } from "../../services/dataInteraction";
 import { signInSchema } from "../../schemas/SignInSchema";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
+const interactions = require('../../services/dataInteraction')
 const theme = createTheme();
 
 export default function SignIn() {
@@ -34,7 +34,7 @@ export default function SignIn() {
     },
     validationSchema: signInSchema,
     onSubmit: async (values) => {
-      const dataReturn = await sendData(values, signInURL);
+      const dataReturn = await interactions.sendData(values, signInURL);
       console.log("datareturn", dataReturn);
       if (Boolean(dataReturn.error)) {
         setDataRetrieve(dataReturn.loggedIn.toString());

@@ -20,6 +20,7 @@ import TableBody from "@mui/material/TableBody";
 import Title from "../Title/Title";
 
 const axios = require("axios");
+const interactions = require('../../services/dataInteraction')
 
 export default function Coin() {
   const [coin, setCoin] = useState("");
@@ -32,18 +33,16 @@ export default function Coin() {
     return moneyInputLocal || "";
   });
 
-  /**
-   * todo-fetch fav coins based on user email, and set them to local storage.
-   *
-   */
+ 
   const [isFav, setIsFav] = useState(() => {
-    let checkLocalStorage = JSON.parse(localStorage.getItem("favouriteCoins"));
+    let checkLocalStorage = localStorage.getItem("favouriteCoins");
     if (checkLocalStorage) {
       return checkLocalStorage.includes(id);
     } else {
       return false;
     }
   });
+
 
   const [graphInterval, setGraphInterval] = useState("daily");
 
@@ -119,49 +118,21 @@ export default function Coin() {
     setCrypto(Number.parseFloat((1 / price) * event.target.value).toFixed(7));
   };
 
-  const addCoinToList = async (data) => {
-    try {
-      let url = 'http://localhost:5000/favourite';
-      let result = await fetch(url, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => {
-          let checkJson = res.headers
-            .get("content-type")
-            ?.includes("application/json");
-          if (res && checkJson) {
-            return res.json();
-          } else {
-            throw new Error("unknown server response");
-          }
-        })
-        .then((data) => data)
-        .catch((err) => console.error("error POST inside addCoinToList", err));
 
-      return result;
-    } catch (err) {
-      console.error("unexpected error inside addcointolist", err);
-    }
-  };
 
 /**
- * todo - coin table link  is not working for non fav user - fix it
- * todo - check fav button functionality for non fav user list
+ * 
  * todo - once you save the terminal isLogged on client side is getting false
  */
   const addToFavouriteHandler = async () => {
+    console.log('isFav',isFav)
     if (!isFav) {
-      if (JSON.parse(localStorage.getItem("favouriteCoins"))) {
+      if (localStorage.getItem("favouriteCoins")) {
         let favouriteCoinsArr = JSON.parse(
           localStorage.getItem("favouriteCoins")
         );
         favouriteCoinsArr = [...favouriteCoinsArr, id];
-        let result = await addCoinToList([...new Set(favouriteCoinsArr)])
+        let result = await interactions.addCoinToList([...new Set(favouriteCoinsArr)])
         console.log('result->',result)
         localStorage.setItem(
           "favouriteCoins",
@@ -171,6 +142,8 @@ export default function Coin() {
         setIsFav(true);
       } else {
         //after adding update db here
+        let result = await interactions.addCoinToList([id])
+        console.log('result->',result)
         localStorage.setItem("favouriteCoins", JSON.stringify([id]))
         setIsFav(true);
       }
@@ -179,7 +152,7 @@ export default function Coin() {
         localStorage.getItem("favouriteCoins")
       );
       let arrayAfterFavRemoval = favouriteCoinsArr.filter((e) => e !== id);
-      let result = await addCoinToList(arrayAfterFavRemoval)
+      let result = await interactions.addCoinToList(arrayAfterFavRemoval)
         console.log('result->',result)
       localStorage.setItem(
         "favouriteCoins",
