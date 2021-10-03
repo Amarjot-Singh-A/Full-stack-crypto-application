@@ -184,6 +184,9 @@ export default function SignUp() {
             </Grid>
           </Box>
           <Typography component="h5" variant="h5" style={{ color: 'green' }}>
+            Sign up Successful = {dataResp}
+          </Typography>
+          <Typography component="h5" variant="h5" style={{ color: 'red' }}>
             {signUpError}
           </Typography>
         </Box>
