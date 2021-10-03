@@ -38,6 +38,33 @@ const bcryptHashPassword = (bcrypt, password) => {
   });
 };
 
+const getUserBalance = async (connection, email) => {
+  try {
+    let query = `select balance from balance where email = '${email}'`;
+    let resultOfGetUserBalance = await executeQuery(connection, query);
+    return { balance: resultOfGetUserBalance, error: null };
+  } catch (e) {
+    console.error("error inside getuserbalance", e);
+    return { balance: null, error: e };
+  }
+};
+
+const addDefaultMoney = async (connection, resultOfUserQuery, email) => {
+  try {
+    if (resultOfUserQuery.insertId) {
+      let query = `insert into balance(userid,email,balance)
+    values('${resultOfUserQuery.insertId}','${email}',50000.00)`;
+      let resultOfBalanceQuery = await executeQuery(connection, query);
+      return { resultMoney: resultOfBalanceQuery, errorMoney: null };
+    } else {
+      throw new Error("insertId empty in addDefaultMoney");
+    }
+  } catch (e) {
+    console.error("error in adddefaultmoney", e);
+    return { resultMoney: null, errorMoney: e };
+  }
+};
+
 const signUpUser = async (
   { firstName, lastName, email, password },
   connection,
@@ -103,13 +130,22 @@ const getCoinsDb = async (connection, email) => {
  */
 const insertCoinsDb = async (connection, req) => {
   try {
-    let query = `update users set coins=('${JSON.stringify(req.body)}') WHERE email='${req.session.email}'`;
-    let resultofCoinInsertion = await executeQuery(connection,query)
+    let query = `update users set coins=('${JSON.stringify(
+      req.body
+    )}') WHERE email='${req.session.email}'`;
+    let resultofCoinInsertion = await executeQuery(connection, query);
     return resultofCoinInsertion;
   } catch (err) {
     console.error("error inserting coins into db", err);
   }
 };
 
-
-module.exports = { verifySignIn, signUpUser, mysqlErrorCodes, getCoinsDb, insertCoinsDb };
+module.exports = {
+  verifySignIn,
+  signUpUser,
+  mysqlErrorCodes,
+  getCoinsDb,
+  insertCoinsDb,
+  addDefaultMoney,
+  getUserBalance,
+};

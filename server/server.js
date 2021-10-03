@@ -106,11 +106,6 @@ app.get("/favourite", checkAuth, async (req, res) => {
   }
 });
 
-
-
-
-
-
 app.post("/favourite", checkAuth, async (req, res) => {
   let resultOfCoinsQuery = await helper.insertCoinsDb(connection, req);
   if (Object.keys(resultOfCoinsQuery).length > 0) {
@@ -126,14 +121,32 @@ app.post("/favourite", checkAuth, async (req, res) => {
   }
 });
 
-
-
 app.get("/express", checkAuth, (req, res) => {
   console.log("/express ->", req.session);
   res.status(200).send({
     express: `welcome ${req.session.userId}`,
   });
 });
+
+
+
+
+app.get("/balance",checkAuth,async (req,res)=>{
+  const {balance, error} = await helper.getUserBalance(connection,req.session.email)
+  if(balance == null && error){
+    res.status(404).send({
+      retrieved : false,
+      error ,
+      balance : null
+    })
+  }else{
+    res.status(200).send({
+      retrieved : true,
+      error:null,
+      balance
+    })
+  }
+})
 
 
 
@@ -174,6 +187,7 @@ app.post("/signup", async (req, res) => {
         connection,
         bcrypt
       );
+
       if (result == null && err) {
         let error = helper.mysqlErrorCodes(err);
         console.log(error);
@@ -182,14 +196,28 @@ app.post("/signup", async (req, res) => {
           error: error,
         });
       } else {
-        console.log("query executed", result);
-        req.session.userId = req.body.firstName;
-        req.session.isLogged = true;
-        req.session.email = req.body.email;
-        res.status(200).send({
-          loggedIn: true,
-          error: "",
-        });
+        console.log("sign up query executed", result);
+        const { resultMoney, errorMoney } = await helper.addDefaultMoney(
+          connection,
+          result,
+          req.body.email
+        );
+        if ((resultMoney == null) & errorMoney) {
+          console.log(errorMoney);
+          res.status(403).send({
+            loggedIn: false,
+            error: error,
+          });
+        } else {
+          console.log('default money query executed',resultMoney)
+          req.session.userId = req.body.firstName;
+          req.session.isLogged = true;
+          req.session.email = req.body.email;
+          res.status(200).send({
+            loggedIn: true,
+            error: "",
+          });
+        }
       }
     } catch (err) {
       console.error("error in /signup");

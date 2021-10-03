@@ -31,6 +31,7 @@ import Coin from "../Coin/Coin";
 import Favourite from "../Favourite/Favourite";
 import Settings from "../Settings/Settings";
 import Swal from "sweetalert2";
+import DisplayBalance from "../Balance/DisplayBalance";
 
 const drawerWidth = 240;
 
@@ -182,6 +183,7 @@ export default function DashboardContent() {
                   >
                     Dashboard
                   </Typography>
+                  <DisplayBalance />
                   <IconButton color="inherit">
                     <Badge badgeContent={4} color="secondary">
                       <NotificationsIcon />
@@ -268,5 +270,9 @@ export default function DashboardContent() {
     }
   };
 
-  return <>{dashBoardRender()}</>;
+  return( 
+  <>
+  {dashBoardRender()}
+  </>
+  )
 }
