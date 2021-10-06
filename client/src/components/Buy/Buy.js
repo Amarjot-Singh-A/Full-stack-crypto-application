@@ -1,5 +1,10 @@
 import React from 'react'
 
+
+/**
+ *todo - use snackbar material ui to notify buy bitcoin
+ *todo - use tabs to build buy and sell form
+ */
 export default function Buy() {
 
 let pickCurrency = 'https://api.coingecko.com/api/v3/simple/supported_vs_currencies'
@@ -58,7 +63,7 @@ let priceOfCoinInCurrency = 'https://api.coingecko.com/api/v3/simple/price?ids=b
     
     return (
         <div>
-            
+            this is the buy page
         </div>
     )
 }

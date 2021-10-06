@@ -13,6 +13,11 @@ import TableRow from "@mui/material/TableRow";
 
 const axios = require("axios");
 
+
+/**
+ * todo - use progress or skeleton from material ui when coins and coin page loads
+*/
+
 export default function Coins() {
   const [coins, setCoins] = useState("");
   const [page, setPage] = useState(0);

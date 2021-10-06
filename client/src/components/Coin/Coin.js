@@ -9,6 +9,10 @@ import CoinPrice from "./CoinPrice";
 
 const axios = require("axios");
 
+
+/**
+ * todo - use progress or skeleton from material ui when coins and coin page loads
+*/
 export default function Coin() {
   const { id } = useParams();
   const [stats, setStats] = useState("");

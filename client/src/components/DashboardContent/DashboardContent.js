@@ -32,6 +32,8 @@ import Favourite from "../Favourite/Favourite";
 import Settings from "../Settings/Settings";
 import Swal from "sweetalert2";
 import DisplayBalance from "../Balance/DisplayBalance";
+import Buy from "../Buy/Buy";
+import Sell from "../Sell/Sell";
 
 const drawerWidth = 240;
 
@@ -81,6 +83,11 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
+
+
+/**
+ * todo - use progress or skeleton from material ui when coins and coin page loads
+*/
 export default function DashboardContent() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -254,6 +261,16 @@ export default function DashboardContent() {
                         {/* Settings page*/}
 
                         <Settings />
+                      </Route>
+                      <Route path={`${path}/buy`} exact>
+                        {/* Buy page*/}
+
+                        <Buy />
+                      </Route>
+                      <Route path={`${path}/sell`} exact>
+                        {/* Sell page*/}
+
+                        <Sell />
                       </Route>
                     </Switch>
                   </Grid>

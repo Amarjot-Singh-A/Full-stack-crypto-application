@@ -21,6 +21,11 @@ import Swal from "sweetalert2";
 const interactions = require('../../services/dataInteraction')
 const theme = createTheme();
 
+
+/**
+ * todo - use <Alert severity="error">This is an error alert — check it out!</Alert> to show errors
+ * in both signin and signup
+ */
 export default function SignIn() {
   const history = useHistory();
   const [dataRetrieve, setDataRetrieve] = useState(false);
