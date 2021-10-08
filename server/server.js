@@ -8,6 +8,7 @@ const sessions = require("express-session");
 const MySQLStore = require("express-mysql-session")(sessions);
 const port = process.env.PORT || 5000;
 const helper = require("./lib/helper_functions");
+const e = require("express");
 const oneDay = 1000 * 60 * 60 * 24;
 
 /**
@@ -128,27 +129,25 @@ app.get("/express", checkAuth, (req, res) => {
   });
 });
 
-
-
-
-app.get("/balance",checkAuth,async (req,res)=>{
-  const {balance, error} = await helper.getUserBalance(connection,req.session.email)
-  if(balance == null && error){
+app.get("/balance", checkAuth, async (req, res) => {
+  const { balance, error } = await helper.getUserBalance(
+    connection,
+    req.session.email
+  );
+  if (balance == null && error) {
     res.status(404).send({
-      retrieved : false,
-      error ,
-      balance : null
-    })
-  }else{
+      retrieved: false,
+      error,
+      balance: null,
+    });
+  } else {
     res.status(200).send({
-      retrieved : true,
-      error:null,
-      balance
-    })
+      retrieved: true,
+      error: null,
+      balance,
+    });
   }
-})
-
-
+});
 
 app.post("/signin", async (req, res) => {
   console.log("/signin body ->", req.body);
@@ -209,7 +208,7 @@ app.post("/signup", async (req, res) => {
             error: error,
           });
         } else {
-          console.log('default money query executed',resultMoney)
+          console.log("default money query executed", resultMoney);
           req.session.userId = req.body.firstName;
           req.session.isLogged = true;
           req.session.email = req.body.email;
@@ -262,5 +261,31 @@ app.get("/logout", (req, res) => {
       error: "session doesnt exist",
     });
     console.log("user is not logged in");
+  }
+});
+
+app.post("/buy", checkAuth, async (req, res) => {
+  let { result, completed, error } = await helper.cryptoBuyAction(
+    connection,
+    req
+  );
+  if (completed) {
+    res.status(200).send({
+      result,
+      error,
+      completed,
+    });
+  } else if (completed === false && result) {
+    res.status(403).send({
+      result,
+      error,
+      completed,
+    });
+  } else {
+    res.status(403).send({
+      result,
+      error,
+      completed,
+    });
   }
 });

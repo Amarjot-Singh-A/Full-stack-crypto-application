@@ -39,21 +39,30 @@ export default function Buy() {
 
   useEffect(() => {
     async function getCoinsList() {
-      let url =
+      try{
+
+        let url =
         "https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_desc&per_page=50&page=1&sparkline=false";
-      let result = await fetch(url)
+        let result = await fetch(url)
         .then((res) => res.json())
         .then((data) => data)
         .catch((err) => console.error(err));
-      setCoinsList(JSON.stringify(result));
+        setCoinsList(JSON.stringify(result));
+      }catch(e){
+        console.error('error inside getcoinlist',e)
+      }
     }
     async function getCoinPrice() {
-      let priceOfCoinInCurrency = `https://api.coingecko.com/api/v3/simple/price?ids=${defaultCoin}&vs_currencies=cad`;
-      let result = await fetch(priceOfCoinInCurrency)
+      try{
+        let priceOfCoinInCurrency = `https://api.coingecko.com/api/v3/simple/price?ids=${defaultCoin}&vs_currencies=cad`;
+        let result = await fetch(priceOfCoinInCurrency)
         .then((res) => res.json())
         .then((data) => data)
         .catch((err) => console.error(err));
-      setCoinPrice(Number(Object.values(result)[0]?.cad));
+        setCoinPrice(Number(Object.values(result)[0]?.cad));
+      }catch(e){
+        console.error('error fetching getcoinprice',e)
+      }
       if (amountInvest !== null) {
         setQuantityBought(
           Number.parseFloat((1 / coinPrice) * amountInvest).toFixed(7)
