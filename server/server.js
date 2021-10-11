@@ -265,6 +265,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/buy", checkAuth, async (req, res) => {
+  console.log('buy -> ',req.body)
   let { result, completed, error } = await helper.cryptoBuyAction(
     connection,
     req

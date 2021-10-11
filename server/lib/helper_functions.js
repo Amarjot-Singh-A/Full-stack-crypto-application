@@ -51,8 +51,10 @@ const getUserBalance = async (connection, email) => {
 
 const enoughBalance = async (balance, amountToInvest) => {
   if (balance >= amountToInvest) {
+    console.log('balance >')
     return { moneyLeft: Number(balance - amountToInvest), eligible: true };
   } else {
+    console.log('balance <')
     return { moneyLeft: balance, eligible: false };
   }
 };
@@ -79,8 +81,8 @@ const updateMoneyInAccount = async (email, moneyLeft, connection) => {
 
 const insertTransactionIntoTable = async (connection, req) => {
   try {
-    let { coinPrice, coinName, amountInvest, quantityBought } = req.body;
-    let query = `insert into table transactions(email,coinPrice,coinName,amountInvested,quantityBought) values ('${req.session.email}','${coinPrice}','${coinName}','${amountInvest}','${quantityBought}')`;
+    let { coinPrice, coinName, amountInvested, quantityBought } = req.body;
+    let query = `insert into transactions(email,coin_price,coin_name,amount_invested,quantity_bought) values ('${req.session.email}',${Number(coinPrice).toFixed(2)},'${coinName}',${Number(amountInvested).toFixed(2)},${Number(quantityBought).toFixed(2)})`;
     let resultOfTransactionInsertion = await executeQuery(connection,query)
     return {resultOfTransactionInsertion,error:null}
   } catch (error) {
@@ -95,17 +97,20 @@ const cryptoBuyAction = async (connection, req) => {
     let { email } = req.session;
     let { balance, error } = await getUserBalance(connection, email);
     if (error == null) {
+      console.log("inside crypto error = null",balance[0].balance)
       let { moneyLeft, eligible } = await enoughBalance(
-        balance,
-        req.body.amountInvested
+        balance[0].balance,
+        Number(req.body.amountInvested)
       );
       if (eligible) {
+        console.log('inside eligible',moneyLeft)
         let { updateMoneyResult, updatedMoneyerror } =
           await updateMoneyInAccount(email, moneyLeft, connection);
 
         let {resultOfTransactionInsertion,error} = await insertTransactionIntoTable(connection, req);
 
         if (updatedMoneyerror == null && resultOfTransactionInsertion) {
+          console.log('result of trans')
           return { result: updateMoneyResult, completed: true, error: null };
         } else {
           return {

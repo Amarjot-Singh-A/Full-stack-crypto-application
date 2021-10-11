@@ -10,6 +10,10 @@ import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel/InputLabel";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
+
+const interactions = require('../../services/dataInteraction')
+
+
 /**
  *todo - use snackbar material ui to notify buy bitcoin
  *todo - use formik and yup for form validation and check balance before processing 
@@ -18,12 +22,20 @@ export default function Buy() {
   const [coinsList, setCoinsList] = useState(0);
   const [defaultCoin, setDefaultCoin] = useState("bitcoin");
   const [coinPrice, setCoinPrice] = useState(0);
-  const [amountInvest, setAmountInvest] = useState(null);
+  const [amountInvest, setAmountInvest] = useState('');
   const [quantityBought, setQuantityBought] = useState(null);
+  const buyCoinURL = "http://localhost:5000/buy"
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(e)
+    const data = {
+      amountInvested:amountInvest,
+      coinName :defaultCoin,
+      coinPrice,
+      quantityBought,
+    }
+    let resultOfBuyCoin = await interactions.sendData(data,buyCoinURL)
+    console.log('result of Coin=>',resultOfBuyCoin)
   };
 
   const handleChange = (e) => {

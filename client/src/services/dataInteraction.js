@@ -56,5 +56,4 @@ const addCoinToList = async (data) => {
 
 
 
-
 module.exports = {sendData,addCoinToList}
