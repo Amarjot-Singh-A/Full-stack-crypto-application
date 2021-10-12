@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 import FavouriteItem from "./FavouriteItem";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const axios = require("axios");
 
 export default function FavouriteList({ favCoinsLists }) {
   const [favCoinsList, setFavCoinsList] = useState([]);
-
 
   useEffect(() => {
     function displayFavList(favCoinsLists) {
@@ -36,9 +36,9 @@ export default function FavouriteList({ favCoinsLists }) {
       {favCoinsList.length > 0 ? (
         <FavouriteItem coins={favCoinsList} />
       ) : (
-        <Typography color="text.secondary" sx={{ flex: 1 }}>
-          empty
-        </Typography>
+        <Grid item xs={12}>
+          <CircularProgress />
+        </Grid>
       )}
     </>
   );

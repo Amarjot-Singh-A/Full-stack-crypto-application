@@ -12,6 +12,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Paper from "@mui/material/Paper";
 
 const interactions = require("../../services/dataInteraction");
 
@@ -32,8 +33,8 @@ export default function Buy() {
   const [snackAlert, setSnackAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
   const [alertType, setAlertType] = useState("success");
-  const buyCoinURL = "http://localhost:5000/buy";
 
+  const buyCoinURL = "http://localhost:5000/buy";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,8 +66,9 @@ export default function Buy() {
 
   const handleSnackBarClose = (event, reason) => {
     if (reason === "clickaway") {
-      return;
     }
+    setAmountInvest("");
+    setQuantityBought(null);
     setSnackAlert(false);
   };
 
@@ -119,8 +121,11 @@ export default function Buy() {
   }, [amountInvest, coinPrice, coinsList, defaultCoin]);
 
   return (
-    <>
+    <Grid item xs={12}>
       <Box
+        component="form"
+        noValidate
+        onSubmit={handleSubmit}
         sx={{
           marginTop: 20,
           display: "flex",
@@ -128,19 +133,22 @@ export default function Buy() {
           alignItems: "center",
         }}
       >
-        <Grid item xs={6}>
-          <Typography variant="h5">Buy Coin</Typography>
-          <Typography name="coinPrice" variant="h6">
-            {coinPrice}
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+        <Grid item xs={12}>
+          <Paper
+            sx={{
+              p: 2,
+              display: "flex",
+              flexDirection: "column",
+              height: 350,
+            }}
           >
+            <Typography variant="h5">Buy Coin</Typography>
+            <Typography name="coinPrice" variant="h6">
+              {coinPrice}
+            </Typography>
+
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <InputLabel id="coin-label">Coin</InputLabel>
                 {coinsList ? (
                   <Select
@@ -174,40 +182,40 @@ export default function Buy() {
                   }
                 />
               </Grid>
+              </Grid>
               <Grid item xs={12}>
                 <Typography variant="h6" name="quantityBought">
                   {" "}
                   {defaultCoin} - {quantityBought}
                 </Typography>
               </Grid>
-            </Grid>
-            <LoadingButton
-              color="success"
-              type="submit"
-              size="large"
-              loading={btnDisabled}
-              loadingPosition="start"
-              startIcon={<SaveIcon />}
-              variant="contained"
-            >
-              Buy
-            </LoadingButton>
-            <Snackbar
-              open={snackAlert}
-              autoHideDuration={6000}
-              onClose={handleSnackBarClose}
-            >
-              <Alert
-                onClose={handleSnackBarClose}
-                severity={alertType}
-                sx={{ width: "100%" }}
+              <LoadingButton
+                color="success"
+                type="submit"
+                size="large"
+                loading={btnDisabled}
+                loadingPosition="start"
+                startIcon={<SaveIcon />}
+                variant="contained"
               >
-                {alertText}
-              </Alert>
-            </Snackbar>
-          </Box>
+                Buy
+              </LoadingButton>
+              <Snackbar
+                open={snackAlert}
+                autoHideDuration={6000}
+                onClose={handleSnackBarClose}
+              >
+                <Alert
+                  onClose={handleSnackBarClose}
+                  severity={alertType}
+                  sx={{ width: "100%" }}
+                >
+                  {alertText}
+                </Alert>
+              </Snackbar>
+          </Paper>
         </Grid>
       </Box>
-    </>
+    </Grid>
   );
 }

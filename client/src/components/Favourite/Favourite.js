@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useCallback } from "react";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+
 
 import FavouriteList from "./FavouriteList";
 
 export default function Favourite() {
-  
   const [favCoins, setFavCoins] = useState([]);
   const fetchCoinsApi = useCallback(async () => {
     const url = "http://localhost:5000/favourite";
@@ -17,8 +21,6 @@ export default function Favourite() {
 
     return result;
   }, []);
-  
-
 
   useEffect(() => {
     async function setCoinsEffect() {
@@ -36,5 +38,32 @@ export default function Favourite() {
     setCoinsEffect();
   }, [fetchCoinsApi]);
 
-  return <FavouriteList favCoinsLists={favCoins} />;
+  const displayFavSkeleton = () => {
+    return (
+      <Grid item xs={12} md={4} lg={2}>
+        <Paper
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            height: 240,
+          }}>
+          <Stack spacing={1}>
+            <Skeleton variant="text" />
+            <Skeleton variant="rectangular" height={150}/>
+            <Skeleton variant="text" />
+          </Stack>
+        </Paper>
+      </Grid>
+    );
+  };
+  return (
+    <>
+      {favCoins.length > 0 ? (
+        <FavouriteList favCoinsLists={favCoins} />
+      ) : (
+        displayFavSkeleton()
+      )}
+    </>
+  );
 }
