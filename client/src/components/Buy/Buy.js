@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -9,33 +8,66 @@ import MenuItem from "@mui/material/MenuItem/MenuItem";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel/InputLabel";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+import SaveIcon from "@mui/icons-material/Save";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
+const interactions = require("../../services/dataInteraction");
 
-const interactions = require('../../services/dataInteraction')
-
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 /**
- *todo - use snackbar material ui to notify buy bitcoin
- *todo - use formik and yup for form validation and check balance before processing 
+ *todo - form validation
  */
 export default function Buy() {
   const [coinsList, setCoinsList] = useState(0);
   const [defaultCoin, setDefaultCoin] = useState("bitcoin");
   const [coinPrice, setCoinPrice] = useState(0);
-  const [amountInvest, setAmountInvest] = useState('');
+  const [amountInvest, setAmountInvest] = useState("");
   const [quantityBought, setQuantityBought] = useState(null);
-  const buyCoinURL = "http://localhost:5000/buy"
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [snackAlert, setSnackAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
+  const [alertType, setAlertType] = useState("success");
+  const buyCoinURL = "http://localhost:5000/buy";
+
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setBtnDisabled(true);
     const data = {
-      amountInvested:amountInvest,
-      coinName :defaultCoin,
+      amountInvested: amountInvest,
+      coinName: defaultCoin,
       coinPrice,
       quantityBought,
+    };
+    let { result, completed, error } = await interactions.sendData(
+      data,
+      buyCoinURL
+    );
+    setBtnDisabled(false);
+    setSnackAlert(true);
+
+    if (completed) {
+      setAlertText("Transaction Successful !");
+      setAlertType("success");
+    } else if (completed === false && result) {
+      setAlertText(result);
+      setAlertType("warning");
+    } else {
+      setAlertText(error);
+      setAlertType("error");
     }
-    let resultOfBuyCoin = await interactions.sendData(data,buyCoinURL)
-    console.log('result of Coin=>',resultOfBuyCoin)
+  };
+
+  const handleSnackBarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackAlert(false);
   };
 
   const handleChange = (e) => {
@@ -51,29 +83,28 @@ export default function Buy() {
 
   useEffect(() => {
     async function getCoinsList() {
-      try{
-
+      try {
         let url =
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_desc&per_page=50&page=1&sparkline=false";
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_desc&per_page=50&page=1&sparkline=false";
         let result = await fetch(url)
-        .then((res) => res.json())
-        .then((data) => data)
-        .catch((err) => console.error(err));
+          .then((res) => res.json())
+          .then((data) => data)
+          .catch((err) => console.error(err));
         setCoinsList(JSON.stringify(result));
-      }catch(e){
-        console.error('error inside getcoinlist',e)
+      } catch (e) {
+        console.error("error inside getcoinlist", e);
       }
     }
     async function getCoinPrice() {
-      try{
+      try {
         let priceOfCoinInCurrency = `https://api.coingecko.com/api/v3/simple/price?ids=${defaultCoin}&vs_currencies=cad`;
         let result = await fetch(priceOfCoinInCurrency)
-        .then((res) => res.json())
-        .then((data) => data)
-        .catch((err) => console.error(err));
+          .then((res) => res.json())
+          .then((data) => data)
+          .catch((err) => console.error(err));
         setCoinPrice(Number(Object.values(result)[0]?.cad));
-      }catch(e){
-        console.error('error fetching getcoinprice',e)
+      } catch (e) {
+        console.error("error fetching getcoinprice", e);
       }
       if (amountInvest !== null) {
         setQuantityBought(
@@ -85,9 +116,7 @@ export default function Buy() {
     }
     getCoinsList();
     getCoinPrice();
-  }, [amountInvest,coinPrice,coinsList, defaultCoin]);
-
-
+  }, [amountInvest, coinPrice, coinsList, defaultCoin]);
 
   return (
     <>
@@ -101,7 +130,9 @@ export default function Buy() {
       >
         <Grid item xs={6}>
           <Typography variant="h5">Buy Coin</Typography>
-          <Typography name="coinPrice" variant="h6">{coinPrice}</Typography>
+          <Typography name="coinPrice" variant="h6">
+            {coinPrice}
+          </Typography>
           <Box
             component="form"
             noValidate
@@ -150,15 +181,30 @@ export default function Buy() {
                 </Typography>
               </Grid>
             </Grid>
-            <Button
-              type="submit"
+            <LoadingButton
               color="success"
+              type="submit"
               size="large"
+              loading={btnDisabled}
+              loadingPosition="start"
+              startIcon={<SaveIcon />}
               variant="contained"
-              sx={{ mt: 3, mb: 2, pl: 5, pr: 5 }}
             >
               Buy
-            </Button>
+            </LoadingButton>
+            <Snackbar
+              open={snackAlert}
+              autoHideDuration={6000}
+              onClose={handleSnackBarClose}
+            >
+              <Alert
+                onClose={handleSnackBarClose}
+                severity={alertType}
+                sx={{ width: "100%" }}
+              >
+                {alertText}
+              </Alert>
+            </Snackbar>
           </Box>
         </Grid>
       </Box>

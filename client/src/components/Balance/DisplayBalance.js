@@ -20,11 +20,13 @@ export default function DisplayBalance() {
 
       return result;
     }
+
     let balanceInAcc = getBalance();
+
     if (mounted) {
       balanceInAcc.then(({ retrieved, error, balance }) => {
         if (retrieved === true && error == null) {
-          console.log("balance");
+          console.log('balance')
           setBalance(Object.values(balance[0])[0].toFixed(2));
         } else {
           console.log("balance", 0);
@@ -35,6 +37,9 @@ export default function DisplayBalance() {
       mounted = false;
     };
   }, []);
+
+  
+
 
   return (
     <Typography variant="string" color="inherit" noWrap sx={{ flexGrow: .25 }}>

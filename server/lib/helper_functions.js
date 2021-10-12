@@ -114,24 +114,24 @@ const cryptoBuyAction = async (connection, req) => {
           return { result: updateMoneyResult, completed: true, error: null };
         } else {
           return {
-            result: "unexpected error inside updateMoneyInAccount",
+            result: "Unexpected error inside",
             completed: false,
             error: null,
           };
         }
       } else {
         return {
-          result: "not enough balance in account",
+          result: "Not enough balance in account",
           completed: false,
           error: null,
         };
       }
     } else {
-      throw error("error fetching balance inside cryptobuyaction");
+      throw new Error("Error fetching balance");
     }
   } catch (e) {
-    console.error("error inside crypto buy action", e);
-    return { result: null, completed: false, error: e };
+    console.error("Error inside crypto buy action", e);
+    return { result: null, completed: false, error: e.message };
   }
 };
 
