@@ -34,6 +34,7 @@ import Swal from "sweetalert2";
 import DisplayBalance from "../Balance/DisplayBalance";
 import Buy from "../Buy/Buy";
 import Sell from "../Sell/Sell";
+import Portfolio from "../Portfolio/Portfolio";
 
 const drawerWidth = 240;
 
@@ -271,6 +272,11 @@ export default function DashboardContent() {
                         {/* Sell page*/}
 
                         <Sell />
+                      </Route>
+                      <Route path={`${path}/portfolio`} exact>
+                        {/* portfolio page*/}
+
+                        <Portfolio />
                       </Route>
                     </Switch>
                   </Grid>

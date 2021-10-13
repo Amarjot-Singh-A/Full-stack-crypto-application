@@ -26,6 +26,7 @@ export default function Trending() {
       .get(url)
       .then((response) => {
         let allData = response.data.coins;
+        console.log('alldata',allData)
         setTrending(allData);
       })
       .catch((error) => console.error(`Error -> ${error}`));

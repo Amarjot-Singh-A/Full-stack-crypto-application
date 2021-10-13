@@ -24,6 +24,31 @@ const sendData = (data, postURL) => {
 }
 
 
+const getData = (getURL) => {
+  return fetch(getURL, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+    .then((res) => {
+      let checkJson = res.headers
+        .get("content-type")
+        ?.includes("application/json")
+      if (res && checkJson) {
+        return res.json()
+      } else {
+        throw new Error("not a valid response from server")
+      }
+    })
+    .then((data) => data)
+    .catch((err) => {
+      return { error: err.message }
+    })
+}
+
+
 const addCoinToList = async (data) => {
   try {
     let url = 'http://localhost:5000/favourite';
@@ -56,4 +81,4 @@ const addCoinToList = async (data) => {
 
 
 
-module.exports = {sendData,addCoinToList}
+module.exports = {sendData,addCoinToList,getData}

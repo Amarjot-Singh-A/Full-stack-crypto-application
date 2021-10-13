@@ -51,10 +51,10 @@ const getUserBalance = async (connection, email) => {
 
 const enoughBalance = async (balance, amountToInvest) => {
   if (balance >= amountToInvest) {
-    console.log('balance >')
+    console.log("balance >");
     return { moneyLeft: Number(balance - amountToInvest), eligible: true };
   } else {
-    console.log('balance <')
+    console.log("balance <");
     return { moneyLeft: balance, eligible: false };
   }
 };
@@ -82,35 +82,39 @@ const updateMoneyInAccount = async (email, moneyLeft, connection) => {
 const insertTransactionIntoTable = async (connection, req) => {
   try {
     let { coinPrice, coinName, amountInvested, quantityBought } = req.body;
-    let query = `insert into transactions(email,coin_price,coin_name,amount_invested,quantity_bought) values ('${req.session.email}',${Number(coinPrice).toFixed(2)},'${coinName}',${Number(amountInvested).toFixed(2)},${Number(quantityBought).toFixed(2)})`;
-    let resultOfTransactionInsertion = await executeQuery(connection,query)
-    return {resultOfTransactionInsertion,error:null}
+    let query = `insert into transactions(email,coin_price,coin_name,amount_invested,quantity_bought) values ('${
+      req.session.email
+    }',${Number(coinPrice).toFixed(2)},'${coinName}',${Number(
+      amountInvested
+    ).toFixed(2)},${Number(quantityBought).toFixed(2)})`;
+    let resultOfTransactionInsertion = await executeQuery(connection, query);
+    return { resultOfTransactionInsertion, error: null };
   } catch (error) {
     console.error("error inside insertTransactionIntoTable", error);
-    return {resultOfTransactionInsertion:null , error}
+    return { resultOfTransactionInsertion: null, error };
   }
 };
-
 
 const cryptoBuyAction = async (connection, req) => {
   try {
     let { email } = req.session;
     let { balance, error } = await getUserBalance(connection, email);
     if (error == null) {
-      console.log("inside crypto error = null",balance[0].balance)
+      console.log("inside crypto error = null", balance[0].balance);
       let { moneyLeft, eligible } = await enoughBalance(
         balance[0].balance,
         Number(req.body.amountInvested)
       );
       if (eligible) {
-        console.log('inside eligible',moneyLeft)
+        console.log("inside eligible", moneyLeft);
         let { updateMoneyResult, updatedMoneyerror } =
           await updateMoneyInAccount(email, moneyLeft, connection);
 
-        let {resultOfTransactionInsertion,error} = await insertTransactionIntoTable(connection, req);
+        let { resultOfTransactionInsertion, error } =
+          await insertTransactionIntoTable(connection, req);
 
         if (updatedMoneyerror == null && resultOfTransactionInsertion) {
-          console.log('result of trans')
+          console.log("result of trans");
           return { result: updateMoneyResult, completed: true, error: null };
         } else {
           return {
@@ -226,6 +230,17 @@ const insertCoinsDb = async (connection, req) => {
   }
 };
 
+const fetchUserTrans = async (connection, email) => {
+  try {
+    let query = `select * from transactions where email='${email}'`;
+    let result = await executeQuery(connection, query);
+    return { result, error: null };
+  } catch (e) {
+    console.error("error inside fetchUserTrans", e);
+    return { result: null, error: e };
+  }
+};
+
 module.exports = {
   verifySignIn,
   signUpUser,
@@ -235,4 +250,5 @@ module.exports = {
   addDefaultMoney,
   getUserBalance,
   cryptoBuyAction,
+  fetchUserTrans
 };

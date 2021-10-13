@@ -15,6 +15,7 @@ import Collapse from '@mui/material/Collapse';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SellIcon from '@mui/icons-material/Sell';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import PieChartIcon from '@mui/icons-material/PieChart';
 import { useHistory} from "react-router";
 
 
@@ -41,6 +42,13 @@ export default function ListItems() {
           <AttachMoneyIcon />
         </ListItemIcon>
         <ListItemText primary="Coins" />
+      </ListItem>
+
+      <ListItem button onClick={() => history.push("/dashboard/portfolio")}>
+        <ListItemIcon>
+          <PieChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Portfolio" />
       </ListItem>
 
       <ListItemButton onClick={handleClick}>

@@ -7,6 +7,10 @@ import Stack from "@mui/material/Stack";
 
 import FavouriteList from "./FavouriteList";
 
+
+/**
+ * todo - skeleton appears when no coins are fav, fix it
+ */
 export default function Favourite() {
   const [favCoins, setFavCoins] = useState([]);
   const fetchCoinsApi = useCallback(async () => {
