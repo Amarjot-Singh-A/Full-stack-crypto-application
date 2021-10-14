@@ -73,11 +73,6 @@ const updateMoneyInAccount = async (email, moneyLeft, connection) => {
   }
 };
 
-/**
- * todo - create table transactions with email as foreign key from balance,
- * todo - other columns - coinPrice,coinName,amountInvest,quantityBought,
- * todo - timestamp created, timestamp updated
- */
 
 const insertTransactionIntoTable = async (connection, req) => {
   try {
@@ -86,7 +81,7 @@ const insertTransactionIntoTable = async (connection, req) => {
       req.session.email
     }',${Number(coinPrice).toFixed(2)},'${coinName}',${Number(
       amountInvested
-    ).toFixed(2)},${Number(quantityBought).toFixed(2)})`;
+    ).toFixed(2)},${Number(quantityBought).toFixed(4)})`;
     let resultOfTransactionInsertion = await executeQuery(connection, query);
     return { resultOfTransactionInsertion, error: null };
   } catch (error) {

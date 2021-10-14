@@ -9,6 +9,10 @@ import Title from "../Title/Title";
 import PortfolioList from "./PortfolioList";
 import { getData } from "../../services/dataInteraction";
 
+
+/**
+ * todo - remove reptition of coins in the table
+ */
 export default function Portfolio() {
   const [transList, setTransList] = useState([]);
   const [transError, setTransError] = useState("");
@@ -46,12 +50,21 @@ export default function Portfolio() {
               <TableCell>Price</TableCell>
               <TableCell>Invested</TableCell>
               <TableCell>Quantity</TableCell>
+              <TableCell>Current Price</TableCell>
+              <TableCell>% Change</TableCell>
             </TableRow>
           </TableHead>
           {transList.length > 0 ? (
             <PortfolioList transactions={transList} />
           ) : (
-            "empty"
+            <TableRow>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
+            </TableRow>
           )}
         </Table>
         {transError}
