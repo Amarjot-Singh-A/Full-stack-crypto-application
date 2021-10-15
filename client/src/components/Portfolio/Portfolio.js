@@ -5,6 +5,7 @@ import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
 import Title from "../Title/Title";
 import PortfolioList from "./PortfolioList";
 import { getData } from "../../services/dataInteraction";
@@ -29,7 +30,6 @@ export default function Portfolio() {
         } else {
           setTransList(data.result);
         }
-        console.log("data", data.result);
       } else {
         console.log("trans components had already unmounted");
       }
@@ -57,6 +57,7 @@ export default function Portfolio() {
           {transList.length > 0 ? (
             <PortfolioList transactions={transList} />
           ) : (
+            <TableBody>
             <TableRow>
               <TableCell>-</TableCell>
               <TableCell>-</TableCell>
@@ -65,6 +66,7 @@ export default function Portfolio() {
               <TableCell>-</TableCell>
               <TableCell>-</TableCell>
             </TableRow>
+            </TableBody>
           )}
         </Table>
         {transError}

@@ -33,7 +33,7 @@ export default function PortfolioItem({ obj }) {
       <TableCell>{coin_name}</TableCell>
       <TableCell>{coin_price}</TableCell>
       <TableCell>{amount_invested}</TableCell>
-      <TableCell>{quantity_bought}</TableCell>
+      <TableCell>{Number(quantity_bought).toFixed(4)}</TableCell>
       <TableCell>
         {currentPrice ? (
           currentPrice

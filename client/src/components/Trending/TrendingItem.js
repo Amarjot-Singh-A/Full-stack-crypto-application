@@ -16,7 +16,7 @@ export default function TrendingItem({obj}) {
       .then((response) => {
         let { data } = response;
         let cadPrice = Object.values(data)[0].cad;
-        setPrice(cadPrice);
+        setPrice(Number(cadPrice).toFixed(6));
       })
       .catch((err) => console.error(err));
   }, [url]);
