@@ -1,4 +1,14 @@
+/****************************************************************************************
+ * This file contains the configuration of back-end framework (Express)
+ * Contains different modules used by the Express
+ * List all the Route used by the Express
+ * List the Middleware used for Routes
+ ****************************************************************************************/
+
+// Require the file
 require("dotenv").config();
+
+// Assign objects and variables
 const mysql = require("mysql");
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -11,10 +21,7 @@ const helper = require("./lib/helper_functions");
 const e = require("express");
 const oneDay = 1000 * 60 * 60 * 24;
 
-/**
- * TODO : validate user credentials before inserting into db
- */
-
+// express uses cors 
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -23,16 +30,19 @@ app.use(
   })
 );
 
+// express uses URL encode
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
 
+// express uses json format
 app.use(express.json());
 
 // app.set('trust proxy', 1)
 
+// create a mySql connection Object with values from .env file
 let connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -40,6 +50,7 @@ let connection = mysql.createConnection({
   database: process.env.DB,
 });
 
+// create a connection to Db
 connection.connect(function (err) {
   if (err) {
     console.error("error connecting: " + err.stack);
@@ -48,6 +59,7 @@ connection.connect(function (err) {
   console.log("connected as id " + connection.threadId);
 });
 
+// configure mySql session settings
 const sessionStore = new MySQLStore(
   {
     clearExpired: true,
@@ -61,18 +73,27 @@ const sessionStore = new MySQLStore(
   }
 );
 
+// configure express
 app.use(
   sessions({
     secret: process.env.SECRET,
     saveUninitialized: false,
     store: sessionStore,
-    cookie: { maxAge: oneDay },
+    cookie: { maxAge: oneDay , sameSite : "lax"},
     resave: false,
   })
 );
 
+// check if express is listening to port
 app.listen(port, () => console.log(`Listening to port ${port}`));
 
+/**
+ * Middleware to check the user is authenticated for every request
+ * @param {Object} req - Request Object
+ * @param {Object} res - Response Object
+ * @param {*} next - Callback function to run once the middleware is successfull
+ * @returns 
+ */
 const checkAuth = (req, res, next) => {
   if (!req.session.isLogged && !req.session.userId && !req.session.email) {
     res.redirect("/signin");
@@ -81,6 +102,10 @@ const checkAuth = (req, res, next) => {
   next();
 };
 
+/**
+ * Route - /favourite
+ * @summary GET favourite coins of a user 
+ */
 app.get("/favourite", checkAuth, async (req, res) => {
   try {
     let fetchedCoinsArr = await helper.getCoinsDb(
@@ -107,6 +132,10 @@ app.get("/favourite", checkAuth, async (req, res) => {
   }
 });
 
+/**
+ * Route - /favourite 
+ * @summary - POST favourite coin by a user
+ */
 app.post("/favourite", checkAuth, async (req, res) => {
   let resultOfCoinsQuery = await helper.insertCoinsDb(connection, req);
   if (Object.keys(resultOfCoinsQuery).length > 0) {
@@ -122,6 +151,10 @@ app.post("/favourite", checkAuth, async (req, res) => {
   }
 });
 
+/**
+ * Route - /express
+ * @summary Check whether the user is authenticated or not
+ */
 app.get("/express", checkAuth, (req, res) => {
   console.log("/express ->", req.session);
   res.status(200).send({
@@ -129,6 +162,10 @@ app.get("/express", checkAuth, (req, res) => {
   });
 });
 
+/**
+ * Route - /balance
+ * @summary - GET user account balance
+ */
 app.get("/balance", checkAuth, async (req, res) => {
   const { balance, error } = await helper.getUserBalance(
     connection,
@@ -149,6 +186,10 @@ app.get("/balance", checkAuth, async (req, res) => {
   }
 });
 
+/**
+ * Route - /signin
+ * @summary - POST signin request of user
+ */
 app.post("/signin", async (req, res) => {
   console.log("/signin body ->", req.body);
   const formEmail = req.body.email || "";
@@ -178,6 +219,10 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+/**
+ * Route - /signup
+ * @summary - POST signup request of user and add default money to account
+ */
 app.post("/signup", async (req, res) => {
   if (req.body) {
     try {
@@ -229,6 +274,10 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+/**
+ * Route - /logout
+ * @summary - Destroy the user session and clear the cookie 
+ */
 app.get("/logout", (req, res) => {
   if (req.session.isLogged) {
     req.session.destroy((err) => {
@@ -264,6 +313,10 @@ app.get("/logout", (req, res) => {
   }
 });
 
+/**
+ * Route - /buy
+ * @summary - POST request to buy crypto
+ */
 app.post("/buy", checkAuth, async (req, res) => {
   console.log("buy -> ", req.body);
   let { result, completed, error } = await helper.cryptoBuyAction(
@@ -291,6 +344,10 @@ app.post("/buy", checkAuth, async (req, res) => {
   }
 });
 
+/**
+ * Route - /portfolio
+ * @summary - GET Transactions of an user
+ */
 app.get("/portfolio", checkAuth, async (req, res) => {
   try {
     let result = await helper.fetchUserTrans(connection, req.session.email);

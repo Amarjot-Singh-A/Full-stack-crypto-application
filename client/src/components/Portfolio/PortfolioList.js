@@ -69,16 +69,5 @@ export default function PortfolioList({ transactions }) {
     return combineRep(sortedArr);
   };
 
-  // const iterateTransactions = (transactions) => {
-  //   return (
-  //     transactions.length > 0 &&
-  //     transactions.map((obj, i) => {
-  //       return <PortfolioItem key={i} obj={obj} />;
-  //     })
-  //   );
-  // };
-
-  // return <TableBody>{iterateTransactions(transactions)}</TableBody>;
-
   return <TableBody>{item(transactions)}</TableBody>;
 }
