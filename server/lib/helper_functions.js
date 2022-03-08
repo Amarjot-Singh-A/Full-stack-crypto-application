@@ -2,6 +2,12 @@
  * This file contains the important functions to implement the back-end API functionality
  ****************************************************************************************/
 
+const mysql = require("mysql");
+const formatSqlQuery = (query, inserts) => mysql.format(query, inserts);
+
+// todo - write test for API using jest
+// https://www.albertgao.xyz/2017/05/24/how-to-test-expressjs-with-jest-and-supertest/
+
 /**
  * A common function used to execute query using promises
  * @param {mysql.Connection} connection - mySql connection object
@@ -62,8 +68,10 @@ const bcryptHashPassword = (bcrypt, password) => {
  */
 const getUserBalance = async (connection, email) => {
   try {
-    let query = `select balance from balance where email = '${email}'`;
-    let resultOfGetUserBalance = await executeQuery(connection, query);
+    let sql = "SELECT ?? FROM ?? WHERE ?? = ?";
+    let inserts = ["balance", "balance", "email", email];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let resultOfGetUserBalance = await executeQuery(connection, formattedQuery);
     return { balance: resultOfGetUserBalance, error: null };
   } catch (e) {
     console.error("error inside getuserbalance", e);
@@ -96,8 +104,10 @@ const enoughBalance = async (balance, amountToInvest) => {
  */
 const updateMoneyInAccount = async (email, moneyLeft, connection) => {
   try {
-    let query = `UPDATE balance SET balance = '${moneyLeft}' WHERE (email = '${email}')`;
-    let resultOfDbMoneyUpdate = await executeQuery(connection, query);
+    let sql = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
+    let inserts = ["balance", "balance", moneyLeft, "email", email];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let resultOfDbMoneyUpdate = await executeQuery(connection, formattedQuery);
     return {
       updateMoneyResult: resultOfDbMoneyUpdate,
       updatedMoneyError: null,
@@ -117,12 +127,20 @@ const updateMoneyInAccount = async (email, moneyLeft, connection) => {
 const insertTransactionIntoTable = async (connection, req) => {
   try {
     let { coinPrice, coinName, amountInvested, quantityBought } = req.body;
-    let query = `insert into transactions(email,coin_price,coin_name,amount_invested,quantity_bought) values ('${
-      req.session.email
-    }',${Number(coinPrice).toFixed(2)},'${coinName}',${Number(
-      amountInvested
-    ).toFixed(2)},${Number(quantityBought).toFixed(4)})`;
-    let resultOfTransactionInsertion = await executeQuery(connection, query);
+    let sql =
+      "INSERT INTO transactions(email,coin_price,coin_name,amount_invested,quantity_bought) values (?,?,?,?,?)";
+    let inserts = [
+      req.session.email,
+      Number(coinPrice).toFixed(2),
+      coinName,
+      Number(amountInvested).toFixed(2),
+      Number(quantityBought).toFixed(4),
+    ];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let resultOfTransactionInsertion = await executeQuery(
+      connection,
+      formattedQuery
+    );
     return { resultOfTransactionInsertion, error: null };
   } catch (error) {
     console.error("error inside insertTransactionIntoTable", error);
@@ -180,6 +198,7 @@ const cryptoBuyAction = async (connection, req) => {
   }
 };
 
+// todo - if addDefaultMoney fails, fail the user signup
 /**
  * Add default money into user account, when user is created
  * @param {mysql.Connection} connection - Db connection Object
@@ -190,9 +209,19 @@ const cryptoBuyAction = async (connection, req) => {
 const addDefaultMoney = async (connection, resultOfUserQuery, email) => {
   try {
     if (resultOfUserQuery.insertId) {
-      let query = `insert into balance(userid,email,balance)
-    values('${resultOfUserQuery.insertId}','${email}',50000.00)`;
-      let resultOfBalanceQuery = await executeQuery(connection, query);
+      let sql = "INSERT INTO ?? (??,??,??) values (?,?,?)";
+      let inserts = [
+        "balance",
+        "userid",
+        "email",
+        "balance",
+        resultOfUserQuery.insertId,
+        email,
+        50000.0,
+      ];
+      let formattedQuery = formatSqlQuery(sql, inserts);
+      let resultOfBalanceQuery = await executeQuery(connection, formattedQuery);
+
       return { resultMoney: resultOfBalanceQuery, errorMoney: null };
     } else {
       throw new Error("insertId empty in addDefaultMoney");
@@ -217,9 +246,21 @@ const signUpUser = async (
 ) => {
   try {
     let hashedPassword = await bcryptHashPassword(bcrypt, password);
-    let query = `INSERT INTO users(email,password,first_name,last_name) 
-        VALUES('${email}','${hashedPassword}','${firstName}','${lastName}')`;
-    let resultOfUserQuery = await executeQuery(connection, query);
+    let sql = "INSERT INTO ?? (??,??,??,??) values (?,?,?,?)";
+    let inserts = [
+      "users",
+      "email",
+      "password",
+      "first_name",
+      "last_name",
+      email,
+      hashedPassword,
+      firstName,
+      lastName,
+    ];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let resultOfUserQuery = await executeQuery(connection, formattedQuery);
+
     return { result: resultOfUserQuery, err: null };
   } catch (err) {
     console.error("error in signUpUser", err);
@@ -237,8 +278,11 @@ const signUpUser = async (
  */
 const verifySignIn = async (connection, bcrypt, email, password) => {
   try {
-    const query = `SELECT first_name,password FROM users WHERE email='${email}'`;
-    let queryResult = await executeQuery(connection, query);
+    let sql = "SELECT ??,?? FROM ?? WHERE ?? = ?";
+    let inserts = ["first_name", "password", "users", "email", email];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let queryResult = await executeQuery(connection, formattedQuery);
+
     if (Object.keys(queryResult).length > 0) {
       let isPasswordMatch = await bcryptComparePassword(
         bcrypt,
@@ -281,8 +325,11 @@ const mysqlErrorCodes = ({ errno }) => {
  */
 const getCoinsDb = async (connection, email) => {
   try {
-    let query = `SELECT coins FROM users WHERE email='${email}'`;
-    let favouriteCoinsArr = await executeQuery(connection, query);
+    let sql = "SELECT ?? FROM ?? WHERE ?? = ?";
+    let inserts = ["coins", "users", "email", email];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let favouriteCoinsArr = await executeQuery(connection, formattedQuery);
+
     return favouriteCoinsArr;
   } catch (err) {
     console.error("error fetching coins from db", err);
@@ -297,10 +344,17 @@ const getCoinsDb = async (connection, email) => {
  */
 const insertCoinsDb = async (connection, req) => {
   try {
-    let query = `update users set coins=('${JSON.stringify(
-      req.body
-    )}') WHERE email='${req.session.email}'`;
-    let resultofCoinInsertion = await executeQuery(connection, query);
+    let sql = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
+    let inserts = [
+      "users",
+      "coins",
+      JSON.stringify(req.body),
+      "email",
+      req.session.email,
+    ];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let resultofCoinInsertion = await executeQuery(connection, formattedQuery);
+
     return resultofCoinInsertion;
   } catch (err) {
     console.error("error inserting coins into db", err);
@@ -315,8 +369,11 @@ const insertCoinsDb = async (connection, req) => {
  */
 const fetchUserTrans = async (connection, email) => {
   try {
-    let query = `select * from transactions where email='${email}'`;
-    let result = await executeQuery(connection, query);
+    let sql = "SELECT * FROM ?? WHERE ?? = ?";
+    let inserts = ["transactions", "email", email];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let result = await executeQuery(connection, formattedQuery);
+
     return { result, error: null };
   } catch (e) {
     console.error("error inside fetchUserTrans", e);

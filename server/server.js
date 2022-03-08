@@ -84,7 +84,7 @@ app.use(
   })
 );
 
-// check if express is listening to port
+// Express is listening to port
 app.listen(port, () => console.log(`Listening to port ${port}`));
 
 /**
