@@ -18,9 +18,10 @@ export default function CoinGraph({ id, graphInterval }) {
 
   const fetchGraph = useCallback(async () => {
     try {
-      let respone = await axios.get(graphUrl);
-      respone = await formatChartData(respone.data.prices);
-      setCoin(respone);
+      // let respone = await axios.get(graphUrl);
+      // respone = await formatChartData(respone.data.prices);
+      // setCoin(respone);
+      setCoin([]);
     } catch (err) {
       console.error(`Error inside fetchGraph -> ${err}`);
     }

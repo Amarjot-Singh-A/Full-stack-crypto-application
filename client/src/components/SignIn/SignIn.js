@@ -30,7 +30,7 @@ export default function SignIn() {
   const history = useHistory();
   const [dataRetrieve, setDataRetrieve] = useState(false);
 
-  const signInURL = "http://localhost:5000/signin";
+  const signInURL = "http://localhost:5000/users/signin";
 
   const formik = useFormik({
     initialValues: {

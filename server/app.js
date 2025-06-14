@@ -8,17 +8,19 @@
 // Require the file
 require("dotenv").config();
 
-// Assign objects and variables
-const mysql = require("mysql2");
+// Require and constants
 const express = require("express");
+const app = express();
 const bcrypt = require("bcrypt");
 const cors = require("cors");
-const app = express();
-const sessions = require("express-session");
-const MySQLStore = require("express-mysql-session")(sessions);
+const {connection, sessions, sessionStore} = require("./config/db");
 const helper = require("./lib/helper_functions");
-const e = require("express");
+const { checkAuth } = require("./services/middleware");
 const ONE_DAY = 1000 * 60 * 60 * 24;
+
+const usersRoutes = require("./routes/usersRoutes");
+const coinsRoutes = require("./routes/coinsRoutes");
+const ledgerRoutes = require("./routes/ledgerRoutes");
 
 // express uses cors
 app.use(
@@ -39,22 +41,6 @@ app.use(
 // express uses json format
 app.use(express.json());
 
-// Create a connection to db
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB
-});
-
-// Check for db connection error
-connection.addListener('error', (err) => {
-  console.log(err);
-});
-
-// configure mySql session settings
-const sessionStore = new MySQLStore({}, connection.promise());
-
 // configure express
 app.use(
   sessions({
@@ -67,69 +53,17 @@ app.use(
   })
 );
 
-/**
- * Middleware to check the user is authenticated for every request
- * @param {Object} req - Request Object
- * @param {Object} res - Response Object
- * @param {*} next - Callback function to run once the middleware is successfull
- * @returns
- */
-const checkAuth = (req, res, next) => {
-  if (!req.session.isLogged && !req.session.userId && !req.session.email) {
-    res.redirect("/signin");
-    return;
-  }
-  next();
-};
 
-/**
- * Route - /favourite
- * @summary GET favourite coins of a user
- */
-app.get("/favourite", checkAuth, async (req, res) => {
-  try {
-    let fetchedCoinsArr = await helper.getCoinsDb(
-      connection,
-      req.session.email
-    );
-    console.log("fetchedCoinsArr", fetchedCoinsArr);
-    if (fetchedCoinsArr[0].coins) {
-      res.status(200).send({
-        coins: fetchedCoinsArr,
-        error: "",
-      });
-    } else {
-      res.status(200).send({
-        coins: fetchedCoinsArr[0].coins,
-        error: "user have no favourite coins",
-      });
-    }
-  } catch (err) {
-    res.status(400).send({
-      coins: fetchedCoinsArr[0].coins,
-      error: "user have no favourite coins",
-    });
-  }
-});
+// signUp, signIn. logOut
+app.use("/users", usersRoutes);
 
-/**
- * Route - /favourite
- * @summary - POST favourite coin by a user
- */
-app.post("/favourite", checkAuth, async (req, res) => {
-  let resultOfCoinsQuery = await helper.insertCoinsDb(connection, req);
-  if (Object.keys(resultOfCoinsQuery).length > 0) {
-    res.status(200).send({
-      inserted: true,
-      error: "",
-    });
-  } else {
-    res.status(403).send({
-      inserted: false,
-      error: "error inserting coins",
-    });
-  }
-});
+
+app.use("/coins", coinsRoutes);
+
+
+app.use("/ledger", ledgerRoutes);
+
+
 
 /**
  * Route - /express
@@ -142,156 +76,6 @@ app.get("/express", checkAuth, (req, res) => {
   });
 });
 
-/**
- * Route - /balance
- * @summary - GET user account balance
- */
-app.get("/balance", checkAuth, async (req, res) => {
-  const { balance, error } = await helper.getUserBalance(
-    connection,
-    req.session.email
-  );
-  if (balance == null && error) {
-    res.status(404).send({
-      retrieved: false,
-      error,
-      balance: null,
-    });
-  } else {
-    res.status(200).send({
-      retrieved: true,
-      error: null,
-      balance,
-    });
-  }
-});
-
-/**
- * Route - /signin
- * @summary - POST signin request of user
- */
-app.post("/signin", async (req, res) => {
-  console.log("/signin body ->", req.body);
-  const formEmail = req.body.email || "";
-  const formPassword = req.body.password || "";
-
-  if (formEmail && formPassword) {
-    const { isPasswordMatch, isEmailMatch, firstName } =
-      await helper.verifySignIn(connection, bcrypt, formEmail, formPassword);
-    if (isPasswordMatch === true && isEmailMatch === true) {
-      req.session.userId = firstName;
-      req.session.isLogged = true;
-      req.session.email = formEmail;
-      console.log("session signin-> ", req.session);
-
-      console.log("password matched");
-      res.status(200).send({
-        loggedIn: true,
-        error: "",
-      });
-    } else {
-      console.log("email or password doesnt match");
-      res.status(401).send({
-        loggedIn: false,
-        error: "email or password doesnt match",
-      });
-    }
-  }
-});
-
-/**
- * Route - /signup
- * @summary - POST signup request of user and add default money to account
- */
-app.post("/signup", async (req, res) => {
-  if (req.body) {
-    try {
-      const { result, err } = await helper.signUpUser(
-        req.body,
-        connection,
-        bcrypt
-      );
-
-      if (result == null && err) {
-        let error = helper.mysqlErrorCodes(err);
-        console.log(error);
-        res.status(403).send({
-          loggedIn: false,
-          error: error,
-        });
-      } else {
-        console.log("sign up query executed", result);
-        // const { resultMoney, errorMoney } = await helper.addDefaultMoney(
-        //   connection,
-        //   result,
-        //   req.body.email
-        // );
-        // if ((resultMoney == null) & errorMoney) {
-        //   console.log(errorMoney);
-        //   res.status(403).send({
-        //     loggedIn: false,
-        //     error: error,
-        //   });
-        // } else {
-        //   console.log("default money query executed", resultMoney);
-        //   req.session.userId = req.body.firstName;
-        //   req.session.isLogged = true;
-        //   req.session.email = req.body.email;
-        //   res.status(200).send({
-        //     loggedIn: true,
-        //     error: "",
-        //   });
-        // }
-      }
-    } catch (err) {
-      console.error("error in /signup");
-    }
-  } else {
-    res.status(500).send({
-      loggedIn: false,
-      error: "No data recieved from the form",
-    });
-  }
-});
-
-/**
- * Route - /logout
- * @summary - Destroy the user session and clear the cookie
- */
-app.get("/logout", (req, res) => {
-  if (req.session.isLogged) {
-    req.session.destroy((err) => {
-      console.log("/logout inside-> ", req.session);
-
-      if (err) {
-        console.error("failed to log user out");
-        res.status(500).send({
-          isLogged: true,
-          error: `erorr logging out`,
-        });
-      }
-      req.session = null;
-      console.log("user logged out");
-      return res
-        .clearCookie("connect.sid", {
-          secure: false,
-          path: "/",
-          httpOnly: true,
-        })
-        .status(200)
-        .send({
-          isLogged: false,
-          error: "",
-        });
-    });
-  } else {
-    res.status(500).send({
-      isLogged: false,
-      error: "session doesnt exist",
-    });
-    console.log("user is not logged in");
-  }
-});
 
 /**
  * Route - /buy

@@ -23,7 +23,7 @@ export default function SignUp() {
   const [signUpError,setSignUpError] = useState('')
   const history = useHistory();
 
-  const SignUpURL = 'http://localhost:5000/signup'
+  const SignUpURL = 'http://localhost:5000/users/signup'
 
   const formik = useFormik({
     initialValues: {
