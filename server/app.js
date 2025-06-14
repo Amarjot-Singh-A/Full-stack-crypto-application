@@ -9,7 +9,7 @@
 require("dotenv").config();
 
 // Assign objects and variables
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
@@ -18,9 +18,9 @@ const sessions = require("express-session");
 const MySQLStore = require("express-mysql-session")(sessions);
 const helper = require("./lib/helper_functions");
 const e = require("express");
-const oneDay = 1000 * 60 * 60 * 24;
+const ONE_DAY = 1000 * 60 * 60 * 24;
 
-// express uses cors 
+// express uses cors
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -39,57 +39,40 @@ app.use(
 // express uses json format
 app.use(express.json());
 
-// app.set('trust proxy', 1)
-
-// create a mySql connection Object with values from .env file
-let connection = mysql.createConnection({
+// Create a connection to db
+const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
-  database: process.env.DB,
+  database: process.env.DB
 });
 
-// create a connection to Db
-connection.connect(function (err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
-  console.log("connected as id " + connection.threadId);
+// Check for db connection error
+connection.addListener('error', (err) => {
+  console.log(err);
 });
 
 // configure mySql session settings
-const sessionStore = new MySQLStore(
-  {
-    clearExpired: true,
-    checkExpirationInterval: 60000,
-  },
-  connection,
-  (err) => {
-    if (err) {
-      console.error("error creating mysqlstore");
-    }
-  }
-);
+const sessionStore = new MySQLStore({}, connection.promise());
 
 // configure express
 app.use(
   sessions({
+    key: "session_cookie_name",
     secret: process.env.SECRET,
-    saveUninitialized: false,
     store: sessionStore,
-    cookie: { maxAge: oneDay , sameSite : "lax"},
+    saveUninitialized: false,
     resave: false,
+    cookie: { maxAge: ONE_DAY, sameSite: "lax" },
   })
 );
-
 
 /**
  * Middleware to check the user is authenticated for every request
  * @param {Object} req - Request Object
  * @param {Object} res - Response Object
  * @param {*} next - Callback function to run once the middleware is successfull
- * @returns 
+ * @returns
  */
 const checkAuth = (req, res, next) => {
   if (!req.session.isLogged && !req.session.userId && !req.session.email) {
@@ -101,7 +84,7 @@ const checkAuth = (req, res, next) => {
 
 /**
  * Route - /favourite
- * @summary GET favourite coins of a user 
+ * @summary GET favourite coins of a user
  */
 app.get("/favourite", checkAuth, async (req, res) => {
   try {
@@ -130,7 +113,7 @@ app.get("/favourite", checkAuth, async (req, res) => {
 });
 
 /**
- * Route - /favourite 
+ * Route - /favourite
  * @summary - POST favourite coin by a user
  */
 app.post("/favourite", checkAuth, async (req, res) => {
@@ -182,7 +165,6 @@ app.get("/balance", checkAuth, async (req, res) => {
     });
   }
 });
-
 
 /**
  * Route - /signin
@@ -239,27 +221,27 @@ app.post("/signup", async (req, res) => {
         });
       } else {
         console.log("sign up query executed", result);
-        const { resultMoney, errorMoney } = await helper.addDefaultMoney(
-          connection,
-          result,
-          req.body.email
-        );
-        if ((resultMoney == null) & errorMoney) {
-          console.log(errorMoney);
-          res.status(403).send({
-            loggedIn: false,
-            error: error,
-          });
-        } else {
-          console.log("default money query executed", resultMoney);
-          req.session.userId = req.body.firstName;
-          req.session.isLogged = true;
-          req.session.email = req.body.email;
-          res.status(200).send({
-            loggedIn: true,
-            error: "",
-          });
-        }
+        // const { resultMoney, errorMoney } = await helper.addDefaultMoney(
+        //   connection,
+        //   result,
+        //   req.body.email
+        // );
+        // if ((resultMoney == null) & errorMoney) {
+        //   console.log(errorMoney);
+        //   res.status(403).send({
+        //     loggedIn: false,
+        //     error: error,
+        //   });
+        // } else {
+        //   console.log("default money query executed", resultMoney);
+        //   req.session.userId = req.body.firstName;
+        //   req.session.isLogged = true;
+        //   req.session.email = req.body.email;
+        //   res.status(200).send({
+        //     loggedIn: true,
+        //     error: "",
+        //   });
+        // }
       }
     } catch (err) {
       console.error("error in /signup");
@@ -274,7 +256,7 @@ app.post("/signup", async (req, res) => {
 
 /**
  * Route - /logout
- * @summary - Destroy the user session and clear the cookie 
+ * @summary - Destroy the user session and clear the cookie
  */
 app.get("/logout", (req, res) => {
   if (req.session.isLogged) {

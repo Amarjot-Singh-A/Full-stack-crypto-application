@@ -2,7 +2,7 @@
  * This file contains the important functions to implement the back-end API functionality
  ****************************************************************************************/
 
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const formatSqlQuery = (query, inserts) => mysql.format(query, inserts);
 
 // todo - write test for API using jest
@@ -24,6 +24,7 @@ const executeQuery = (connection, sqlQuery) => {
     });
   });
 };
+
 
 /**
  * This function compare password entered by user with the password in the Db
@@ -251,8 +252,8 @@ const signUpUser = async (
       "users",
       "email",
       "password",
-      "first_name",
-      "last_name",
+      "firstName",
+      "lastName",
       email,
       hashedPassword,
       firstName,
