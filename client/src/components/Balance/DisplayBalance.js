@@ -7,7 +7,7 @@ export default function DisplayBalance() {
   useEffect(() => {
     let mounted = true;
     async function getBalance() {
-      let url = "http://localhost:5000/balance";
+      let url = "http://localhost:5000/ledger/balance";
       let result = await fetch(url, {
         method: "GET",
         credentials: "include",
@@ -24,10 +24,9 @@ export default function DisplayBalance() {
     let balanceInAcc = getBalance();
 
     if (mounted) {
-      balanceInAcc.then(({ retrieved, error, balance }) => {
-        if (retrieved === true && error == null) {
-          console.log('balance')
-          setBalance(Object.values(balance[0])[0].toFixed(2));
+      balanceInAcc.then((data) => {
+        if (data.result && data.result.length > 0 && data.error == null) {
+          setBalance(data.result[0]['balance'].toFixed(2));
         } else {
           console.log("balance", 0);
         }

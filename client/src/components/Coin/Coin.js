@@ -23,9 +23,10 @@ export default function Coin() {
   
   const fetchStats = useCallback(async () => {
     try {
-      let response = await axios.get(statsUrl);
-      response = response.data;
-      setStats(response);
+      // let response = await axios.get(statsUrl);
+      // response = response.data;
+      // setStats(response);
+      setStats([]);
     } catch (err) {
       console.error(`Error inside fetchStats -> ${err}`);
     }

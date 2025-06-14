@@ -14,7 +14,7 @@ import FavouriteList from "./FavouriteList";
 export default function Favourite() {
   const [favCoins, setFavCoins] = useState([]);
   const fetchCoinsApi = useCallback(async () => {
-    const url = "http://localhost:5000/favourite";
+    const url = "http://localhost:5000/coins/favourite";
     const result = await fetch(url, {
       method: "GET",
       credentials: "include",
@@ -28,7 +28,8 @@ export default function Favourite() {
 
   useEffect(() => {
     async function setCoinsEffect() {
-      let { coins } = await fetchCoinsApi();
+      // let { coins } = await fetchCoinsApi();
+      let coins = null;
       if (coins == null) {
         setFavCoins([]);
         localStorage.setItem("favouriteCoins", []);

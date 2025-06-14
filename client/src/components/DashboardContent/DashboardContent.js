@@ -104,7 +104,7 @@ export default function DashboardContent() {
   const handleLogOut = async (event) => {
     event.preventDefault();
     console.log("logout clicked");
-    await fetch("http://localhost:5000/logout", {
+    await fetch("http://localhost:5000/users/logout", {
       method: "GET",
       credentials: "include",
     })
@@ -244,39 +244,39 @@ export default function DashboardContent() {
 
                         {/* Trending */}
 
-                        <Trending />
+                        {/* <Trending /> */}
                       </Route>
 
                       <Route path={`${path}/coins`} exact>
                         {/* List of Coins */}
 
-                        <Coins />
+                        {/* <Coins /> */}
                       </Route>
 
                       <Route path={`${path}/coin/:id`} exact>
                         {/* Individual Coin */}
 
-                        <Coin />
+                        {/* <Coin /> */}
                       </Route>
                       <Route path={`${path}/settings`} exact>
                         {/* Settings page*/}
 
-                        <Settings />
+                        {/* <Settings /> */}
                       </Route>
                       <Route path={`${path}/buy`} exact>
                         {/* Buy page*/}
 
-                        <Buy />
+                        {/* <Buy /> */}
                       </Route>
                       <Route path={`${path}/sell`} exact>
                         {/* Sell page*/}
 
-                        <Sell />
+                        {/* <Sell /> */}
                       </Route>
                       <Route path={`${path}/portfolio`} exact>
                         {/* portfolio page*/}
 
-                        <Portfolio />
+                        {/* <Portfolio /> */}
                       </Route>
                     </Switch>
                   </Grid>
