@@ -84,6 +84,63 @@ const signUp = async (req, res) => {
   }
 };
 
+
+// todo - if addDefaultMoney fails, fail the user signup
+/**
+ * Add default money into user account, when user is created
+ * @param {mysql.Connection} connection - Db connection Object
+ * @param {Object} resultOfUserQuery - Result of user insert query
+ * @param {String} email - Email of the user
+ * @returns {Object} - Object with resultMoney and errorMoney as keys
+ */
+const addDefaultMoney = async (connection, resultOfUserQuery, email) => {
+  try {
+    if (resultOfUserQuery.insertId) {
+      let sql = "INSERT INTO ?? (??,??,??) values (?,?,?)";
+      let inserts = [
+        "balance",
+        "userid",
+        "email",
+        "balance",
+        resultOfUserQuery.insertId,
+        email,
+        50000.0,
+      ];
+      let formattedQuery = formatSqlQuery(sql, inserts);
+      let resultOfBalanceQuery = await executeQuery(connection, formattedQuery);
+
+      return { resultMoney: resultOfBalanceQuery, errorMoney: null };
+    } else {
+      throw new Error("insertId empty in addDefaultMoney");
+    }
+  } catch (e) {
+    console.error("error in adddefaultmoney", e);
+    return { resultMoney: null, errorMoney: e };
+  }
+};
+
+
+
+
+// todo - fix this
+/**
+ * General error codes related to mysql
+ * @param {*} param0 - Object containing error number ({ errno })
+ * @returns {String} - String describing the error
+ */
+const mysqlErrorCodes = ({ errno }) => {
+  switch (errno) {
+    case 1062:
+      return "user with email already exist";
+
+    default:
+      return "Error while creating user";
+  }
+};
+
+
+
+
 /**
  * Handle logic related to logging out a user
  * @param {Object} req

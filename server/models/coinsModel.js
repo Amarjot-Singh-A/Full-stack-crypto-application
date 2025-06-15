@@ -51,56 +51,103 @@ const buy = async (req) => {
 //   }
 };
 
-
+// todo - fix this
 /**
- * Get user favourite coins from Db
- * @param {String} userId
- * @returns {Object} - Array of Object containing the favourite coins of user
+ * Get the user balance from Db
+ * @param {mysql.Connection} connection - Connection object for Db
+ * @param {String} email - Email entered by user
+ * @returns {Object} - An object with balance and error as keys
  */
-const getFavourite = async (userId) => {
+const getUserBalance = async (connection, email) => {
   try {
-    let sql = "SELECT ??,?? FROM ?? WHERE ?? = ?";
-    let inserts = ["coinId","name", "favouriteCoins", "userId", userId];
+    let sql = "SELECT ?? FROM ?? WHERE ?? = ?";
+    let inserts = ["balance", "balance", "email", email];
     let formattedQuery = formatSqlQuery(sql, inserts);
-    let favouriteCoinsArr = await executeQuery(formattedQuery);
-
-    return favouriteCoinsArr;
-  } catch (err) {
-    console.error("error fetching coins from db", err);
+    let resultOfGetUserBalance = await executeQuery(connection, formattedQuery);
+    return { balance: resultOfGetUserBalance, error: null };
+  } catch (e) {
+    console.error("error inside getuserbalance", e);
+    return { balance: null, error: e };
   }
 };
 
+
+// todo - fix this
 /**
- * Update the user favourite coins in Db
- * @param {Object}  - {coinId, name, userId }
- * @returns {Object} - Result Object of insertion sql operation
+ * Check whether the balance is enough to perform transaction
+ * @param {Number} balance - Current balance of user
+ * @param {Number} amountToInvest - Amount to be invested in coins
+ * @returns {Object} - An object with moneyLeft and eligible as keys
  */
-const postFavourite = async ({coinId, name, userId }) => {
+const enoughBalance = async (balance, amountToInvest) => {
+  if (balance >= amountToInvest) {
+    console.log("balance >");
+    return { moneyLeft: Number(balance - amountToInvest), eligible: true };
+  } else {
+    console.log("balance <");
+    return { moneyLeft: balance, eligible: false };
+  }
+};
+
+
+
+// todo - fix this
+/**
+ *
+ * @param {String} email - Email of the user
+ * @param {Number} moneyLeft - Money left in user account
+ * @param {mysql.Connection} connection - DB connection object
+ * @returns {Object} - An object with updateMoneyResult and updatedMoneyError as keys
+ */
+const updateMoneyInAccount = async (email, moneyLeft, connection) => {
   try {
-    let sql = "INSERT INTO ?? (??,??,??,??) values (?,?,?,?)";
+    let sql = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
+    let inserts = ["balance", "balance", moneyLeft, "email", email];
+    let formattedQuery = formatSqlQuery(sql, inserts);
+    let resultOfDbMoneyUpdate = await executeQuery(connection, formattedQuery);
+    return {
+      updateMoneyResult: resultOfDbMoneyUpdate,
+      updatedMoneyError: null,
+    };
+  } catch (error) {
+    console.error("error inside updateMoneyInAccount", error);
+    return { updateMoneyResult: null, updatedMoneyError: error };
+  }
+};
+
+
+// todo - fix this
+/**
+ *
+ * @param {mysql.Connection} connection - Db connection Object
+ * @param {Object} req - Request Object
+ * @returns {Object} - Object with resultOfTransactionInsertion and error as keys
+ */
+const insertTransactionIntoTable = async (connection, req) => {
+  try {
+    let { coinPrice, coinName, amountInvested, quantityBought } = req.body;
+    let sql =
+      "INSERT INTO transactions(email,coin_price,coin_name,amount_invested,quantity_bought) values (?,?,?,?,?)";
     let inserts = [
-      "favouriteCoins",
-      "coinId",
-      "name",
-      "userId",
-      "timestamp",
-      coinId,
-      name,
-      userId,
-      Math.floor(Date.now() / 1000)
+      req.session.email,
+      Number(coinPrice).toFixed(2),
+      coinName,
+      Number(amountInvested).toFixed(2),
+      Number(quantityBought).toFixed(4),
     ];
     let formattedQuery = formatSqlQuery(sql, inserts);
-    let resultofCoinInsertion = await executeQuery(formattedQuery);
-
-    return resultofCoinInsertion;
-  } catch (err) {
-    console.error("error inserting coins into db", err);
+    let resultOfTransactionInsertion = await executeQuery(
+      connection,
+      formattedQuery
+    );
+    return { resultOfTransactionInsertion, error: null };
+  } catch (error) {
+    console.error("error inside insertTransactionIntoTable", error);
+    return { resultOfTransactionInsertion: null, error };
   }
 };
 
 module.exports = {
-    buy,
-    getFavourite,
-    postFavourite
+    buy
 }
 

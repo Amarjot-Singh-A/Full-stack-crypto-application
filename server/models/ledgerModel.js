@@ -7,8 +7,8 @@ const { formatSqlQuery, executeQuery } = require("../config/db");
  */
 const create = async ({ userId, transactionId, balance }) => {
   try {
-    let sql = "INSERT INTO ?? (??,??,??,??) values (?,?,?,?)";
-    let inserts = [
+    const sql = "INSERT INTO ?? (??,??,??,??) values (?,?,?,?)";
+    const inserts = [
       "ledger",
       "userId",
       "transactionId",
@@ -19,8 +19,8 @@ const create = async ({ userId, transactionId, balance }) => {
       balance,
       Math.floor(Date.now() / 1000)
     ];
-    let formattedQuery = formatSqlQuery(sql, inserts);
-    let result = await executeQuery(formattedQuery);
+    const formattedQuery = formatSqlQuery(sql, inserts);
+    const result = await executeQuery(formattedQuery);
 
     return { result, error: null };
   } catch (error) {
@@ -46,9 +46,6 @@ const get = async (userId) => {
     return { result: null, error };
   }
 };
-
-// let sql = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
-
 
 module.exports = {
     create,
