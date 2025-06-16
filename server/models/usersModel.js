@@ -3,10 +3,11 @@ const {
   bcryptHashPassword,
 } = require("../services/bcrypt");
 const { formatSqlQuery, executeQuery } = require("../config/db");
+const logger = require("../services/logger");
 
 /**
  * Sign up new user
- * @param {*} param0 - Object with values => {firstname :, lastName:, email:, password:,}
+ * @param {*} param0 - Object with values => {firstName:, lastName:, email:, password:}
  * @returns {Object} - Object with result and err as keys
  */
 const signUp = async ({ firstName, lastName, email, password }) => {
@@ -29,7 +30,7 @@ const signUp = async ({ firstName, lastName, email, password }) => {
 
     return { result: resultOfUserQuery, err: null };
   } catch (err) {
-    console.error("error in signUp", err);
+    logger.error("error in signUp", err);
     return { result: null, err };
   }
 };
@@ -38,7 +39,7 @@ const signUp = async ({ firstName, lastName, email, password }) => {
  * Authenticate the user
  * @param {String} email - Email entered by user
  * @param {String} password - Password entered by user
- * @returns {Object} - Object with keys isPasswordMatch and isEmailMatch. additional key firstName on success
+ * @returns {Object} - Object with keys isPasswordMatch, isEmailMatch, firstName, and userId on success
  */
 const signIn = async (email, password) => {
   try {
@@ -47,7 +48,7 @@ const signIn = async (email, password) => {
     const formattedQuery = formatSqlQuery(sql, inserts);
     const queryResult = await executeQuery(formattedQuery);
 
-    if (Object.keys(queryResult).length > 0) {
+    if (Array.isArray(queryResult) && queryResult.length > 0) {
       const isPasswordMatch = await bcryptComparePassword(
         password,
         queryResult[0].password
@@ -67,7 +68,13 @@ const signIn = async (email, password) => {
      };
     }
   } catch (err) {
-    console.error("error in signIn", err);
+    logger.error("error in signIn", err);
+    return { 
+      isPasswordMatch: false, 
+      isEmailMatch: false,
+      firstName: null,
+      userId: null
+    };
   }
 };
 

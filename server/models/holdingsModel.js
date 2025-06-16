@@ -1,9 +1,10 @@
 const { formatSqlQuery, executeQuery } = require("../config/db");
+const logger = require("../services/logger");
 
 const get = async (userId) => {
   try {
-    const sql = "SELECT ??,?? FROM ?? WHERE ?? = ?";
-    const inserts = ["id", "coinId", "quantity", "holdings", "userId", userId];
+    const sql = "SELECT ??, ??, ??, ?? FROM ?? WHERE ?? = ?";
+    const inserts = ["id", "coinId", "quantity", "userId", "holdings", "userId", userId];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
@@ -12,7 +13,7 @@ const get = async (userId) => {
       error: null,
     };
   } catch (error) {
-    console.error("Error fetching holdings - data model", error);
+    logger.error("Error fetching holdings - data model", error);
     return {
       result: [],
       error,
@@ -40,7 +41,7 @@ const create = async ({ userId, coinId, quantity }) => {
       error: null,
     };
   } catch (error) {
-    console.error("Error inserting holdings - data model", error);
+    logger.error("Error inserting holdings - data model", error);
     return {
       result: [],
       error,
@@ -60,7 +61,7 @@ const remove = async (id) => {
       error: null,
     };
   } catch (error) {
-    console.error("Error deleting holdings - data model", error);
+    logger.error("Error deleting holdings - data model", error.stack || error);
     return {
       result: [],
       error,

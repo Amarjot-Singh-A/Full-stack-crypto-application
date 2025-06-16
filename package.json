@@ -30,10 +30,12 @@
     "express-mysql-session": "^2.1.7",
     "express-session": "^1.17.2",
     "mysql2": "^3.14.1",
-    "save": "^2.4.0"
+    "save": "^2.4.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "jest": "26.6.0",
+    "jest-mock": "^30.0.0",
     "nodemon": "^2.0.13",
     "supertest": "^6.2.2"
   }

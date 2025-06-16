@@ -1,4 +1,5 @@
 const { formatSqlQuery, executeQuery } = require("../config/db");
+const logger = require("../services/logger");
 
 /**
  * Create a record in ledger table
@@ -24,14 +25,14 @@ const create = async ({ userId, transactionId, balance }) => {
 
     return { result, error: null };
   } catch (error) {
-    console.error("error in creating ledger record", err);
+    logger.error("error in creating ledger record", error);
     return { result: null, error };
   }
 };
 
 /**
  * Fetch record from ledger table
- * @param {int} userId -
+ * @param {number} userId -
  * @returns {Object} - fetched ledger record
  */
 const get = async (userId) => {
@@ -40,9 +41,9 @@ const get = async (userId) => {
     const inserts = ["userId", "transactionId", "balance", "ledger", "userId", userId];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
-    return {result, error: null};
+    return { result, error: null };
   } catch (error) {
-    console.error("error fetching ledger record", error);
+    logger.error("error fetching ledger record", error);
     return { result: null, error };
   }
 };

@@ -1,9 +1,10 @@
 const { formatSqlQuery, executeQuery } = require("../config/db");
+const logger = require("../services/logger");
 
 /**
  * Get user favourite coins from Db
  * @param {String} userId
- * @returns {Object}
+ * @returns {{ result: Array<any>, error: Error|null }}
  */
 const get = async (userId) => {
   try {
@@ -17,7 +18,8 @@ const get = async (userId) => {
       error: null,
     };
   } catch (error) {
-    console.error("Error fetching favourite coins - data model", error);
+    // Use a logging library or mask sensitive data in production
+    logger.error("Error fetching favourite coins - data model", error.message);
     return {
       result: [],
       error,
@@ -27,8 +29,8 @@ const get = async (userId) => {
 
 /**
  * Update the user favourite coins in Db
- * @param {Object}  - {coinId, name, userId }
- * @returns {Object}
+ * @param {Object}  params - { coinId, name, userId }
+ * @returns {{ result: any, error: Error|null }}
  */
 const create = async ({ coinId, name, userId }) => {
   try {
@@ -52,7 +54,7 @@ const create = async ({ coinId, name, userId }) => {
       error: null,
     };
   } catch (error) {
-    console.error("Error inserting favourite coins - data model", error);
+    logger.error("Error inserting favourite coins - data model", error.message);
     return {
       result: [],
       error,
