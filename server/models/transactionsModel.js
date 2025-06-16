@@ -1,55 +1,80 @@
-
+const { formatSqlQuery, executeQuery } = require("../config/db");
+const logger = require("../services/logger");
 
 /**
- * Route - /portfolio
- * @summary - GET Transactions of an user
+ * Fetch a transaction record from the database
+ * @param {number} id - The ID of the transaction to fetch
+ * @returns {Object} - An object containing the result and error (if any)
  */
-app.get("/portfolio", checkAuth, async (req, res) => {
+const get = async (id) => {
   try {
-    let result = await helper.fetchUserTrans(connection, req.session.email);
-    console.log("get portfolio->", result);
-    if (result.error) {
-      res.status(403).send({
-        result: result.result,
-        error: error,
-        completed: false,
-      });
-    } else {
-      res.status(200).send({
-        result: result.result,
-        error: result.error,
-        completed: true,
-      });
-    }
-  } catch (e) {
-    console.error("error inside get portfolio", e);
-    res.status(403).send({
-      result: null,
-      error: e,
-      completed: false,
-    });
-  }
-});
-
-
-// todo - fix this
-/**
- * Fetch the list of transaction done by user
- * @param {mysql.Connection} connection - Db connection Object
- * @param {String} email - User email
- * @returns {Object} - Object containing result and error as keys
- */
-const fetchUserTrans = async (connection, email) => {
-  try {
-    let sql = "SELECT * FROM ?? WHERE ?? = ?";
-    let inserts = ["transactions", "email", email];
-    let formattedQuery = formatSqlQuery(sql, inserts);
-    let result = await executeQuery(connection, formattedQuery);
+    const sql = "SELECT * FROM ?? WHERE ?? = ?";
+    const inserts = ["transactions", "id", id];
+    const formattedQuery = formatSqlQuery(sql, inserts);
+    const result = await executeQuery(formattedQuery);
 
     return { result, error: null };
-  } catch (e) {
-    console.error("error inside fetchUserTrans", e);
-    return { result: null, error: e };
+  } catch (error) {
+    logger.error("Error fetching single transaction record", error);
+    return { result: null, error };
   }
 };
 
+/**
+ * Fetch all transaction records from the database
+ * @returns {{ result: Array<Object>|null, error: Error|null }} - An object containing an array of transaction objects as `result` and `error` if any
+ */
+const getAll = async () => {
+  try {
+    const sql = "SELECT * FROM ??";
+    const inserts = ["transactions"];
+    const formattedQuery = formatSqlQuery(sql, inserts);
+    const result = await executeQuery(formattedQuery);
+
+    return { result, error: null };
+  } catch (error) {
+    logger.error("Error fetching transaction records", error);
+    return { result: null, error };
+  }
+};
+
+/**
+ * Create a new transaction record in the database
+ * @param {Object} param0 - An object containing the transaction details
+ * @param {number} param0.paymentId - The ID of the payment associated with the transaction
+ * @param {number} param0.amount - The amount of the transaction
+ * @param {string} param0.notes - Additional notes for the transaction
+ * @returns {{ result: Object|null, error: Error|null }} - An object containing the result of the insert operation and error (if any)
+ */
+const create = async ({
+  paymentId,
+  amount,
+  notes}) => {  
+  try {
+    const sql = "INSERT INTO ?? (??, ??, ??, ??) VALUES (?, ?, ?, ?)";
+    const inserts = [
+      "transactions",
+      "paymentId",
+      "amount",
+      "notes",
+      "timestamp",
+      paymentId,
+      amount,
+      notes,
+      Math.floor(Date.now() / 1000),
+    ];
+    const formattedQuery = formatSqlQuery(sql, inserts);
+    const result = await executeQuery(formattedQuery);
+
+    return { result, error: null };
+  } catch (error) {
+    logger.error("Error inserting transaction record", error);
+    return { result: null, error };
+  }
+};
+
+module.exports = {
+  get,
+  getAll,
+  create,
+};

@@ -12,12 +12,12 @@ const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
-  database: process.env.DB
+  database: process.env.DB_NAME
 });
 
 // Check for db connection error
 connection.addListener('error', (err) => {
-  console.log(err);
+  console.error(err);
 });
 
 // configure mySql session settings
@@ -37,14 +37,7 @@ const formatSqlQuery = (query, inserts) => mysql.format(query, inserts);
  * @returns {Promise} - A Promise with value of either reject or resolve
  */
 const executeQuery = (sqlQuery) => {
-  return new Promise((resolve, reject) => {
-    connection.query(sqlQuery, (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
-  });
+  return connection.promise().query(sqlQuery).then(([result]) => result);
 };
 
 

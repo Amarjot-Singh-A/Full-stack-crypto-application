@@ -6,7 +6,7 @@ const {checkAuth} = require("../services/middleware");
 
 
 router.get("/",checkAuth, favouriteCoinsController.getFavourite);
-router.post("/",checkAuth, favouriteCoinsController.postFavourite);
+router.post("/",checkAuth, favouriteCoinsController.createFavourite);
 
 
 module.exports = router;

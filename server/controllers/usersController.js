@@ -13,7 +13,7 @@ const signIn = async (req, res) => {
     const { isPasswordMatch, isEmailMatch, firstName , userId} =
       await usersModel.signIn(formEmail, formPassword);
     if (isPasswordMatch === true && isEmailMatch === true) {
-      req.session.userName = firstName; // todo - change this to table user id
+      req.session.userName = firstName;
       req.session.isLogged = true;
       req.session.email = formEmail;
       req.session.userId = userId
