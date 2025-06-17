@@ -1,15 +1,16 @@
-const ledgerModel = require('../models/ledgerModel');
-const db = require('../config/db');
-const logger = require('../services/logger');
-
 // Mock db and logger
 jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../services/logger', () => ({
+jest.mock('../utils/logger'), () => ({
   error: jest.fn(),
-}));
+})
+
+const ledgerModel = require('../models/ledgerModel');
+const db = require('../config/db');
+const logger = require('../utils/logger');
+
 
 describe('ledgerModel', () => {
   afterEach(() => {

@@ -1,0 +1,293 @@
+2025-06-17T19:58:09.338Z [error]: Error inserting coin - data model
+2025-06-17T19:58:09.341Z [info]: Inserted new coin bitcoin with price 143368
+2025-06-17T19:58:17.351Z [error]: Error inserting coin - data model
+2025-06-17T19:58:17.353Z [info]: Inserted new coin bitcoin with price 143368
+2025-06-17T19:58:23.097Z [error]: Error inserting coin - data model
+2025-06-17T19:58:23.098Z [info]: Inserted new coin bitcoin with price 143368
+2025-06-17T19:58:29.158Z [error]: Error inserting coin - data model
+2025-06-17T19:58:29.159Z [info]: Inserted new coin bitcoin with price 143368
+2025-06-17T19:58:35.125Z [error]: Error inserting coin - data model
+2025-06-17T19:58:35.125Z [info]: Inserted new coin bitcoin with price 143368
+2025-06-17T19:58:41.091Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T19:58:47.089Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T19:59:47.931Z [error]: Error inserting coin - data model
+2025-06-17T19:59:47.933Z [info]: Inserted new coin bitcoin with price 143303
+2025-06-17T20:00:47.886Z [error]: Error inserting coin - data model
+2025-06-17T20:00:47.886Z [info]: Inserted new coin bitcoin with price 143237
+2025-06-17T20:01:56.936Z [error]: Error inserting coin - data model
+2025-06-17T20:01:56.938Z [info]: Inserted new coin bitcoin with price 143196
+2025-06-17T20:02:56.855Z [error]: Error inserting coin - data model
+2025-06-17T20:02:56.855Z [info]: Inserted new coin bitcoin with price 143158
+2025-06-17T20:03:56.970Z [error]: Error inserting coin - data model
+2025-06-17T20:03:56.970Z [info]: Inserted new coin bitcoin with price 143022
+2025-06-17T20:04:56.890Z [error]: Error inserting coin - data model
+2025-06-17T20:04:56.891Z [info]: Inserted new coin bitcoin with price 143022
+2025-06-17T20:05:57.209Z [error]: Error inserting coin - data model
+2025-06-17T20:05:57.209Z [info]: Inserted new coin bitcoin with price 143024
+2025-06-17T20:06:56.966Z [error]: Error inserting coin - data model
+2025-06-17T20:06:56.966Z [info]: Inserted new coin bitcoin with price 143020
+2025-06-17T20:07:28.758Z [info]: Inserted new coin bitcoin with price 143020
+2025-06-17T20:07:38.714Z [error]: Error updating coin - data model
+2025-06-17T20:07:38.715Z [info]: Updated coin bitcoin with new price 143020
+2025-06-17T20:08:47.034Z [error]: Error updating coin - data model
+2025-06-17T20:08:47.036Z [info]: Updated coin bitcoin with new price 143014
+2025-06-17T20:17:31.016Z [info]: Inserted new coin bitcoin with price 142934
+2025-06-17T20:18:30.860Z [info]: Updated coin bitcoin with new price 142934
+2025-06-17T20:31:24.611Z [error]: Error inserting coin - data model
+2025-06-17T20:31:24.618Z [error]: Error fetching single coin - data model
+2025-06-17T20:31:24.620Z [error]: Error fetching all coins - data model
+2025-06-17T20:31:24.623Z [error]: Error updating coin - data model
+2025-06-17T20:32:08.622Z [error]: Error inserting coin - data model
+2025-06-17T20:32:08.630Z [error]: Error fetching single coin - data model
+2025-06-17T20:32:08.634Z [error]: Error fetching all coins - data model
+2025-06-17T20:32:08.638Z [error]: Error updating coin - data model
+2025-06-17T20:32:08.727Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:32:08.757Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:32:47.162Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:32:47.184Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:32:47.298Z [error]: Error inserting coin - data model
+2025-06-17T20:32:47.467Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:32:47.474Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:32:47.479Z [error]: Error deleting holdings - data model
+2025-06-17T20:32:47.306Z [error]: Error fetching single coin - data model
+2025-06-17T20:32:47.310Z [error]: Error fetching all coins - data model
+2025-06-17T20:32:47.315Z [error]: Error updating coin - data model
+2025-06-17T20:33:03.526Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:33:03.602Z [error]: Error inserting coin - data model
+2025-06-17T20:33:03.621Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:33:03.724Z [error]: error in creating ledger record DB error
+2025-06-17T20:33:03.731Z [error]: error fetching ledger record DB error
+2025-06-17T20:33:03.736Z [error]: error deleting ledger record DB error
+2025-06-17T20:33:03.537Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:33:03.542Z [error]: Error deleting holdings - data model
+2025-06-17T20:33:03.609Z [error]: Error fetching single coin - data model
+2025-06-17T20:33:03.612Z [error]: Error fetching all coins - data model
+2025-06-17T20:33:03.617Z [error]: Error updating coin - data model
+2025-06-17T20:33:03.652Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:33:12.794Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:33:12.788Z [error]: error in creating ledger record DB error
+2025-06-17T20:33:12.798Z [error]: error fetching ledger record DB error
+2025-06-17T20:33:12.802Z [error]: error deleting ledger record DB error
+2025-06-17T20:33:12.800Z [error]: Error inserting coin - data model
+2025-06-17T20:33:12.894Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:33:12.925Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:33:12.802Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:33:12.805Z [error]: Error deleting holdings - data model
+2025-06-17T20:33:13.056Z [error]: error in creating payment method record DB error
+2025-06-17T20:33:13.059Z [error]: error fetching payment method record DB error
+2025-06-17T20:33:13.061Z [error]: error fetching all payment methods DB error
+2025-06-17T20:33:12.806Z [error]: Error fetching single coin - data model
+2025-06-17T20:33:12.809Z [error]: Error fetching all coins - data model
+2025-06-17T20:33:12.812Z [error]: Error updating coin - data model
+2025-06-17T20:33:22.877Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:33:22.902Z [error]: error in creating ledger record DB error
+2025-06-17T20:33:22.934Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:33:22.971Z [error]: Error inserting coin - data model
+2025-06-17T20:33:22.981Z [error]: Error fetching single coin - data model
+2025-06-17T20:33:22.985Z [error]: Error fetching all coins - data model
+2025-06-17T20:33:22.989Z [error]: Error updating coin - data model
+2025-06-17T20:33:22.898Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:33:23.024Z [error]: error in creating payment method record DB error
+2025-06-17T20:33:23.027Z [error]: error fetching payment method record DB error
+2025-06-17T20:33:23.037Z [error]: error fetching all payment methods DB error
+2025-06-17T20:33:22.909Z [error]: error fetching ledger record DB error
+2025-06-17T20:33:22.913Z [error]: error deleting ledger record DB error
+2025-06-17T20:33:23.163Z [error]: Error fetching single transaction record DB error
+2025-06-17T20:33:23.168Z [error]: Error fetching transaction records DB error
+2025-06-17T20:33:23.176Z [error]: Error inserting transaction record DB error
+2025-06-17T20:33:22.946Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:33:22.951Z [error]: Error deleting holdings - data model
+2025-06-17T20:33:37.288Z [error]: error in creating ledger record DB error
+2025-06-17T20:33:37.304Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:33:37.369Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:33:37.297Z [error]: error fetching ledger record DB error
+2025-06-17T20:33:37.301Z [error]: error deleting ledger record DB error
+2025-06-17T20:33:37.452Z [error]: Error fetching single transaction record DB error
+2025-06-17T20:33:37.459Z [error]: Error fetching transaction records DB error
+2025-06-17T20:33:37.468Z [error]: Error inserting transaction record DB error
+2025-06-17T20:33:37.325Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:33:37.486Z [error]: error in creating payment method record DB error
+2025-06-17T20:33:37.491Z [error]: error fetching payment method record DB error
+2025-06-17T20:33:37.498Z [error]: error fetching all payment methods DB error
+2025-06-17T20:33:37.424Z [error]: Error inserting coin - data model
+2025-06-17T20:33:37.451Z [error]: Error fetching single coin - data model
+2025-06-17T20:33:37.462Z [error]: Error fetching all coins - data model
+2025-06-17T20:33:37.476Z [error]: Error updating coin - data model
+2025-06-17T20:33:37.379Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:33:37.384Z [error]: Error deleting holdings - data model
+2025-06-17T20:33:37.697Z [error]: error in signUp Hash error
+2025-06-17T20:33:37.701Z [error]: error in signIn DB error
+2025-06-17T20:33:41.791Z [error]: Error inserting coin - data model
+2025-06-17T20:33:41.881Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:33:41.794Z [error]: Error fetching single coin - data model
+2025-06-17T20:33:41.795Z [error]: Error fetching all coins - data model
+2025-06-17T20:33:41.797Z [error]: Error updating coin - data model
+2025-06-17T20:33:41.883Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:33:41.884Z [error]: Error deleting holdings - data model
+2025-06-17T20:33:41.966Z [error]: error in creating ledger record DB error
+2025-06-17T20:33:41.968Z [error]: error fetching ledger record DB error
+2025-06-17T20:33:41.969Z [error]: error deleting ledger record DB error
+2025-06-17T20:33:42.078Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:33:42.081Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:33:42.156Z [error]: error in signUp Hash error
+2025-06-17T20:33:42.158Z [error]: error in signIn DB error
+2025-06-17T20:33:42.217Z [error]: Error fetching single transaction record DB error
+2025-06-17T20:33:42.219Z [error]: Error fetching transaction records DB error
+2025-06-17T20:33:42.221Z [error]: Error inserting transaction record DB error
+2025-06-17T20:33:42.298Z [error]: error in creating payment method record DB error
+2025-06-17T20:33:42.300Z [error]: error fetching payment method record DB error
+2025-06-17T20:33:42.301Z [error]: error fetching all payment methods DB error
+2025-06-17T20:36:00.224Z [error]: Error inserting coin - data model
+2025-06-17T20:36:00.246Z [error]: error in creating payment method record DB error
+2025-06-17T20:36:00.255Z [error]: error fetching payment method record DB error
+2025-06-17T20:36:00.259Z [error]: error fetching all payment methods DB error
+2025-06-17T20:36:00.291Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:36:00.330Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:36:00.231Z [error]: Error fetching single coin - data model
+2025-06-17T20:36:00.235Z [error]: Error fetching all coins - data model
+2025-06-17T20:36:00.239Z [error]: Error updating coin - data model
+2025-06-17T20:36:00.394Z [error]: error in creating ledger record DB error
+2025-06-17T20:36:00.397Z [error]: error fetching ledger record DB error
+2025-06-17T20:36:00.400Z [error]: error deleting ledger record DB error
+2025-06-17T20:36:00.404Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:36:00.408Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:36:00.412Z [error]: Error deleting holdings - data model
+2025-06-17T20:36:00.470Z [error]: Error fetching single transaction record DB error
+2025-06-17T20:36:00.475Z [error]: Error fetching transaction records DB error
+2025-06-17T20:36:00.490Z [error]: Error inserting transaction record DB error
+2025-06-17T20:36:27.198Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:36:27.215Z [error]: error in creating payment method record DB error
+2025-06-17T20:36:27.257Z [error]: Error inserting coin - data model
+2025-06-17T20:36:27.220Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:36:27.353Z [error]: error in creating ledger record DB error
+2025-06-17T20:36:27.358Z [error]: error fetching ledger record DB error
+2025-06-17T20:36:27.362Z [error]: error deleting ledger record DB error
+2025-06-17T20:36:27.225Z [error]: error fetching payment method record DB error
+2025-06-17T20:36:27.229Z [error]: error fetching all payment methods DB error
+2025-06-17T20:36:27.372Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:36:27.376Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:36:27.379Z [error]: Error deleting holdings - data model
+2025-06-17T20:36:27.265Z [error]: Error fetching single coin - data model
+2025-06-17T20:36:27.269Z [error]: Error fetching all coins - data model
+2025-06-17T20:36:27.274Z [error]: Error updating coin - data model
+2025-06-17T20:36:41.317Z [error]: Error inserting coin - data model
+2025-06-17T20:36:41.327Z [error]: Error fetching single coin - data model
+2025-06-17T20:36:41.331Z [error]: Error fetching all coins - data model
+2025-06-17T20:36:41.336Z [error]: Error updating coin - data model
+2025-06-17T20:36:41.496Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:36:41.500Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:36:41.503Z [error]: Error deleting holdings - data model
+2025-06-17T20:36:41.513Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:36:41.541Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:36:41.366Z [error]: error in creating ledger record DB error
+2025-06-17T20:36:41.379Z [error]: error fetching ledger record DB error
+2025-06-17T20:36:41.383Z [error]: error deleting ledger record DB error
+2025-06-17T20:36:51.716Z [error]: Error inserting coin - data model
+2025-06-17T20:36:51.831Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:36:51.727Z [error]: Error fetching single coin - data model
+2025-06-17T20:36:51.731Z [error]: Error fetching all coins - data model
+2025-06-17T20:36:51.736Z [error]: Error updating coin - data model
+2025-06-17T20:36:51.923Z [error]: Error fetching holdings - data model DB error
+2025-06-17T20:36:51.929Z [error]: Error inserting holdings - data model DB error
+2025-06-17T20:36:51.933Z [error]: Error deleting holdings - data model
+2025-06-17T20:36:51.859Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:37:03.126Z [error]: Error fetching favourite coins - data model
+2025-06-17T20:37:03.153Z [error]: Error inserting favourite coins - data model
+2025-06-17T20:37:03.288Z [error]: Error inserting coin - data model
+2025-06-17T20:37:03.296Z [error]: Error fetching single coin - data model
+2025-06-17T20:37:03.300Z [error]: Error fetching all coins - data model
+2025-06-17T20:37:03.306Z [error]: Error updating coin - data model
+2025-06-17T20:37:15.798Z [error]: Error inserting coin - data model
+2025-06-17T20:37:15.805Z [error]: Error fetching single coin - data model
+2025-06-17T20:37:15.809Z [error]: Error fetching all coins - data model
+2025-06-17T20:37:15.813Z [error]: Error updating coin - data model
+2025-06-17T20:43:50.345Z [info]: Updated coin bitcoin with new price 142878
+2025-06-17T20:44:50.308Z [info]: Updated coin bitcoin with new price 142884
+2025-06-17T20:46:32.696Z [info]: Updated coin bitcoin with new price 142890
+2025-06-17T20:47:32.659Z [info]: Updated coin bitcoin with new price 143146
+2025-06-17T20:48:55.142Z [info]: Updated coin bitcoin with new price 143151
+2025-06-17T20:50:37.448Z [info]: Updated coin bitcoin with new price 143116
+2025-06-17T20:51:37.451Z [info]: Updated coin bitcoin with new price 142916
+2025-06-17T20:53:19.016Z [info]: Updated coin bitcoin with new price 142901
+2025-06-17T20:54:18.999Z [info]: Updated coin bitcoin with new price 142890
+2025-06-17T20:55:28.494Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T20:57:38.496Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T20:58:38.273Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:00:33.737Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:02:06.410Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:04:03.237Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:05:03.132Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:06:03.467Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:07:31.871Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:07:41.812Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:07:51.826Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:08:01.825Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:08:11.806Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:08:21.871Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:08:33.364Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:08:43.312Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:08:53.325Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:09:03.566Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:09:13.347Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:09:23.306Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:09:33.351Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:09:46.771Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:09:56.712Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:10:06.825Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:11:17.157Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:11:46.433Z [info]: Updated coin bitcoin with new price 142653
+2025-06-17T21:11:56.410Z [info]: Updated coin bitcoin with new price 142703
+2025-06-17T21:12:06.388Z [info]: Updated coin bitcoin with new price 142703
+2025-06-17T21:12:16.696Z [info]: Updated coin bitcoin with new price 142703
+2025-06-17T21:12:26.424Z [info]: Updated coin bitcoin with new price 142703
+2025-06-17T21:12:36.410Z [info]: Updated coin bitcoin with new price 142703
+2025-06-17T21:12:46.388Z [info]: Updated coin bitcoin with new price 142703
+2025-06-17T21:14:03.971Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:14:13.660Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:15:22.455Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:16:30.067Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:16:39.983Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:16:52.845Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:17:02.799Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:17:12.807Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:17:22.801Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:17:32.861Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:17:42.857Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:17:52.806Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:18:02.803Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:18:12.803Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:18:22.805Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:18:32.809Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:18:42.853Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:18:55.159Z [info]: Updated coin bitcoin with new price 142683
+2025-06-17T21:19:05.075Z [info]: Updated coin bitcoin with new price 142683
+2025-06-17T21:19:15.073Z [info]: Updated coin bitcoin with new price 142683
+2025-06-17T21:19:25.084Z [info]: Updated coin bitcoin with new price 142683
+2025-06-17T21:19:35.127Z [info]: Updated coin bitcoin with new price 142683
+2025-06-17T21:19:45.087Z [info]: Updated coin bitcoin with new price 142683
+2025-06-17T21:19:55.075Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:20:05.114Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:20:15.143Z [error]: Error in fetchAndUpsertCoin
+2025-06-17T21:20:34.362Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:20:44.263Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:20:54.268Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:21:04.353Z [info]: Updated coin bitcoin with new price 142721
+2025-06-17T21:21:14.361Z [info]: Updated coin bitcoin with new price 142721
+2025-06-17T21:21:24.296Z [info]: Updated coin bitcoin with new price 142721
+2025-06-17T21:21:34.303Z [info]: Updated coin bitcoin with new price 142721
+2025-06-17T21:21:44.391Z [info]: Updated coin bitcoin with new price 142721
+2025-06-17T21:21:54.279Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:22:04.298Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:22:14.299Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:22:24.292Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:22:34.292Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:22:44.291Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:22:54.309Z [info]: Updated coin bitcoin with new price 142745
+2025-06-17T21:23:08.100Z [info]: Updated coin bitcoin with new price 142749
+2025-06-17T21:23:17.982Z [info]: Updated coin bitcoin with new price 142749
+2025-06-17T21:23:27.978Z [info]: Updated coin bitcoin with new price 142749
+2025-06-17T21:23:37.984Z [info]: Updated coin bitcoin with new price 142749
+2025-06-17T21:23:48.490Z [error]: Error in fetchAndUpsertCoin Cannot access 'result' before initialization
+2025-06-17T21:23:58.407Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:24:08.409Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429
+2025-06-17T21:24:18.417Z [error]: Error in fetchAndUpsertCoin Request failed with status code 429

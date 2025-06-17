@@ -1,20 +1,20 @@
-const usersModel = require('../models/usersModel');
-const db = require('../config/db');
-const logger = require('../services/logger');
-const bcrypt = require('../services/bcrypt');
-
 // Mock db, logger, and bcrypt
 jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../services/logger', () => ({
+jest.mock('../utils/logger', () => ({
   error: jest.fn(),
 }));
 jest.mock('../services/bcrypt', () => ({
   bcryptHashPassword: jest.fn(),
   bcryptComparePassword: jest.fn(),
 }));
+
+const usersModel = require('../models/usersModel');
+const db = require('../config/db');
+const logger = require('../utils/logger');
+const bcrypt = require('../services/bcrypt');
 
 describe('usersModel', () => {
   afterEach(() => {
@@ -31,7 +31,7 @@ describe('usersModel', () => {
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
       expect(res.result).toEqual({ insertId: 1 });
-      expect(res.err).toBeNull();
+      expect(res.error).toBeNull();
     });
 
     it('should handle errors and log them', async () => {
@@ -40,7 +40,7 @@ describe('usersModel', () => {
       const res = await usersModel.signUp(data);
       expect(logger.error).toHaveBeenCalled();
       expect(res.result).toBeNull();
-      expect(res.err).toBeInstanceOf(Error);
+      expect(res.error).toBeInstanceOf(Error);
     });
   });
 

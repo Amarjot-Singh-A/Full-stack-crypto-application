@@ -1,5 +1,5 @@
 const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../services/logger");
+const logger = require("../utils/logger");
 
 
 /**

@@ -1,184 +1,146 @@
+const { Logger, log } = require("winston");
 const usersModel = require("../models/usersModel");
+const logger = require("../utils/logger");
 
 /**
- * Hanlde logic related to signing in of a user
- * @param {Object} req
- * @param {Object} res
+ * Handle business logic related to signing in a user
+ * @param {*} req
+ * @param {*} res
+ * @returns {Object} - Object with keys loggedIn and error
+ *                      loggedIn: true if user is successfully signed in, false otherwise
+ *                      error: empty string if no error, otherwise contains error message
  */
 const signIn = async (req, res) => {
-  const formEmail = req.body.email || "";
-  const formPassword = req.body.password || "";
+  const { email, password } = req.body;
 
-  if (formEmail && formPassword) {
-    const { isPasswordMatch, isEmailMatch, firstName , userId} =
-      await usersModel.signIn(formEmail, formPassword);
+  if (!email || !password) {
+    logger.error("email or password not provided");
+    return res.status(400).send({
+      loggedIn: false,
+      error: "email or password not provided",
+    });
+  }
+
+  try {
+    const { isPasswordMatch, isEmailMatch, firstName, userId } =
+      await usersModel.signIn(email, password);
+
     if (isPasswordMatch === true && isEmailMatch === true) {
       req.session.userName = firstName;
       req.session.isLogged = true;
-      req.session.email = formEmail;
-      req.session.userId = userId
-      console.log("password matched & session signin-> ", req.session);
+      req.session.email = email;
+      req.session.userId = userId;
+      logger.info("User signed in successfully", {
+        userId,
+        email,
+      });
       res.status(200).send({
         loggedIn: true,
         error: "",
       });
     } else {
-      console.log("email or password doesnt match");
+      logger.warn("email or password doesnt match", {
+        email,
+      });
       res.status(401).send({
         loggedIn: false,
         error: "email or password doesnt match",
       });
     }
-  }
-};
-
-/**
- * Hanlde business logic related to signing up a user
- * @param {Object} req
- * @param {Object} res
- */
-const signUp = async (req, res) => {
-  if (req.body) {
-    try {
-      const { result, err } = await usersModel.signUp(req.body);
-
-      if (result == null && err) {
-        let error = helper.mysqlErrorCodes(err);
-        console.log(error);
-        res.status(403).send({
-          loggedIn: false,
-          error: error,
-        });
-      } else {
-        console.log("sign up query executed", result);
-        // const { resultMoney, errorMoney } = await helper.addDefaultMoney(
-        //   connection,
-        //   result,
-        //   req.body.email
-        // );
-        // if ((resultMoney == null) & errorMoney) {
-        //   console.log(errorMoney);
-        //   res.status(403).send({
-        //     loggedIn: false,
-        //     error: error,
-        //   });
-        // } else {
-        //   console.log("default money query executed", resultMoney);
-        //   req.session.userId = req.body.firstName;
-        //   req.session.isLogged = true;
-        //   req.session.email = req.body.email;
-        //   res.status(200).send({
-        //     loggedIn: true,
-        //     error: "",
-        //   });
-        // }
-      }
-    } catch (err) {
-      console.error("error in signing up user");
-    }
-  } else {
+  } catch (error) {
+    logger.error("Error in controller while signing in: ", error);
     res.status(500).send({
       loggedIn: false,
-      error: "No data recieved from the form",
+      error: `Error in controller while signing up: ${error.message}`,
     });
   }
 };
 
-
-// todo - if addDefaultMoney fails, fail the user signup
 /**
- * Add default money into user account, when user is created
- * @param {mysql.Connection} connection - Db connection Object
- * @param {Object} resultOfUserQuery - Result of user insert query
- * @param {String} email - Email of the user
- * @returns {Object} - Object with resultMoney and errorMoney as keys
+ * Handle business logic related to signing up a user
+ * @param {*} req
+ * @param {*} res
+ * @returns {Object} - Object with keys loggedIn and error
+ *                      loggedIn: true if user is successfully signed up, false otherwise
+ *                      error: empty string if no error, otherwise contains error message
  */
-const addDefaultMoney = async (connection, resultOfUserQuery, email) => {
+const signUp = async (req, res) => {
+  if (!req.body) {
+    logger.error("No data in request body");
+    return res.status(500).send({
+      loggedIn: false,
+      error: "No data in request body",
+    });
+  }
+
   try {
-    if (resultOfUserQuery.insertId) {
-      let sql = "INSERT INTO ?? (??,??,??) values (?,?,?)";
-      let inserts = [
-        "balance",
-        "userid",
-        "email",
-        "balance",
-        resultOfUserQuery.insertId,
-        email,
-        50000.0,
-      ];
-      let formattedQuery = formatSqlQuery(sql, inserts);
-      let resultOfBalanceQuery = await executeQuery(connection, formattedQuery);
-
-      return { resultMoney: resultOfBalanceQuery, errorMoney: null };
+    const { result, error } = await usersModel.signUp(req.body);
+    if (result == null && error) {
+      logger.error("Error in model while signing up: ", error);
+      return res.status(401).send({
+        loggedIn: false,
+        error,
+      });
     } else {
-      throw new Error("insertId empty in addDefaultMoney");
+      logger.info("User signed up successfully", result);
+      res.status(200).send({
+        loggedIn: true,
+        error: "",
+      });
     }
-  } catch (e) {
-    console.error("error in adddefaultmoney", e);
-    return { resultMoney: null, errorMoney: e };
+  } catch (error) {
+    logger.error("Error in controller while signing in: ", error);
+    res.status(500).send({
+      loggedIn: false,
+      error: `Error in controller while signing in: ${error.message}`,
+    });
   }
 };
 
-
-
-
-// todo - fix this
 /**
- * General error codes related to mysql
- * @param {*} param0 - Object containing error number ({ errno })
- * @returns {String} - String describing the error
- */
-const mysqlErrorCodes = ({ errno }) => {
-  switch (errno) {
-    case 1062:
-      return "user with email already exist";
-
-    default:
-      return "Error while creating user";
-  }
-};
-
-
-
-
-/**
- * Handle logic related to logging out a user
- * @param {Object} req
- * @param {Object} res
+ * Handle business logic related to logging out a user
+ * @param {*} req
+ * @param {*} res
+ * @returns {Object} - Object with keys isLogged and error
+ *                      isLogged: false if user is successfully logged out, true otherwise
+ *                      error: empty string if no error, otherwise contains error message
  */
 const logOut = (req, res) => {
-  if (req.session.isLogged) {
-    req.session.destroy((err) => {
-      console.log("/logout inside-> ", req.session);
-
-      if (err) {
-        console.error("failed to log user out");
-        res.status(500).send({
-          isLogged: true,
-          error: `erorr logging out`,
-        });
-      }
-      req.session = null;
-      console.log("user logged out");
-      return res
-        .clearCookie("connect.sid", {
-          secure: false,
-          path: "/",
-          httpOnly: true,
-        })
-        .status(200)
-        .send({
-          isLogged: false,
-          error: "",
-        });
-    });
-  } else {
-    res.status(500).send({
+  if (!req.session || !req.session.isLogged) {
+    logger.warn("session doesnt exist");
+    return res.status(500).send({
       isLogged: false,
       error: "session doesnt exist",
     });
-    console.log("user is not logged in");
   }
+
+  console.log("session before destroy-> ", req.session);
+  req.session.destroy((error) => {
+    if (error) {
+      logger.error("Error logging out user: ", error);
+      return res.status(500).send({
+        isLogged: true,
+        error: `error logging out: ${error.message}`,
+      });
+    }
+    //clear the cookie
+    logger.info("user session destroyed successfully", {
+      userId: req.session.userId,
+      email: req.session.email,
+    });
+    // clear the cookie
+    return res
+      .clearCookie(process.env.SESSION_COOKIE_NAME, {
+        secure: false,
+        path: "/",
+        httpOnly: true,
+      })
+      .status(200)
+      .send({
+        isLogged: false,
+        error: "",
+      });
+  });
 };
 
 module.exports = {

@@ -3,7 +3,6 @@
  * Require files
  * 
  ***********************************************/
-require("dotenv").config();
 const usersRoutes = require("./routes/usersRoutes");
 const coinsRoutes = require("./routes/coinsRoutes");
 const ledgerRoutes = require("./routes/ledgerRoutes");
@@ -12,6 +11,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const {sessions, sessionStore} = require("./config/db");
+require('./services/scheduler');
 
 
 /***********************************************
@@ -34,7 +34,7 @@ app.use(
 app.use(express.json());
 app.use(
   sessions({
-    key: "session_cookie_name",
+    key: process.env.SESSION_COOKIE_NAME,
     secret: process.env.SECRET,
     store: sessionStore,
     saveUninitialized: false,

@@ -1,5 +1,6 @@
 const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../services/logger");
+const logger = require("../utils/logger");
+const { getTimestampInZone } = require("../utils/dateUtils");
 
 /**
  * Fetch a transaction record from the database
@@ -61,7 +62,7 @@ const create = async ({
       paymentId,
       amount,
       notes,
-      Math.floor(Date.now() / 1000),
+      getTimestampInZone(),
     ];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);

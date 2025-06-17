@@ -1,4 +1,5 @@
 const ledgerModel = require("../models/ledgerModel");
+const logger = require("../utils/logger");
 
 /**
  * Fetch record from ledger table
@@ -8,6 +9,7 @@ const ledgerModel = require("../models/ledgerModel");
 const getLedger = async (req, res) => {
   try {
     if (!req.session || !req.session.userId) {
+      logger.warn("User not authenticated or session missing");
       return res.status(401).send({
         result: null,
         error: "User not authenticated or session missing",
@@ -16,20 +18,23 @@ const getLedger = async (req, res) => {
     const { result, error } = await ledgerModel.get(req.session.userId);
     console.log("getLedger result =>", result);
     if (result == null && error) {
-      res.status(404).send({
+      logger.error("Error fetching balance - ledgerModel", error.message || error);
+      return res.status(404).send({
         result,
-        error,
+        error: `Error fetching balance - controller level: ${error.message}`,
       });
     } else {
+      logger.info(`Balance fetched successfully for user ${req.session.userId}`);
       res.status(200).send({
         result,
         error,
       });
     }
-  } catch (err) {
+  } catch (error) {
+    logger.error("Error fetching balance - ledgerController", error.message || error);
     res.status(500).send({
       result: null,
-      error: `Error fetching balance - controller level: ${err.message}`,
+      error: `Error fetching balance - controller level: ${error.message}`,
     });
   }
 };
@@ -43,6 +48,7 @@ const getLedger = async (req, res) => {
 const removeLedger = async (req, res) => {
   try {
     if (!req.body.id) {
+      logger.warn("Missing required field: id");
       return res.status(400).send({
         result: null,
         error: "Missing required field: id",
@@ -50,20 +56,23 @@ const removeLedger = async (req, res) => {
     }
     const { result, error } = await ledgerModel.remove(req.body.id);
     if (result == null && error) {
-      res.status(404).send({
+      logger.error("Error deleting ledger record - ledgerModel", error.message || error);
+      return res.status(404).send({
         result,
-        error,
+        error: `Error deleting ledger record - controller level: ${error.message}`,
       });
     } else {
+      logger.info(`Ledger record deleted successfully with ID: ${req.body.id}`);
       res.status(200).send({
         result,
         error,
       });
     }
-  } catch (err) {
+  } catch (error) {
+    logger.error("Error deleting ledger record - ledgerController", error.message || error);
     res.status(500).send({
       result: null,
-      error: `Error deleting ledger record - controller level: ${err.message}`,
+      error: `Error deleting ledger record - controller level: ${error.message}`,
     });
   }
 };
@@ -82,6 +91,7 @@ const createLedger = async (req, res) => {
   try {
     // Validate session and request body
     if (!req.session || !req.session.userId) {
+      logger.warn("User not authenticated or session missing");
       return res.status(401).send({
         result: null,
         error: "User not authenticated or session missing",
@@ -93,6 +103,7 @@ const createLedger = async (req, res) => {
       (!req.body.amount || req.body.amount <= 0 )||
       !req.body.notes
     ) {
+      logger.warn("Missing required fields: paymentId, amount, or notes");
       return res.status(400).send({
         result: null,
         error: "Missing required fields: paymentId, amount, or notes",
@@ -105,12 +116,14 @@ const createLedger = async (req, res) => {
     // Fetch the user's ledger records
     const getLedgerRecords = await ledgerModel.get(userId);
     if (getLedgerRecords.error) {
+      logger.error("Error fetching ledger records - ledgerModel", getLedgerRecords.error.message);
       return res.status(500).send({
         result: null,
         error: `Error fetching ledger records: ${getLedgerRecords.error.message}`,
       });
     }
     if (getLedgerRecords.result.length === 0) {
+      logger.warn("No ledger records found for the user");
       return res.status(404).send({
         result: null,
         error: "No ledger records found for the user",
@@ -122,6 +135,7 @@ const createLedger = async (req, res) => {
     const lastRecord =
       getLedgerRecords.result[getLedgerRecords.result.length - 1];
     if (lastRecord.balance < amount) {
+      logger.warn("Insufficient balance in ledger for the requested amount");
       return res.status(400).send({
         result: null,
         error: "Insufficient balance in ledger",
@@ -138,6 +152,7 @@ const createLedger = async (req, res) => {
       notes,
     });
     if (transactionId.error) {
+      logger.error("Error creating transaction record - ledgerModel", transactionId.error.message);
       return res.status(500).send({
         result: null,
         error: `Error creating transaction record: ${transactionId.error.message}`,
@@ -156,21 +171,23 @@ const createLedger = async (req, res) => {
       });
       console.log("createLedger result =>", result);
       if (result == null && error) {
-        res.status(404).send({
+        logger.error("Error creating ledger record - ledgerModel", error.message || error);
+        return res.status(404).send({
           result,
           error,
         });
       } else {
-        res.status(201).send({
+        logger.info(`Ledger record created successfully for user ${userId}`);
+        return res.status(201).send({
           result,
           error,
         });
       }
     } else {
-      console.log(
+      logger.info(
         "Payment ID is for cash deposit or withdrawal, skipping ledger record creation."
       );
-      res.status(200).send({
+      return res.status(200).send({
         result: {
           message:
             "Payment ID is for cash deposit or withdrawal, no ledger record created.",
@@ -179,6 +196,7 @@ const createLedger = async (req, res) => {
       });
     }
   } catch (err) {
+    logger.error("Error creating ledger record - ledgerController", err.message || err);
     res.status(500).send({
       result: null,
       error: `Error creating ledger record - controller level: ${err.message}`,
