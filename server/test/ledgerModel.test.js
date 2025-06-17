@@ -59,4 +59,23 @@ describe('ledgerModel', () => {
       expect(res.error).toBeInstanceOf(Error);
     });
   })
+
+  describe('remove', () => {
+    it('should delete a ledger record and return result', async () => {
+      db.executeQuery.mockResolvedValue({ affectedRows: 1 });
+      const res = await ledgerModel.remove(1);
+      expect(db.formatSqlQuery).toHaveBeenCalled();
+      expect(db.executeQuery).toHaveBeenCalled();
+      expect(res.result).toEqual({ affectedRows: 1 });
+      expect(res.error).toBeNull();
+    });
+
+    it('should handle errors and log them', async () => {
+      db.executeQuery.mockRejectedValue(new Error('DB error'));
+      const res = await ledgerModel.remove(1);
+      expect(logger.error).toHaveBeenCalled();
+      expect(res.result).toBeNull();
+      expect(res.error).toBeInstanceOf(Error);
+    });
+  });
 });

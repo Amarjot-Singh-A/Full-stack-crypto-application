@@ -1,31 +1,102 @@
+const transactionsModel = require('../models/transactionsModel');
 
 /**
- * Route - /portfolio
- * @summary - GET Transactions of an user
+ * Get single transaction by ID
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {Object} - Object with keys - result, error
  */
-app.get("/portfolio", checkAuth, async (req, res) => {
+const getTransaction = async (req, res) => {
   try {
-    let result = await helper.fetchUserTrans(connection, req.session.email);
-    console.log("get portfolio->", result);
-    if (result.error) {
-      res.status(403).send({
-        result: result.result,
-        error: error,
-        completed: false,
-      });
-    } else {
-      res.status(200).send({
-        result: result.result,
-        error: result.error,
-        completed: true,
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).send({
+        result: null,
+        error: 'Missing required field: id',
       });
     }
-  } catch (e) {
-    console.error("error inside get portfolio", e);
-    res.status(403).send({
+    const { result, error } = await transactionsModel.get(id);
+    if (error) {
+      return res.status(400).send({
+        result: null,
+        error: `Error fetching transaction: ${error.message}`,
+      });
+    }
+    res.status(200).send({
+      result,
+      error: null,
+    });
+  } catch (err) {
+    res.status(500).send({
       result: null,
-      error: e,
-      completed: false,
+      error: `Error fetching transaction - controller level: ${err.message}`,
     });
   }
-});
+};
+
+/**
+ * Get all transactions
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {Object} - Object with keys - result, error
+ */
+const getAllTransactions = async (req, res) => {  
+  try {
+    const { result, error } = await transactionsModel.getAll();
+    if (error) {
+      return res.status(400).send({
+        result: null,
+        error: `Error fetching transactions: ${error.message}`,
+      });
+    }
+    res.status(200).send({
+      result,
+      error: null,
+    });
+  } catch (err) {
+    res.status(500).send({
+      result: null,
+      error: `Error fetching transactions - controller level: ${err.message}`,
+    });
+  }
+};
+
+/**
+ * Create a new transaction
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {Object} - Object with keys - result, error
+ */
+const createTransaction = async (req, res) => {
+  try {
+    const { paymentId, amount, notes } = req.body;
+    if (!paymentId || !amount) {
+      return res.status(400).send({
+        result: null,
+        error: 'Missing required fields: paymentId or amount',
+      });
+    }
+    const { result, error } = await transactionsModel.create({ paymentId, amount, notes });
+    if (error) {
+      return res.status(400).send({
+        result: null,
+        error: `Error creating transaction: ${error.message}`,
+      });
+    }
+    res.status(201).send({
+      result,
+      error: null,
+    });
+  } catch (err) {
+    res.status(500).send({
+      result: null,
+      error: `Error creating transaction - controller level: ${err.message}`,
+    });
+  }
+};
+
+module.exports = {
+  getTransaction,
+  getAllTransactions,
+  createTransaction,
+};
