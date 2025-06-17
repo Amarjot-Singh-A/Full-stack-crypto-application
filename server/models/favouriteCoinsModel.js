@@ -1,5 +1,6 @@
 const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../services/logger");
+const logger = require("../utils/logger");
+const { getTimestampInZone } = require("../utils/dateUtils");
 
 /**
  * Get user favourite coins from Db
@@ -44,7 +45,7 @@ const create = async ({ coinId, name, userId }) => {
       coinId,
       name,
       userId,
-      Math.floor(Date.now() / 1000),
+      getTimestampInZone(),
     ];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);

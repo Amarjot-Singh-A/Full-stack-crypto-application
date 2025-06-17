@@ -1,5 +1,6 @@
 const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../services/logger");
+const logger = require("../utils/logger");
+const { getTimestampInZone } = require("../utils/dateUtils");
 
 /**
  * Create a record in ledger table
@@ -18,7 +19,7 @@ const create = async ({ userId, transactionId, balance }) => {
       userId,
       transactionId,
       balance,
-      Math.floor(Date.now() / 1000)
+      getTimestampInZone(),
     ];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
@@ -48,7 +49,26 @@ const get = async (userId) => {
   }
 };
 
+/**
+ * Delete a record from ledger table
+ * @param {number} id - ID of the ledger record to be deleted
+ * @returns {Object} - Object with result and error as keys 
+ */
+const remove = async (id) => {
+  try {
+    const sql = "DELETE FROM ?? WHERE ?? = ?";
+    const inserts = ["ledger", "id", id];
+    const formattedQuery = formatSqlQuery(sql, inserts);
+    const result = await executeQuery(formattedQuery);  
+    return { result, error: null };
+  } catch (error) {
+    logger.error("error deleting ledger record", error);
+    return { result: null, error };
+  }
+};
+
 module.exports = {
     create,
-    get
+    get,
+    remove
 }
