@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import Box from "@mui/material/Box";
-import Select from "@mui/material/Select/Select";
-import MenuItem from "@mui/material/MenuItem/MenuItem";
-import Typography from "@mui/material/Typography";
-import InputLabel from "@mui/material/InputLabel/InputLabel";
-import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
-import SaveIcon from "@mui/icons-material/Save";
-import LoadingButton from "@mui/lab/LoadingButton";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
-import Paper from "@mui/material/Paper";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import Box from '@mui/material/Box';
+import Select from '@mui/material/Select/Select';
+import MenuItem from '@mui/material/MenuItem/MenuItem';
+import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel/InputLabel';
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
+import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Paper from '@mui/material/Paper';
 
-const interactions = require("../../services/dataInteraction");
+const interactions = require('../../services/dataInteraction');
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -25,16 +25,16 @@ const Alert = React.forwardRef(function Alert(props, ref) {
  */
 export default function Buy() {
   const [coinsList, setCoinsList] = useState(0);
-  const [defaultCoin, setDefaultCoin] = useState("bitcoin");
+  const [defaultCoin, setDefaultCoin] = useState('bitcoin');
   const [coinPrice, setCoinPrice] = useState(0);
-  const [amountInvest, setAmountInvest] = useState("");
+  const [amountInvest, setAmountInvest] = useState('');
   const [quantityBought, setQuantityBought] = useState(null);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [snackAlert, setSnackAlert] = useState(false);
-  const [alertText, setAlertText] = useState("");
-  const [alertType, setAlertType] = useState("success");
+  const [alertText, setAlertText] = useState('');
+  const [alertType, setAlertType] = useState('success');
 
-  const buyCoinURL = "http://localhost:5000/buy";
+  const buyCoinURL = 'http://localhost:5000/buy';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,27 +47,27 @@ export default function Buy() {
     };
     let { result, completed, error } = await interactions.sendData(
       data,
-      buyCoinURL
+      buyCoinURL,
     );
     setBtnDisabled(false);
     setSnackAlert(true);
 
     if (completed) {
-      setAlertText("Transaction Successful !");
-      setAlertType("success");
+      setAlertText('Transaction Successful !');
+      setAlertType('success');
     } else if (completed === false && result) {
       setAlertText(result);
-      setAlertType("warning");
+      setAlertType('warning');
     } else {
       setAlertText(error);
-      setAlertType("error");
+      setAlertType('error');
     }
   };
 
   const handleSnackBarClose = (event, reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
     }
-    setAmountInvest("");
+    setAmountInvest('');
     setQuantityBought(null);
     setSnackAlert(false);
   };
@@ -79,7 +79,7 @@ export default function Buy() {
   const handleInputChange = (e) => {
     setAmountInvest(e.target.value);
     setQuantityBought(
-      Number.parseFloat((1 / coinPrice) * e.target.value).toFixed(7)
+      Number.parseFloat((1 / coinPrice) * e.target.value).toFixed(7),
     );
   };
 
@@ -87,14 +87,14 @@ export default function Buy() {
     async function getCoinsList() {
       try {
         let url =
-          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_desc&per_page=50&page=1&sparkline=false";
+          'https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_desc&per_page=50&page=1&sparkline=false';
         let result = await fetch(url)
           .then((res) => res.json())
           .then((data) => data)
           .catch((err) => console.error(err));
         setCoinsList(JSON.stringify(result));
       } catch (e) {
-        console.error("error inside getcoinlist", e);
+        console.error('error inside getcoinlist', e);
       }
     }
     async function getCoinPrice() {
@@ -106,11 +106,11 @@ export default function Buy() {
           .catch((err) => console.error(err));
         setCoinPrice(Number(Object.values(result)[0]?.cad));
       } catch (e) {
-        console.error("error fetching getcoinprice", e);
+        console.error('error fetching getcoinprice', e);
       }
       if (amountInvest !== null) {
         setQuantityBought(
-          Number.parseFloat((1 / coinPrice) * amountInvest).toFixed(7)
+          Number.parseFloat((1 / coinPrice) * amountInvest).toFixed(7),
         );
       } else {
         setQuantityBought(null);
@@ -128,17 +128,17 @@ export default function Buy() {
         onSubmit={handleSubmit}
         sx={{
           marginTop: 20,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <Grid item xs={12}>
           <Paper
             sx={{
               p: 2,
-              display: "flex",
-              flexDirection: "column",
+              display: 'flex',
+              flexDirection: 'column',
               height: 350,
             }}
           >
@@ -182,37 +182,37 @@ export default function Buy() {
                   }
                 />
               </Grid>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6" name="quantityBought">
-                  {" "}
-                  {defaultCoin} - {quantityBought}
-                </Typography>
-              </Grid>
-              <LoadingButton
-                color="success"
-                type="submit"
-                size="large"
-                loading={btnDisabled}
-                loadingPosition="start"
-                startIcon={<SaveIcon />}
-                variant="contained"
-              >
-                Buy
-              </LoadingButton>
-              <Snackbar
-                open={snackAlert}
-                autoHideDuration={6000}
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6" name="quantityBought">
+                {' '}
+                {defaultCoin} - {quantityBought}
+              </Typography>
+            </Grid>
+            <LoadingButton
+              color="success"
+              type="submit"
+              size="large"
+              loading={btnDisabled}
+              loadingPosition="start"
+              startIcon={<SaveIcon />}
+              variant="contained"
+            >
+              Buy
+            </LoadingButton>
+            <Snackbar
+              open={snackAlert}
+              autoHideDuration={6000}
+              onClose={handleSnackBarClose}
+            >
+              <Alert
                 onClose={handleSnackBarClose}
+                severity={alertType}
+                sx={{ width: '100%' }}
               >
-                <Alert
-                  onClose={handleSnackBarClose}
-                  severity={alertType}
-                  sx={{ width: "100%" }}
-                >
-                  {alertText}
-                </Alert>
-              </Snackbar>
+                {alertText}
+              </Alert>
+            </Snackbar>
           </Paper>
         </Grid>
       </Box>

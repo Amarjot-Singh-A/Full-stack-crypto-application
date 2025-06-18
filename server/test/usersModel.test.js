@@ -25,7 +25,12 @@ describe('usersModel', () => {
     it('should hash password, insert user, and return result', async () => {
       bcrypt.bcryptHashPassword.mockResolvedValue('hashedpass');
       db.executeQuery.mockResolvedValue({ insertId: 1 });
-      const data = { firstName: 'John', lastName: 'Doe', email: 'john@example.com', password: 'pass123' };
+      const data = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'pass123',
+      };
       const res = await usersModel.signUp(data);
       expect(bcrypt.bcryptHashPassword).toHaveBeenCalledWith('pass123');
       expect(db.formatSqlQuery).toHaveBeenCalled();
@@ -36,7 +41,12 @@ describe('usersModel', () => {
 
     it('should handle errors and log them', async () => {
       bcrypt.bcryptHashPassword.mockRejectedValue(new Error('Hash error'));
-      const data = { firstName: 'John', lastName: 'Doe', email: 'john@example.com', password: 'pass123' };
+      const data = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        password: 'pass123',
+      };
       const res = await usersModel.signUp(data);
       expect(logger.error).toHaveBeenCalled();
       expect(res.result).toBeNull();
@@ -46,17 +56,22 @@ describe('usersModel', () => {
 
   describe('signIn', () => {
     it('should authenticate user and return success object', async () => {
-      db.executeQuery.mockResolvedValue([{ firstName: 'John', password: 'hashedpass', id: 10 }]);
+      db.executeQuery.mockResolvedValue([
+        { firstName: 'John', password: 'hashedpass', id: 10 },
+      ]);
       bcrypt.bcryptComparePassword.mockResolvedValue(true);
       const res = await usersModel.signIn('john@example.com', 'pass123');
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
-      expect(bcrypt.bcryptComparePassword).toHaveBeenCalledWith('pass123', 'hashedpass');
+      expect(bcrypt.bcryptComparePassword).toHaveBeenCalledWith(
+        'pass123',
+        'hashedpass',
+      );
       expect(res).toEqual({
         isPasswordMatch: true,
         isEmailMatch: true,
         firstName: 'John',
-        userId: 10
+        userId: 10,
       });
     });
 
@@ -67,7 +82,7 @@ describe('usersModel', () => {
         isPasswordMatch: false,
         isEmailMatch: false,
         firstName: null,
-        userId: null
+        userId: null,
       });
     });
 
@@ -79,7 +94,7 @@ describe('usersModel', () => {
         isPasswordMatch: false,
         isEmailMatch: false,
         firstName: null,
-        userId: null
+        userId: null,
       });
     });
   });

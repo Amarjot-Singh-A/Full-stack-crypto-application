@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableBody from "@mui/material/TableBody";
-import Title from "../Title/Title";
-import PortfolioList from "./PortfolioList";
-import { getData } from "../../services/dataInteraction";
-
+import React, { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableBody from '@mui/material/TableBody';
+import Title from '../Title/Title';
+import PortfolioList from './PortfolioList';
+import { getData } from '../../services/dataInteraction';
 
 export default function Portfolio() {
   const [transList, setTransList] = useState([]);
-  const [transError, setTransError] = useState("");
+  const [transError, setTransError] = useState('');
 
   useEffect(() => {
-    let url = "http://localhost:5000/portfolio";
+    let url = 'http://localhost:5000/portfolio';
     let mounted = true;
     getData(url).then((data) => {
       if (mounted) {
@@ -28,7 +27,7 @@ export default function Portfolio() {
           setTransList(data.result);
         }
       } else {
-        console.log("trans components had already unmounted");
+        console.log('trans components had already unmounted');
       }
     });
     return () => {
@@ -38,7 +37,7 @@ export default function Portfolio() {
 
   return (
     <Grid item xs={12}>
-      <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+      <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
         <Title>Portfolio</Title>
         <Table size="small">
           <TableHead>
@@ -55,14 +54,14 @@ export default function Portfolio() {
             <PortfolioList transactions={transList} />
           ) : (
             <TableBody>
-            <TableRow>
-              <TableCell>-</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>-</TableCell>
-            </TableRow>
+              <TableRow>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+              </TableRow>
             </TableBody>
           )}
         </Table>

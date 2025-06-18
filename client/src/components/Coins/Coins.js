@@ -1,32 +1,32 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useHistory } from "react-router-dom";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
+import React, { useEffect, useState, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
-const axios = require("axios");
+const axios = require('axios');
 
 /**
  * todo - use progress or skeleton from material ui when coins and coin page loads
  */
 
 export default function Coins() {
-  const [coins, setCoins] = useState("");
+  const [coins, setCoins] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const history = useHistory();
 
   const url =
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_" +
+    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_' +
     "desc&per_page=100&page=1&sparkline=false&price_change_percentage='1h%2C24h%2C7d'";
 
   const handleChangePage = (event, newPage) => {
@@ -60,20 +60,20 @@ export default function Coins() {
   const renderSkeleton = () => {
     return (
       <Grid item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
           <Stack spacing={1}>
-            <Skeleton variant="rectangular" sx={{ height: "15vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="text" sx={{ height: "6vh" }} />
-            <Skeleton variant="rectangular" sx={{ height: "15vh" }} />
+            <Skeleton variant="rectangular" sx={{ height: '15vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="text" sx={{ height: '6vh' }} />
+            <Skeleton variant="rectangular" sx={{ height: '15vh' }} />
           </Stack>
         </Paper>
       </Grid>
@@ -83,7 +83,7 @@ export default function Coins() {
   const renderTable = (coins) => {
     return (
       <Grid item xs={12}>
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
           <TableContainer>
             <Table stickyHeader aria-label="coins table">
               <TableHead>
@@ -137,7 +137,7 @@ export default function Coins() {
                       >
                         <TableCell align="right">
                           <img
-                            style={{ maxWidth: "25px", height: "auto" }}
+                            style={{ maxWidth: '25px', height: 'auto' }}
                             src={row.image}
                             alt="coin_image"
                           />
@@ -146,7 +146,7 @@ export default function Coins() {
                         <TableCell align="right">{row.name}</TableCell>
                         <TableCell align="right">{row.id}</TableCell>
                         <TableCell align="right">{`CAD ${JSON.stringify(
-                          row.current_price
+                          row.current_price,
                         )}`}</TableCell>
                         <TableCell component="th" scope="row">
                           {JSON.stringify(row.ath)}
@@ -207,7 +207,7 @@ export default function Coins() {
                         </TableCell>
                         <TableCell align="right">
                           {JSON.stringify(
-                            row.price_change_percentage_24h_in_currency
+                            row.price_change_percentage_24h_in_currency,
                           )}
                         </TableCell>
                         <TableCell align="right">

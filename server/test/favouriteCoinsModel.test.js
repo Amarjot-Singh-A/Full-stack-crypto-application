@@ -3,14 +3,14 @@ jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../utils/logger'), () => ({
-  error: jest.fn(),
-});
+jest.mock('../utils/logger'),
+  () => ({
+    error: jest.fn(),
+  });
 
 const favouriteCoinsModel = require('../models/favouriteCoinsModel');
 const db = require('../config/db');
 const logger = require('../utils/logger');
-
 
 describe('favouriteCoinsModel', () => {
   afterEach(() => {

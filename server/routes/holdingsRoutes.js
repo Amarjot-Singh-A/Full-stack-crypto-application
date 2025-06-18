@@ -1,8 +1,7 @@
-const favouriteCoinsController = require("../controllers/favouriteCoinsController");
-const express = require("express");
+const favouriteCoinsController = require('../controllers/favouriteCoinsController');
+const express = require('express');
 const router = express.Router();
-const {checkAuth} = require("../services/middleware");
-
+const { checkAuth } = require('../services/middleware');
 
 /**
  * Get favourite coins for the authenticated user
@@ -12,7 +11,7 @@ const {checkAuth} = require("../services/middleware");
  * @throws {404} - Favourite coins not found
  * @throws {500} - Internal server error
  */
-router.get("/",checkAuth, favouriteCoinsController.getFavourite);
+router.get('/', checkAuth, favouriteCoinsController.getFavourite);
 
 /**
  * Create a new favourite coin for the authenticated user
@@ -20,9 +19,8 @@ router.get("/",checkAuth, favouriteCoinsController.getFavourite);
  * @param {Object} body - Object containing coinId and userId
  * @returns {Object} - Object with keys - result, error
  * @throws {400} - Missing required fields in request body
- * @throws {500} - Internal server error    
+ * @throws {500} - Internal server error
  */
-router.post("/",checkAuth, favouriteCoinsController.createFavourite);
-
+router.post('/', checkAuth, favouriteCoinsController.createFavourite);
 
 module.exports = router;

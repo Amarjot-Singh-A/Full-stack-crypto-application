@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var dbm;
 var type;
@@ -15,42 +15,42 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable("holdings", {
-    id: { type: "int", primaryKey: true, autoIncrement: true },
+  return db.createTable('holdings', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
     userId: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "user_variant_user_id_fk",
-        table: "users",
+        name: 'user_variant_user_id_fk',
+        table: 'users',
         rules: {
-          onDelete: "CASCADE",
-          onUpdate: "RESTRICT",
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT',
         },
         mapping: {
-          userId: 'id'
+          userId: 'id',
         },
       },
     },
     coinId: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "coin_variant_coin_id_fk",
-        table: "coins",
+        name: 'coin_variant_coin_id_fk',
+        table: 'coins',
         rules: {
-          onDelete: "CASCADE",
-          onUpdate: "RESTRICT",
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT',
         },
         mapping: {
-          coinId: 'id'
+          coinId: 'id',
         },
       },
     },
-    quantity: { type: "decimal", defaultValue: "0.00" },
+    quantity: { type: 'decimal', defaultValue: '0.00' },
   });
 };
 
 exports.down = function (db) {
-  return db.dropTable("holdings");
+  return db.dropTable('holdings');
 };
 
 exports._meta = {

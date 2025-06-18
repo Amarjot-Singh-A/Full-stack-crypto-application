@@ -2,9 +2,9 @@
   "dev": {
     "driver": "mysql",
     "host": "localhost",
-    "database": {"ENV" : "DB"},
-    "user": {"ENV" : "DB_USER"},
-    "password": {"ENV" : "DB_PASS"}
+    "database": { "ENV": "DB" },
+    "user": { "ENV": "DB_USER" },
+    "password": { "ENV": "DB_PASS" }
   },
   "test": {
     "driver": "mysql",

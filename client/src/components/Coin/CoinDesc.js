@@ -1,5 +1,5 @@
-import React from "react";
-import Title from "../Title/Title";
+import React from 'react';
+import Title from '../Title/Title';
 
 export default function CoinDesc({ stats }) {
   return (
@@ -7,7 +7,7 @@ export default function CoinDesc({ stats }) {
       <Title>Description</Title>
       <p>
         {Object.keys(stats).length > 0 &&
-          stats.description.en.replace(/[^\w\s]/gi, "")}
+          stats.description.en.replace(/[^\w\s]/gi, '')}
       </p>
     </div>
   );

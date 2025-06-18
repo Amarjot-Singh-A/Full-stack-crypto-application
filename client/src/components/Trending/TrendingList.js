@@ -1,6 +1,6 @@
-import React from "react";
-import TableBody from "@mui/material/TableBody";
-import TrendingItem from "./TrendingItem";
+import React from 'react';
+import TableBody from '@mui/material/TableBody';
+import TrendingItem from './TrendingItem';
 
 export default function TrendingList({ trendings }) {
   const iterateTrendings = (trendings) => {
@@ -12,9 +12,5 @@ export default function TrendingList({ trendings }) {
     );
   };
 
-  return (
-  <TableBody>
-      {iterateTrendings(trendings)}
-  </TableBody>
-  )
+  return <TableBody>{iterateTrendings(trendings)}</TableBody>;
 }

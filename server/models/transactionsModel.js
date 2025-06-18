@@ -1,6 +1,6 @@
-const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../utils/logger");
-const { getTimestampInZone } = require("../utils/dateUtils");
+const { formatSqlQuery, executeQuery } = require('../config/db');
+const logger = require('../utils/logger');
+const { getTimestampInZone } = require('../utils/dateUtils');
 
 /**
  * Fetch a transaction record from the database
@@ -9,14 +9,14 @@ const { getTimestampInZone } = require("../utils/dateUtils");
  */
 const get = async (id) => {
   try {
-    const sql = "SELECT * FROM ?? WHERE ?? = ?";
-    const inserts = ["transactions", "id", id];
+    const sql = 'SELECT * FROM ?? WHERE ?? = ?';
+    const inserts = ['transactions', 'id', id];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
     return { result, error: null };
   } catch (error) {
-    logger.error("Error fetching single transaction record", error);
+    logger.error('Error fetching single transaction record', error);
     return { result: null, error };
   }
 };
@@ -27,14 +27,14 @@ const get = async (id) => {
  */
 const getAll = async () => {
   try {
-    const sql = "SELECT * FROM ??";
-    const inserts = ["transactions"];
+    const sql = 'SELECT * FROM ??';
+    const inserts = ['transactions'];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
     return { result, error: null };
   } catch (error) {
-    logger.error("Error fetching transaction records", error);
+    logger.error('Error fetching transaction records', error);
     return { result: null, error };
   }
 };
@@ -47,18 +47,15 @@ const getAll = async () => {
  * @param {string} param0.notes - Additional notes for the transaction
  * @returns {{ result: Object|null, error: Error|null }} - An object containing the result of the insert operation and error (if any)
  */
-const create = async ({
-  paymentId,
-  amount,
-  notes}) => {  
+const create = async ({ paymentId, amount, notes }) => {
   try {
-    const sql = "INSERT INTO ?? (??, ??, ??, ??) VALUES (?, ?, ?, ?)";
+    const sql = 'INSERT INTO ?? (??, ??, ??, ??) VALUES (?, ?, ?, ?)';
     const inserts = [
-      "transactions",
-      "paymentId",
-      "amount",
-      "notes",
-      "timestamp",
+      'transactions',
+      'paymentId',
+      'amount',
+      'notes',
+      'timestamp',
       paymentId,
       amount,
       notes,
@@ -69,7 +66,7 @@ const create = async ({
 
     return { result, error: null };
   } catch (error) {
-    logger.error("Error inserting transaction record", error);
+    logger.error('Error inserting transaction record', error);
     return { result: null, error };
   }
 };

@@ -1,6 +1,6 @@
-const { Logger, log } = require("winston");
-const usersModel = require("../models/usersModel");
-const logger = require("../utils/logger");
+const { Logger, log } = require('winston');
+const usersModel = require('../models/usersModel');
+const logger = require('../utils/logger');
 
 /**
  * Handle business logic related to signing in a user
@@ -14,10 +14,10 @@ const signIn = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    logger.error("email or password not provided");
+    logger.error('email or password not provided');
     return res.status(400).send({
       loggedIn: false,
-      error: "email or password not provided",
+      error: 'email or password not provided',
     });
   }
 
@@ -30,25 +30,25 @@ const signIn = async (req, res) => {
       req.session.isLogged = true;
       req.session.email = email;
       req.session.userId = userId;
-      logger.info("User signed in successfully", {
+      logger.info('User signed in successfully', {
         userId,
         email,
       });
       res.status(200).send({
         loggedIn: true,
-        error: "",
+        error: '',
       });
     } else {
-      logger.warn("email or password doesnt match", {
+      logger.warn('email or password doesnt match', {
         email,
       });
       res.status(401).send({
         loggedIn: false,
-        error: "email or password doesnt match",
+        error: 'email or password doesnt match',
       });
     }
   } catch (error) {
-    logger.error("Error in controller while signing in: ", error);
+    logger.error('Error in controller while signing in: ', error);
     res.status(500).send({
       loggedIn: false,
       error: `Error in controller while signing up: ${error.message}`,
@@ -66,30 +66,30 @@ const signIn = async (req, res) => {
  */
 const signUp = async (req, res) => {
   if (!req.body) {
-    logger.error("No data in request body");
+    logger.error('No data in request body');
     return res.status(500).send({
       loggedIn: false,
-      error: "No data in request body",
+      error: 'No data in request body',
     });
   }
 
   try {
     const { result, error } = await usersModel.signUp(req.body);
     if (result == null && error) {
-      logger.error("Error in model while signing up: ", error);
+      logger.error('Error in model while signing up: ', error);
       return res.status(401).send({
         loggedIn: false,
         error,
       });
     } else {
-      logger.info("User signed up successfully", result);
+      logger.info('User signed up successfully', result);
       res.status(200).send({
         loggedIn: true,
-        error: "",
+        error: '',
       });
     }
   } catch (error) {
-    logger.error("Error in controller while signing in: ", error);
+    logger.error('Error in controller while signing in: ', error);
     res.status(500).send({
       loggedIn: false,
       error: `Error in controller while signing in: ${error.message}`,
@@ -107,24 +107,24 @@ const signUp = async (req, res) => {
  */
 const logOut = (req, res) => {
   if (!req.session || !req.session.isLogged) {
-    logger.warn("session doesnt exist");
+    logger.warn('session doesnt exist');
     return res.status(500).send({
       isLogged: false,
-      error: "session doesnt exist",
+      error: 'session doesnt exist',
     });
   }
 
-  console.log("session before destroy-> ", req.session);
+  console.log('session before destroy-> ', req.session);
   req.session.destroy((error) => {
     if (error) {
-      logger.error("Error logging out user: ", error);
+      logger.error('Error logging out user: ', error);
       return res.status(500).send({
         isLogged: true,
         error: `error logging out: ${error.message}`,
       });
     }
     //clear the cookie
-    logger.info("user session destroyed successfully", {
+    logger.info('user session destroyed successfully', {
       userId: req.session.userId,
       email: req.session.email,
     });
@@ -132,13 +132,13 @@ const logOut = (req, res) => {
     return res
       .clearCookie(process.env.SESSION_COOKIE_NAME, {
         secure: false,
-        path: "/",
+        path: '/',
         httpOnly: true,
       })
       .status(200)
       .send({
         isLogged: false,
-        error: "",
+        error: '',
       });
   });
 };

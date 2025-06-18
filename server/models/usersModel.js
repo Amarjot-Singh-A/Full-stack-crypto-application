@@ -1,9 +1,9 @@
 const {
   bcryptComparePassword,
   bcryptHashPassword,
-} = require("../services/bcrypt");
-const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../utils/logger");
+} = require('../services/bcrypt');
+const { formatSqlQuery, executeQuery } = require('../config/db');
+const logger = require('../utils/logger');
 
 /**
  * Sign up new user
@@ -13,13 +13,13 @@ const logger = require("../utils/logger");
 const signUp = async ({ firstName, lastName, email, password }) => {
   try {
     const hashedPassword = await bcryptHashPassword(password);
-    const sql = "INSERT INTO ?? (??,??,??,??) values (?,?,?,?)";
+    const sql = 'INSERT INTO ?? (??,??,??,??) values (?,?,?,?)';
     const inserts = [
-      "users",
-      "email",
-      "password",
-      "firstName",
-      "lastName",
+      'users',
+      'email',
+      'password',
+      'firstName',
+      'lastName',
       email,
       hashedPassword,
       firstName,
@@ -30,7 +30,7 @@ const signUp = async ({ firstName, lastName, email, password }) => {
 
     return { result: resultOfUserQuery, error: null };
   } catch (error) {
-    logger.error("error in signUp", error);
+    logger.error('error in signUp', error);
     return { result: null, error };
   }
 };
@@ -44,37 +44,37 @@ const signUp = async ({ firstName, lastName, email, password }) => {
  */
 const signIn = async (email, password) => {
   try {
-    const sql = "SELECT ??,??, ?? FROM ?? WHERE ?? = ?";
-    const inserts = ["firstName", "password","id", "users", "email", email];
+    const sql = 'SELECT ??,??, ?? FROM ?? WHERE ?? = ?';
+    const inserts = ['firstName', 'password', 'id', 'users', 'email', email];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const queryResult = await executeQuery(formattedQuery);
 
     if (Array.isArray(queryResult) && queryResult.length > 0) {
       const isPasswordMatch = await bcryptComparePassword(
         password,
-        queryResult[0].password
+        queryResult[0].password,
       );
       return {
         isPasswordMatch,
         isEmailMatch: true,
         firstName: queryResult[0].firstName,
-        userId : queryResult[0].id
+        userId: queryResult[0].id,
       };
     } else {
-      return { 
-        isPasswordMatch: false, 
+      return {
+        isPasswordMatch: false,
         isEmailMatch: false,
         firstName: null,
-        userId: null
-     };
+        userId: null,
+      };
     }
   } catch (error) {
-    logger.error("error in signIn", error);
-    return { 
-      isPasswordMatch: false, 
+    logger.error('error in signIn', error);
+    return {
+      isPasswordMatch: false,
       isEmailMatch: false,
       firstName: null,
-      userId: null
+      userId: null,
     };
   }
 };

@@ -3,15 +3,14 @@ jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../utils/logger'), () => ({
-  error: jest.fn(),
-});
-
+jest.mock('../utils/logger'),
+  () => ({
+    error: jest.fn(),
+  });
 
 const holdingsModel = require('../models/holdingsModel');
 const db = require('../config/db');
 const logger = require('../utils/logger');
-
 
 describe('holdingsModel', () => {
   afterEach(() => {
@@ -20,11 +19,15 @@ describe('holdingsModel', () => {
 
   describe('get', () => {
     it('should fetch holdings for a user', async () => {
-      db.executeQuery.mockResolvedValue([{ id: 1, coinId: 2, quantity: 5, userId: 'user123' }]);
+      db.executeQuery.mockResolvedValue([
+        { id: 1, coinId: 2, quantity: 5, userId: 'user123' },
+      ]);
       const res = await holdingsModel.get('user123');
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
-      expect(res.result).toEqual([{ id: 1, coinId: 2, quantity: 5, userId: 'user123' }]);
+      expect(res.result).toEqual([
+        { id: 1, coinId: 2, quantity: 5, userId: 'user123' },
+      ]);
       expect(res.error).toBeNull();
     });
 

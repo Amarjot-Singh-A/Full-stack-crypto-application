@@ -1,10 +1,18 @@
-const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../utils/logger");
+const { formatSqlQuery, executeQuery } = require('../config/db');
+const logger = require('../utils/logger');
 
 const get = async (userId) => {
   try {
-    const sql = "SELECT ??, ??, ??, ?? FROM ?? WHERE ?? = ?";
-    const inserts = ["id", "coinId", "quantity", "userId", "holdings", "userId", userId];
+    const sql = 'SELECT ??, ??, ??, ?? FROM ?? WHERE ?? = ?';
+    const inserts = [
+      'id',
+      'coinId',
+      'quantity',
+      'userId',
+      'holdings',
+      'userId',
+      userId,
+    ];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
@@ -13,7 +21,7 @@ const get = async (userId) => {
       error: null,
     };
   } catch (error) {
-    logger.error("Error fetching holdings - data model", error);
+    logger.error('Error fetching holdings - data model', error);
     return {
       result: [],
       error,
@@ -23,12 +31,12 @@ const get = async (userId) => {
 
 const create = async ({ userId, coinId, quantity }) => {
   try {
-    const sql = "INSERT INTO ?? (??,??,??) values (?,?,?)";
+    const sql = 'INSERT INTO ?? (??,??,??) values (?,?,?)';
     const inserts = [
-      "holdings",
-      "userId",
-      "coinId",
-      "quantity",
+      'holdings',
+      'userId',
+      'coinId',
+      'quantity',
       userId,
       coinId,
       quantity,
@@ -41,7 +49,7 @@ const create = async ({ userId, coinId, quantity }) => {
       error: null,
     };
   } catch (error) {
-    logger.error("Error inserting holdings - data model", error);
+    logger.error('Error inserting holdings - data model', error);
     return {
       result: [],
       error,
@@ -51,8 +59,8 @@ const create = async ({ userId, coinId, quantity }) => {
 
 const remove = async (id) => {
   try {
-    const sql = "DELETE FROM ?? WHERE ?? = ?";
-    const inserts = ["holdings", "id", id];
+    const sql = 'DELETE FROM ?? WHERE ?? = ?';
+    const inserts = ['holdings', 'id', id];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
@@ -61,7 +69,7 @@ const remove = async (id) => {
       error: null,
     };
   } catch (error) {
-    logger.error("Error deleting holdings - data model", error.stack || error);
+    logger.error('Error deleting holdings - data model', error.stack || error);
     return {
       result: [],
       error,

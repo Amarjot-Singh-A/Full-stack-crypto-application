@@ -1,9 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function Settings() {
-    return (
-        <div>
-            this is setting page
-        </div>
-    )
+  return <div>this is setting page</div>;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   AreaChart,
   Area,
@@ -7,14 +7,14 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts";
+} from 'recharts';
 
-const axios = require("axios");
+const axios = require('axios');
 
 export default function CoinGraph({ id, graphInterval }) {
   let graphUrl = `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=cad&days=90&interval=${graphInterval}`;
 
-  const [coin, setCoin] = useState("");
+  const [coin, setCoin] = useState('');
 
   const fetchGraph = useCallback(async () => {
     try {
@@ -38,7 +38,7 @@ export default function CoinGraph({ id, graphInterval }) {
   const formatChartData = (data) => {
     return data.map((datapoint) => {
       return {
-        time: new Date(datapoint[0]).toLocaleString("en-ca"),
+        time: new Date(datapoint[0]).toLocaleString('en-ca'),
         price: datapoint[1],
       };
     });

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import CircularProgress from "@mui/material/CircularProgress";
+import React, { useState, useEffect } from 'react';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function PortfolioItem({ obj }) {
   const { coin_name, coin_price, amount_invested, quantity_bought, id } = obj;
@@ -19,10 +19,10 @@ export default function PortfolioItem({ obj }) {
         let fetchedPrice = Number(Object.values(result)[0]?.cad);
         setCurrentPrice(fetchedPrice);
         setPercentDiff(
-          Number((fetchedPrice / coin_price) * 100 - 100).toFixed(2)
+          Number((fetchedPrice / coin_price) * 100 - 100).toFixed(2),
         );
       } catch (e) {
-        console.error("error fetching getcoinprice", e);
+        console.error('error fetching getcoinprice', e);
       }
     }
     getCoinPrice();
@@ -41,7 +41,7 @@ export default function PortfolioItem({ obj }) {
           <CircularProgress size="1rem" color="info" />
         )}
       </TableCell>
-      <TableCell style={{ color: percentDiff >= 0 ? "green" : "red" }}>
+      <TableCell style={{ color: percentDiff >= 0 ? 'green' : 'red' }}>
         {percentDiff ? (
           percentDiff
         ) : (

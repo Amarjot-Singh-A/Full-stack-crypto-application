@@ -3,14 +3,14 @@ jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../utils/logger'), () => ({
-  error: jest.fn(),
-});
+jest.mock('../utils/logger'),
+  () => ({
+    error: jest.fn(),
+  });
 
 const coinsModel = require('../models/coinsModel');
 const db = require('../config/db');
 const logger = require('../utils/logger');
-
 
 describe('coinsModel', () => {
   afterEach(() => {
@@ -20,7 +20,12 @@ describe('coinsModel', () => {
   describe('create', () => {
     it('should insert a coin and return result', async () => {
       db.executeQuery.mockResolvedValue({ insertId: 1 });
-      const data = { name: 'BTC', description: 'Bitcoin', oldPrice: 100, currentPrice: 200 };
+      const data = {
+        name: 'BTC',
+        description: 'Bitcoin',
+        oldPrice: 100,
+        currentPrice: 200,
+      };
       const res = await coinsModel.create(data);
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
@@ -30,7 +35,12 @@ describe('coinsModel', () => {
 
     it('should handle errors and log them', async () => {
       db.executeQuery.mockRejectedValue(new Error('DB error'));
-      const data = { name: 'BTC', description: 'Bitcoin', oldPrice: 100, currentPrice: 200 };
+      const data = {
+        name: 'BTC',
+        description: 'Bitcoin',
+        oldPrice: 100,
+        currentPrice: 200,
+      };
       const res = await coinsModel.create(data);
       expect(logger.error).toHaveBeenCalled();
       expect(res.result).toEqual([]);
@@ -75,7 +85,13 @@ describe('coinsModel', () => {
   describe('update', () => {
     it('should update a coin and return result', async () => {
       db.executeQuery.mockResolvedValue({ affectedRows: 1 });
-      const data = {id:1 ,name: 'BTC', description: 'Bitcoin updated', oldPrice: 100, currentPrice: 250 };
+      const data = {
+        id: 1,
+        name: 'BTC',
+        description: 'Bitcoin updated',
+        oldPrice: 100,
+        currentPrice: 250,
+      };
       const res = await coinsModel.update(data);
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
@@ -85,7 +101,13 @@ describe('coinsModel', () => {
 
     it('should handle errors and log them', async () => {
       db.executeQuery.mockRejectedValue(new Error('DB error'));
-      const data = { id: 1, name: 'BTC', description: 'Bitcoin updated', oldPrice: 100, currentPrice: 250 };
+      const data = {
+        id: 1,
+        name: 'BTC',
+        description: 'Bitcoin updated',
+        oldPrice: 100,
+        currentPrice: 250,
+      };
       const res = await coinsModel.update(data);
       expect(logger.error).toHaveBeenCalled();
       expect(res.result).toEqual([]);

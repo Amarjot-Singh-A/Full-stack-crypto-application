@@ -5,15 +5,14 @@ var type;
 var seed;
 
 /**
-  * We receive the dbmigrate dependency from dbmigrate initially.
-  * This enables us to not have to rely on NODE_PATH.
-  */
-exports.setup = function(options, seedLink) {
+ * We receive the dbmigrate dependency from dbmigrate initially.
+ * This enables us to not have to rely on NODE_PATH.
+ */
+exports.setup = function (options, seedLink) {
   dbm = options.dbmigrate;
   type = dbm.dataType;
   seed = seedLink;
 };
-
 
 /**
  * id
@@ -23,46 +22,46 @@ exports.setup = function(options, seedLink) {
  * timestamp
  */
 
-exports.up = function(db) {
-  return db.createTable("favouriteCoins", {
-    id: { type: "int", primaryKey: true, autoIncrement: true },
+exports.up = function (db) {
+  return db.createTable('favouriteCoins', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
     userId: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "userss_variant_users_id_fk",
-        table: "users",
+        name: 'userss_variant_users_id_fk',
+        table: 'users',
         rules: {
-          onDelete: "CASCADE",
-          onUpdate: "RESTRICT",
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT',
         },
         mapping: {
-          userId: "id",
+          userId: 'id',
         },
       },
     },
     coinId: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "coins_variant_coins_id_fk",
-        table: "coins",
+        name: 'coins_variant_coins_id_fk',
+        table: 'coins',
         rules: {
-          onDelete: "CASCADE",
-          onUpdate: "RESTRICT",
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT',
         },
         mapping: {
-          coinId: "id",
+          coinId: 'id',
         },
       },
     },
-    name: { type: "string" },
-    timestamp: { type: "timestamp" },
+    name: { type: 'string' },
+    timestamp: { type: 'timestamp' },
   });
 };
 
-exports.down = function(db) {
-  return db.dropTable("favouriteCoins");
+exports.down = function (db) {
+  return db.dropTable('favouriteCoins');
 };
 
 exports._meta = {
-  "version": 1
+  version: 1,
 };
