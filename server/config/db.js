@@ -1,34 +1,41 @@
 // Set up db connection
-
-// Require the file
-require('dotenv').config();
-
 const mysql = require('mysql2');
 const sessions = require('express-session');
 const MySQLStore = require('express-mysql-session')(sessions);
 
-// Create a connection to db
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
+const MAX_RETRIES = 10;
+const RETRY_DELAY = 2000; // ms
 
-// Check for db connection error
-connection.addListener('error', (err) => {
-  console.error(err);
-});
+function createConnectionWithRetry(retries = 0) {
+  const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  });
 
-// configure mySql session settings
-const sessionStore = new MySQLStore({}, connection.promise());
+  return new Promise((resolve, reject) => {
+    connection.connect((err) => {
+      if (err) {
+        if (retries < MAX_RETRIES) {
+          console.log(`DB connection failed. Retrying in 2s... (${retries + 1}/${MAX_RETRIES})`);
+          setTimeout(() => {
+            createConnectionWithRetry(retries + 1).then(resolve).catch(reject);
+          }, RETRY_DELAY);
+        } else {
+          console.error('Could not connect to DB after retries:', err);
+          reject(err);
+        }
+      } else {
+        console.log('Connected to MySQL DB!');
+        resolve(connection);
+      }
+    });
+  });
+}
 
-/**
- * Format sql queries
- * @param {string} query
- * @param {Array} inserts
- * @returns {string}
- */
+let connectionPromise = createConnectionWithRetry();
+
 const formatSqlQuery = (query, inserts) => mysql.format(query, inserts);
 
 /**
@@ -36,17 +43,22 @@ const formatSqlQuery = (query, inserts) => mysql.format(query, inserts);
  * @param {String} sqlQuery - Sql query to be executed
  * @returns {Promise} - A Promise with value of either reject or resolve
  */
-const executeQuery = (sqlQuery) => {
+const executeQuery = async (sqlQuery) => {
+  const connection = await connectionPromise;
   return connection
     .promise()
     .query(sqlQuery)
     .then(([result]) => result);
 };
 
+const sessionStorePromise = connectionPromise.then(
+  (connection) => new MySQLStore({}, connection.promise())
+);
+
 module.exports = {
-  connection,
+  connectionPromise,
   sessions,
-  sessionStore,
+  sessionStorePromise,
   formatSqlQuery,
   executeQuery,
 };
