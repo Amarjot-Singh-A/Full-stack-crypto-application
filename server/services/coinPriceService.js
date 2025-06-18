@@ -32,7 +32,7 @@ async function fetchAndUpsertCoin(name, description) {
     if (result && result.length > 0) {
       // Update result record
       const oldPrice = result[0].currentPrice;
-      const result  = await coinsModel.update(
+      await coinsModel.update(
         result[0].id,
         name,
         description,

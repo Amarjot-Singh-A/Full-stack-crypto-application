@@ -1,0 +1,8 @@
+{
+  "singleQuote": true,
+  "semi": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended"
+  ]
+}
