@@ -25,6 +25,7 @@ app.use(
     optionsSuccessStatus: 200,
   }),
 );
+
 app.use(
   express.urlencoded({
     extended: true,
