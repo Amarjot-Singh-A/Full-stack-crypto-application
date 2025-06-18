@@ -1,6 +1,6 @@
-import React from "react";
-import TableBody from "@mui/material/TableBody";
-import PortfolioItem from "./PortfolioItem";
+import React from 'react';
+import TableBody from '@mui/material/TableBody';
+import PortfolioItem from './PortfolioItem';
 
 function combineRep(arrayOfObj) {
   let skip = false;

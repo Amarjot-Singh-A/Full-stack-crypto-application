@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var dbm;
 var type;
@@ -15,43 +15,43 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable("ledger", {
-    id: { type: "int", primaryKey: true, autoIncrement: true },
+  return db.createTable('ledger', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
     userId: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "users_variant_users_id_fk",
-        table: "users",
+        name: 'users_variant_users_id_fk',
+        table: 'users',
         rules: {
-          onDelete: "CASCADE",
-          onUpdate: "RESTRICT",
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT',
         },
         mapping: {
-          userId: "id",
+          userId: 'id',
         },
       },
     },
     transactionId: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "transaction_variant_transaction_id_fk",
-        table: "transactions",
+        name: 'transaction_variant_transaction_id_fk',
+        table: 'transactions',
         rules: {
-          onDelete: "CASCADE",
-          onUpdate: "RESTRICT",
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT',
         },
         mapping: {
-          transactionId: "id",
+          transactionId: 'id',
         },
       },
     },
-    balance: { type: "decimal", defaultValue: "0.00" },
-    timestamp: { type: "timestamp" },
+    balance: { type: 'decimal', defaultValue: '0.00' },
+    timestamp: { type: 'timestamp' },
   });
 };
 
 exports.down = function (db) {
-  return db.dropTable("ledger");
+  return db.dropTable('ledger');
 };
 
 exports._meta = {

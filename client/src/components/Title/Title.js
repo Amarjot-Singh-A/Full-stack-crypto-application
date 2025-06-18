@@ -10,7 +10,6 @@ function Title(props) {
   );
 }
 
-
 Title.propTypes = {
   children: PropTypes.node,
 };

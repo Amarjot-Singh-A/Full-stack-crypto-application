@@ -1,6 +1,6 @@
-const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../utils/logger");
-const { getTimestampInZone } = require("../utils/dateUtils");
+const { formatSqlQuery, executeQuery } = require('../config/db');
+const logger = require('../utils/logger');
+const { getTimestampInZone } = require('../utils/dateUtils');
 
 /**
  * Get user favourite coins from Db
@@ -9,8 +9,8 @@ const { getTimestampInZone } = require("../utils/dateUtils");
  */
 const get = async (userId) => {
   try {
-    const sql = "SELECT ??,?? FROM ?? WHERE ?? = ?";
-    const inserts = ["coinId", "name", "favouriteCoins", "userId", userId];
+    const sql = 'SELECT ??,?? FROM ?? WHERE ?? = ?';
+    const inserts = ['coinId', 'name', 'favouriteCoins', 'userId', userId];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
@@ -20,7 +20,7 @@ const get = async (userId) => {
     };
   } catch (error) {
     // Use a logging library or mask sensitive data in production
-    logger.error("Error fetching favourite coins - data model", error.message);
+    logger.error('Error fetching favourite coins - data model', error.message);
     return {
       result: [],
       error,
@@ -35,13 +35,13 @@ const get = async (userId) => {
  */
 const create = async ({ coinId, name, userId }) => {
   try {
-    const sql = "INSERT INTO ?? (??,??,??,??) values (?,?,?,?)";
+    const sql = 'INSERT INTO ?? (??,??,??,??) values (?,?,?,?)';
     const inserts = [
-      "favouriteCoins",
-      "coinId",
-      "name",
-      "userId",
-      "timestamp",
+      'favouriteCoins',
+      'coinId',
+      'name',
+      'userId',
+      'timestamp',
       coinId,
       name,
       userId,
@@ -55,7 +55,7 @@ const create = async ({ coinId, name, userId }) => {
       error: null,
     };
   } catch (error) {
-    logger.error("Error inserting favourite coins - data model", error.message);
+    logger.error('Error inserting favourite coins - data model', error.message);
     return {
       result: [],
       error,

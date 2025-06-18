@@ -1,11 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
+import React, { useCallback, useEffect, useState } from 'react';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 
-const axios = require('axios')
+const axios = require('axios');
 
-
-export default function TrendingItem({obj}) {
+export default function TrendingItem({ obj }) {
   const { id, name, symbol, thumb, price_btc } = obj.item;
   const [price, setPrice] = useState(price_btc);
   let url = `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=cad`;
@@ -27,10 +26,12 @@ export default function TrendingItem({obj}) {
 
   return (
     <TableRow key={id}>
-    <TableCell><img src={thumb} alt="thumb" /></TableCell>
-    <TableCell>{symbol}</TableCell>
-    <TableCell>{name}</TableCell>
-    <TableCell>{price}</TableCell>
-  </TableRow>
+      <TableCell>
+        <img src={thumb} alt="thumb" />
+      </TableCell>
+      <TableCell>{symbol}</TableCell>
+      <TableCell>{name}</TableCell>
+      <TableCell>{price}</TableCell>
+    </TableRow>
   );
 }

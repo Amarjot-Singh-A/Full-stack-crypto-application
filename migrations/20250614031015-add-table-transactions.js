@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var dbm;
 var type;
@@ -15,30 +15,30 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable("transactions", {
-    id: { type: "int", primaryKey: true, autoIncrement: true },
+  return db.createTable('transactions', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
     paymentId: {
-      type: "int",
+      type: 'int',
       foreignKey: {
-        name: "paymentMethod_variant_paymentMethod_id_fk",
-        table: "paymentMethod",
+        name: 'paymentMethod_variant_paymentMethod_id_fk',
+        table: 'paymentMethod',
         rules: {
-          onDelete: "CASCADE",
-          onUpdate: "RESTRICT",
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT',
         },
         mapping: {
-          paymentId: "id",
+          paymentId: 'id',
         },
       },
     },
-    notes: { type: "string" },
-    amount: { type: "decimal", defaultValue: "0.00" },
-    timestamp: { type: "timestamp" },
+    notes: { type: 'string' },
+    amount: { type: 'decimal', defaultValue: '0.00' },
+    timestamp: { type: 'timestamp' },
   });
 };
 
 exports.down = function (db) {
-  return db.dropTable("transactions");
+  return db.dropTable('transactions');
 };
 
 exports._meta = {

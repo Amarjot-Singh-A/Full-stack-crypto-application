@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 /**
  * This function compare password entered by user with the password in the Db
@@ -16,7 +16,6 @@ const bcryptComparePassword = (password, retrievedHash) => {
     });
   });
 };
-
 
 /**
  * Hash the password to be stored in Db
@@ -36,5 +35,5 @@ const bcryptHashPassword = (password) => {
 
 module.exports = {
   bcryptComparePassword,
-  bcryptHashPassword
-}
+  bcryptHashPassword,
+};

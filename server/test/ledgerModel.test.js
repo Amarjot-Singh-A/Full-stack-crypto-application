@@ -3,14 +3,14 @@ jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../utils/logger'), () => ({
-  error: jest.fn(),
-})
+jest.mock('../utils/logger'),
+  () => ({
+    error: jest.fn(),
+  });
 
 const ledgerModel = require('../models/ledgerModel');
 const db = require('../config/db');
 const logger = require('../utils/logger');
-
 
 describe('ledgerModel', () => {
   afterEach(() => {
@@ -20,7 +20,11 @@ describe('ledgerModel', () => {
   describe('create', () => {
     it('should insert a ledger record and return result', async () => {
       db.executeQuery.mockResolvedValue({ insertId: 1 });
-      const data = { userId: 'user123', transactionId: 'txn456', balance: 1000 };
+      const data = {
+        userId: 'user123',
+        transactionId: 'txn456',
+        balance: 1000,
+      };
       const res = await ledgerModel.create(data);
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
@@ -30,7 +34,11 @@ describe('ledgerModel', () => {
 
     it('should handle errors and log them', async () => {
       db.executeQuery.mockRejectedValue(new Error('DB error'));
-      const data = { userId: 'user123', transactionId: 'txn456', balance: 1000 };
+      const data = {
+        userId: 'user123',
+        transactionId: 'txn456',
+        balance: 1000,
+      };
       const res = await ledgerModel.create(data);
       expect(logger.error).toHaveBeenCalled();
       expect(res.result).toBeNull();
@@ -41,13 +49,13 @@ describe('ledgerModel', () => {
   describe('get', () => {
     it('should fetch ledger records for a user', async () => {
       db.executeQuery.mockResolvedValue([
-        { userId: 'user123', transactionId: 'txn456', balance: 1000 }
+        { userId: 'user123', transactionId: 'txn456', balance: 1000 },
       ]);
       const res = await ledgerModel.get('user123');
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
       expect(res.result).toEqual([
-        { userId: 'user123', transactionId: 'txn456', balance: 1000 }
+        { userId: 'user123', transactionId: 'txn456', balance: 1000 },
       ]);
       expect(res.error).toBeNull();
     });
@@ -59,7 +67,7 @@ describe('ledgerModel', () => {
       expect(res.result).toBeNull();
       expect(res.error).toBeInstanceOf(Error);
     });
-  })
+  });
 
   describe('remove', () => {
     it('should delete a ledger record and return result', async () => {

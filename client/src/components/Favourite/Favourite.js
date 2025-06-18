@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useCallback } from "react";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
+import React, { useEffect, useState, useCallback } from 'react';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
-
-import FavouriteList from "./FavouriteList";
-
+import FavouriteList from './FavouriteList';
 
 /**
  * todo - skeleton appears when no coins are fav, fix it
@@ -14,14 +12,14 @@ import FavouriteList from "./FavouriteList";
 export default function Favourite() {
   const [favCoins, setFavCoins] = useState([]);
   const fetchCoinsApi = useCallback(async () => {
-    const url = "http://localhost:5000/coins/favourite";
+    const url = 'http://localhost:5000/coins/favourite';
     const result = await fetch(url, {
-      method: "GET",
-      credentials: "include",
+      method: 'GET',
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => data)
-      .catch((err) => console.error("error in fetchCoinsapi", err));
+      .catch((err) => console.error('error in fetchCoinsapi', err));
 
     return result;
   }, []);
@@ -32,10 +30,10 @@ export default function Favourite() {
       let coins = null;
       if (coins == null) {
         setFavCoins([]);
-        localStorage.setItem("favouriteCoins", []);
+        localStorage.setItem('favouriteCoins', []);
       } else {
         let result = coins[0].coins;
-        localStorage.setItem("favouriteCoins", result);
+        localStorage.setItem('favouriteCoins', result);
         console.log(result);
         setFavCoins(JSON.parse(result));
       }
@@ -49,13 +47,14 @@ export default function Favourite() {
         <Paper
           sx={{
             p: 2,
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             height: 240,
-          }}>
+          }}
+        >
           <Stack spacing={1}>
             <Skeleton variant="text" />
-            <Skeleton variant="rectangular" height={150}/>
+            <Skeleton variant="rectangular" height={150} />
             <Skeleton variant="text" />
           </Stack>
         </Paper>

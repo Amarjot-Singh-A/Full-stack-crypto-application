@@ -17,7 +17,7 @@ async function fetchAndUpsertCoin(name, description) {
           ids: name,
           vs_currencies: 'cad',
         },
-      }
+      },
     );
     console.log(`Response from CoinGecko for ${name}:`, response.data);
 
@@ -27,7 +27,7 @@ async function fetchAndUpsertCoin(name, description) {
     }
 
     // Try to get existing coin record
-    const { result, error } = await coinsModel.getByName(name); 
+    const { result, error } = await coinsModel.getByName(name);
 
     if (result && result.length > 0) {
       // Update result record
@@ -37,12 +37,12 @@ async function fetchAndUpsertCoin(name, description) {
         name,
         description,
         oldPrice,
-        currentPrice
+        currentPrice,
       );
       logger.info(`Updated coin ${name} with new price ${currentPrice}`);
     } else {
       // Insert new record
-     await coinsModel.create({
+      await coinsModel.create({
         name,
         description,
         oldPrice: currentPrice,

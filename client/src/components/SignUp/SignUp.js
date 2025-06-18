@@ -9,62 +9,62 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signUpSchema } from '../../schemas/SignUpSchema'
-import { useFormik } from 'formik'
-import { useState } from 'react'
-import { Link,useHistory } from 'react-router-dom';
-import Swal from "sweetalert2";
+import { signUpSchema } from '../../schemas/SignUpSchema';
+import { useFormik } from 'formik';
+import { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-const interactions = require('../../services/dataInteraction')
+const interactions = require('../../services/dataInteraction');
 const theme = createTheme();
 
 export default function SignUp() {
-  const [dataResp, setDataResp] = useState('')
-  const [signUpError,setSignUpError] = useState('')
+  const [dataResp, setDataResp] = useState('');
+  const [signUpError, setSignUpError] = useState('');
   const history = useHistory();
 
-  const SignUpURL = 'http://localhost:5000/users/signup'
+  const SignUpURL = 'http://localhost:5000/users/signup';
 
   const formik = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
     },
     validationSchema: signUpSchema,
     onSubmit: async (values) => {
-      const dataReturn = await interactions.sendData(values, SignUpURL)
+      const dataReturn = await interactions.sendData(values, SignUpURL);
       if (Boolean(dataReturn.error) && !dataReturn.loggedIn) {
-        setDataResp(dataReturn.loggedIn.toString())
-        setSignUpError(dataReturn.error)
+        setDataResp(dataReturn.loggedIn.toString());
+        setSignUpError(dataReturn.error);
         Swal.fire({
-          title: "Sign Up Attempt Failed",
+          title: 'Sign Up Attempt Failed',
           icon: 'error',
-          html: "Please sign up again",
+          html: 'Please sign up again',
           timer: 2000,
           timerProgressBar: true,
           didOpen: () => {
             Swal.showLoading();
-          }
-        })
-      }else {
+          },
+        });
+      } else {
         setDataResp(dataReturn.loggedIn.toString());
         Swal.fire({
-          title: "Sign Up Successful",
+          title: 'Sign Up Successful',
           icon: 'success',
-          html: "Redirecting to Home",
+          html: 'Redirecting to Home',
           timer: 2000,
           timerProgressBar: true,
           didOpen: () => {
             Swal.showLoading();
-          }
+          },
         }).then((result) => {
-          history.push("/dashboard",{ isLogged : `${dataReturn.loggedIn}`});
+          history.push('/dashboard', { isLogged: `${dataReturn.loggedIn}` });
         });
       }
-    }
-  })
+    },
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -84,7 +84,12 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={formik.handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -100,12 +105,10 @@ export default function SignUp() {
                   autoFocus
                 />
 
-                {formik.touched.firstName && formik.errors.firstName ?
-                  (<div style={{ color: 'red' }}>{formik.errors.firstName}</div>) : null}
-
+                {formik.touched.firstName && formik.errors.firstName ? (
+                  <div style={{ color: 'red' }}>{formik.errors.firstName}</div>
+                ) : null}
               </Grid>
-
-
 
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -120,11 +123,10 @@ export default function SignUp() {
                   autoComplete="lname"
                 />
 
-                {formik.touched.lastName && formik.errors.lastName ?
-                  (<div style={{ color: 'red' }}>{formik.errors.lastName}</div>) : null}
-
+                {formik.touched.lastName && formik.errors.lastName ? (
+                  <div style={{ color: 'red' }}>{formik.errors.lastName}</div>
+                ) : null}
               </Grid>
-
 
               <Grid item xs={12}>
                 <TextField
@@ -139,12 +141,10 @@ export default function SignUp() {
                   autoComplete="email"
                 />
 
-                {formik.touched.email && formik.errors.email ?
-                  (<div style={{ color: 'red' }}>{formik.errors.email}</div>) : null}
-
+                {formik.touched.email && formik.errors.email ? (
+                  <div style={{ color: 'red' }}>{formik.errors.email}</div>
+                ) : null}
               </Grid>
-
-
 
               <Grid item xs={12}>
                 <TextField
@@ -160,12 +160,10 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
 
-                {formik.touched.password && formik.errors.password ?
-                  (<div style={{ color: 'red' }}>{formik.errors.password}</div>) : null}
-
+                {formik.touched.password && formik.errors.password ? (
+                  <div style={{ color: 'red' }}>{formik.errors.password}</div>
+                ) : null}
               </Grid>
-
-
             </Grid>
             <Button
               type="submit"
@@ -177,9 +175,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to="/">
-                  Already have an account? Sign in
-                </Link>
+                <Link to="/">Already have an account? Sign in</Link>
               </Grid>
             </Grid>
           </Box>

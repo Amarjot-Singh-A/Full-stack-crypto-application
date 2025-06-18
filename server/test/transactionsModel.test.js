@@ -3,14 +3,14 @@ jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../utils/logger'), () => ({
-  error: jest.fn(),
-});
+jest.mock('../utils/logger'),
+  () => ({
+    error: jest.fn(),
+  });
 
 const transactionsModel = require('../models/transactionsModel');
 const db = require('../config/db');
 const logger = require('../utils/logger');
-
 
 describe('transactionsModel', () => {
   afterEach(() => {
@@ -19,11 +19,27 @@ describe('transactionsModel', () => {
 
   describe('get', () => {
     it('should fetch a transaction by id', async () => {
-      db.executeQuery.mockResolvedValue([{ id: 1, paymentId: 2, amount: 100, notes: 'test', timestamp: 1234567890 }]);
+      db.executeQuery.mockResolvedValue([
+        {
+          id: 1,
+          paymentId: 2,
+          amount: 100,
+          notes: 'test',
+          timestamp: 1234567890,
+        },
+      ]);
       const res = await transactionsModel.get(1);
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
-      expect(res.result).toEqual([{ id: 1, paymentId: 2, amount: 100, notes: 'test', timestamp: 1234567890 }]);
+      expect(res.result).toEqual([
+        {
+          id: 1,
+          paymentId: 2,
+          amount: 100,
+          notes: 'test',
+          timestamp: 1234567890,
+        },
+      ]);
       expect(res.error).toBeNull();
     });
 
@@ -39,15 +55,39 @@ describe('transactionsModel', () => {
   describe('getAll', () => {
     it('should fetch all transactions', async () => {
       db.executeQuery.mockResolvedValue([
-        { id: 1, paymentId: 2, amount: 100, notes: 'test', timestamp: 1234567890 },
-        { id: 2, paymentId: 3, amount: 200, notes: 'another', timestamp: 1234567891 }
+        {
+          id: 1,
+          paymentId: 2,
+          amount: 100,
+          notes: 'test',
+          timestamp: 1234567890,
+        },
+        {
+          id: 2,
+          paymentId: 3,
+          amount: 200,
+          notes: 'another',
+          timestamp: 1234567891,
+        },
       ]);
       const res = await transactionsModel.getAll();
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
       expect(res.result).toEqual([
-        { id: 1, paymentId: 2, amount: 100, notes: 'test', timestamp: 1234567890 },
-        { id: 2, paymentId: 3, amount: 200, notes: 'another', timestamp: 1234567891 }
+        {
+          id: 1,
+          paymentId: 2,
+          amount: 100,
+          notes: 'test',
+          timestamp: 1234567890,
+        },
+        {
+          id: 2,
+          paymentId: 3,
+          amount: 200,
+          notes: 'another',
+          timestamp: 1234567891,
+        },
       ]);
       expect(res.error).toBeNull();
     });

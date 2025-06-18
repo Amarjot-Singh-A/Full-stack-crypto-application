@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var dbm;
 var type;
@@ -15,17 +15,17 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable("users", {
-    id: { type: "int", primaryKey: true, autoIncrement: true },
-    email: { type: "string", notNull: true, unique: true },
-    password: { type: "string", notNull: true },
-    firstName: { type: "string", notNull: true },
-    lastName: { type: "string", notNull: true },
+  return db.createTable('users', {
+    id: { type: 'int', primaryKey: true, autoIncrement: true },
+    email: { type: 'string', notNull: true, unique: true },
+    password: { type: 'string', notNull: true },
+    firstName: { type: 'string', notNull: true },
+    lastName: { type: 'string', notNull: true },
   });
 };
 
 exports.down = function (db) {
-  return db.dropTable("users");
+  return db.dropTable('users');
 };
 
 exports._meta = {

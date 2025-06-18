@@ -1,5 +1,5 @@
-const ledgerModel = require("../models/ledgerModel");
-const logger = require("../utils/logger");
+const ledgerModel = require('../models/ledgerModel');
+const logger = require('../utils/logger');
 
 /**
  * Fetch record from ledger table
@@ -9,29 +9,37 @@ const logger = require("../utils/logger");
 const getLedger = async (req, res) => {
   try {
     if (!req.session || !req.session.userId) {
-      logger.warn("User not authenticated or session missing");
+      logger.warn('User not authenticated or session missing');
       return res.status(401).send({
         result: null,
-        error: "User not authenticated or session missing",
+        error: 'User not authenticated or session missing',
       });
     }
     const { result, error } = await ledgerModel.get(req.session.userId);
-    console.log("getLedger result =>", result);
+    console.log('getLedger result =>', result);
     if (result == null && error) {
-      logger.error("Error fetching balance - ledgerModel", error.message || error);
+      logger.error(
+        'Error fetching balance - ledgerModel',
+        error.message || error,
+      );
       return res.status(404).send({
         result,
         error: `Error fetching balance - controller level: ${error.message}`,
       });
     } else {
-      logger.info(`Balance fetched successfully for user ${req.session.userId}`);
+      logger.info(
+        `Balance fetched successfully for user ${req.session.userId}`,
+      );
       res.status(200).send({
         result,
         error,
       });
     }
   } catch (error) {
-    logger.error("Error fetching balance - ledgerController", error.message || error);
+    logger.error(
+      'Error fetching balance - ledgerController',
+      error.message || error,
+    );
     res.status(500).send({
       result: null,
       error: `Error fetching balance - controller level: ${error.message}`,
@@ -48,15 +56,18 @@ const getLedger = async (req, res) => {
 const removeLedger = async (req, res) => {
   try {
     if (!req.body.id) {
-      logger.warn("Missing required field: id");
+      logger.warn('Missing required field: id');
       return res.status(400).send({
         result: null,
-        error: "Missing required field: id",
+        error: 'Missing required field: id',
       });
     }
     const { result, error } = await ledgerModel.remove(req.body.id);
     if (result == null && error) {
-      logger.error("Error deleting ledger record - ledgerModel", error.message || error);
+      logger.error(
+        'Error deleting ledger record - ledgerModel',
+        error.message || error,
+      );
       return res.status(404).send({
         result,
         error: `Error deleting ledger record - controller level: ${error.message}`,
@@ -69,7 +80,10 @@ const removeLedger = async (req, res) => {
       });
     }
   } catch (error) {
-    logger.error("Error deleting ledger record - ledgerController", error.message || error);
+    logger.error(
+      'Error deleting ledger record - ledgerController',
+      error.message || error,
+    );
     res.status(500).send({
       result: null,
       error: `Error deleting ledger record - controller level: ${error.message}`,
@@ -83,7 +97,7 @@ const removeLedger = async (req, res) => {
  * It checks if the user is authenticated, validates the request body, fetches the user's ledger records,
  * and ensures that the last record's balance is sufficient before creating a new transaction and ledger record.
  * @param {*} req - Request object containing user session and body with paymentId, amount, and notes
- * @param {*} res 
+ * @param {*} res
  * @returns {Object} - Object with keys - result, error
  * @throws {Error} - Throws an error if any step fails, including insufficient balance or missing fields.
  */
@@ -91,22 +105,23 @@ const createLedger = async (req, res) => {
   try {
     // Validate session and request body
     if (!req.session || !req.session.userId) {
-      logger.warn("User not authenticated or session missing");
+      logger.warn('User not authenticated or session missing');
       return res.status(401).send({
         result: null,
-        error: "User not authenticated or session missing",
+        error: 'User not authenticated or session missing',
       });
     }
     if (
       !req.body ||
       !req.body.paymentId ||
-      (!req.body.amount || req.body.amount <= 0 )||
+      !req.body.amount ||
+      req.body.amount <= 0 ||
       !req.body.notes
     ) {
-      logger.warn("Missing required fields: paymentId, amount, or notes");
+      logger.warn('Missing required fields: paymentId, amount, or notes');
       return res.status(400).send({
         result: null,
-        error: "Missing required fields: paymentId, amount, or notes",
+        error: 'Missing required fields: paymentId, amount, or notes',
       });
     }
     // Extract paymentId, amount, and notes from request body
@@ -116,17 +131,20 @@ const createLedger = async (req, res) => {
     // Fetch the user's ledger records
     const getLedgerRecords = await ledgerModel.get(userId);
     if (getLedgerRecords.error) {
-      logger.error("Error fetching ledger records - ledgerModel", getLedgerRecords.error.message);
+      logger.error(
+        'Error fetching ledger records - ledgerModel',
+        getLedgerRecords.error.message,
+      );
       return res.status(500).send({
         result: null,
         error: `Error fetching ledger records: ${getLedgerRecords.error.message}`,
       });
     }
     if (getLedgerRecords.result.length === 0) {
-      logger.warn("No ledger records found for the user");
+      logger.warn('No ledger records found for the user');
       return res.status(404).send({
         result: null,
-        error: "No ledger records found for the user",
+        error: 'No ledger records found for the user',
       });
     }
     // Sort getledgerRecords by id or timestamp
@@ -135,15 +153,15 @@ const createLedger = async (req, res) => {
     const lastRecord =
       getLedgerRecords.result[getLedgerRecords.result.length - 1];
     if (lastRecord.balance < amount) {
-      logger.warn("Insufficient balance in ledger for the requested amount");
+      logger.warn('Insufficient balance in ledger for the requested amount');
       return res.status(400).send({
         result: null,
-        error: "Insufficient balance in ledger",
+        error: 'Insufficient balance in ledger',
       });
     }
     // Deduct the amount from the last record's balance
     const newBalance = lastRecord.balance - amount;
-    console.log("New balance after deduction:", newBalance);
+    console.log('New balance after deduction:', newBalance);
 
     // Create a transaction record with payment id provided in body
     const transactionId = await ledgerModel.createTransaction({
@@ -152,13 +170,16 @@ const createLedger = async (req, res) => {
       notes,
     });
     if (transactionId.error) {
-      logger.error("Error creating transaction record - ledgerModel", transactionId.error.message);
+      logger.error(
+        'Error creating transaction record - ledgerModel',
+        transactionId.error.message,
+      );
       return res.status(500).send({
         result: null,
         error: `Error creating transaction record: ${transactionId.error.message}`,
       });
     }
-    console.log("Transaction ID created:", transactionId.result.id);
+    console.log('Transaction ID created:', transactionId.result.id);
 
     // Create a new ledger record with the new balance and transaction ID
     if (paymentId != 11 || paymentId != 22) {
@@ -169,9 +190,12 @@ const createLedger = async (req, res) => {
         transactionId: transactionId.result.id,
         balance: newBalance,
       });
-      console.log("createLedger result =>", result);
+      console.log('createLedger result =>', result);
       if (result == null && error) {
-        logger.error("Error creating ledger record - ledgerModel", error.message || error);
+        logger.error(
+          'Error creating ledger record - ledgerModel',
+          error.message || error,
+        );
         return res.status(404).send({
           result,
           error,
@@ -185,18 +209,21 @@ const createLedger = async (req, res) => {
       }
     } else {
       logger.info(
-        "Payment ID is for cash deposit or withdrawal, skipping ledger record creation."
+        'Payment ID is for cash deposit or withdrawal, skipping ledger record creation.',
       );
       return res.status(200).send({
         result: {
           message:
-            "Payment ID is for cash deposit or withdrawal, no ledger record created.",
+            'Payment ID is for cash deposit or withdrawal, no ledger record created.',
         },
         error: null,
       });
     }
   } catch (err) {
-    logger.error("Error creating ledger record - ledgerController", err.message || err);
+    logger.error(
+      'Error creating ledger record - ledgerController',
+      err.message || err,
+    );
     res.status(500).send({
       result: null,
       error: `Error creating ledger record - controller level: ${err.message}`,

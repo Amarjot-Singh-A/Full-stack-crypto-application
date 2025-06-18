@@ -1,9 +1,9 @@
-import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import DashboardContent from "./components/DashboardContent/DashboardContent";
-import SignIn from "./components/SignIn/SignIn";
-import SignUp from "./components/SignUp/SignUp";
-import Lost from "./components/Lost/Lost";
+import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import DashboardContent from './components/DashboardContent/DashboardContent';
+import SignIn from './components/SignIn/SignIn';
+import SignUp from './components/SignUp/SignUp';
+import Lost from './components/Lost/Lost';
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           <Route exact path="/dashboard">
             <DashboardContent />
           </Route>
-          <Route  path="*">
+          <Route path="*">
             <Lost />
           </Route>
         </Switch>

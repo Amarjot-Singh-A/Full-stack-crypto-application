@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-const axios = require("axios");
+import React, { useState, useEffect } from 'react';
+const axios = require('axios');
 
 export default function CoinPrice({ id }) {
   const [price, setPrice] = useState(0);

@@ -3,14 +3,14 @@ jest.mock('../config/db', () => ({
   formatSqlQuery: jest.fn((sql, inserts) => 'formatted query'),
   executeQuery: jest.fn(),
 }));
-jest.mock('../utils/logger'), () => ({
-  error: jest.fn(),
-});
+jest.mock('../utils/logger'),
+  () => ({
+    error: jest.fn(),
+  });
 
 const paymentMethodModel = require('../models/paymentMethodModel');
 const db = require('../config/db');
 const logger = require('../utils/logger');
-
 
 describe('paymentMethodModel', () => {
   afterEach(() => {
@@ -40,7 +40,9 @@ describe('paymentMethodModel', () => {
 
   describe('get', () => {
     it('should fetch a payment method by id', async () => {
-      db.executeQuery.mockResolvedValue([{ id: 1, type: 'card', name: 'Visa' }]);
+      db.executeQuery.mockResolvedValue([
+        { id: 1, type: 'card', name: 'Visa' },
+      ]);
       const res = await paymentMethodModel.get(1);
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
@@ -61,14 +63,14 @@ describe('paymentMethodModel', () => {
     it('should fetch all payment methods', async () => {
       db.executeQuery.mockResolvedValue([
         { id: 1, type: 'card', name: 'Visa' },
-        { id: 2, type: 'bank', name: 'Chase' }
+        { id: 2, type: 'bank', name: 'Chase' },
       ]);
       const res = await paymentMethodModel.getAll();
       expect(db.formatSqlQuery).toHaveBeenCalled();
       expect(db.executeQuery).toHaveBeenCalled();
       expect(res.result).toEqual([
         { id: 1, type: 'card', name: 'Visa' },
-        { id: 2, type: 'bank', name: 'Chase' }
+        { id: 2, type: 'bank', name: 'Chase' },
       ]);
       expect(res.error).toBeNull();
     });

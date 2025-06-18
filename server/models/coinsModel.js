@@ -1,6 +1,6 @@
-const { formatSqlQuery, executeQuery } = require("../config/db");
-const logger = require("../utils/logger");
-const { getTimestampInZone } = require("../utils/dateUtils");
+const { formatSqlQuery, executeQuery } = require('../config/db');
+const logger = require('../utils/logger');
+const { getTimestampInZone } = require('../utils/dateUtils');
 
 /**
  * Create a record in coins table
@@ -9,15 +9,15 @@ const { getTimestampInZone } = require("../utils/dateUtils");
  */
 const create = async ({ name, description, oldPrice, currentPrice }) => {
   try {
-    const sql = "INSERT INTO ?? (??,??,??,??,??,??) values (?,?,?,?,?,?)";
+    const sql = 'INSERT INTO ?? (??,??,??,??,??,??) values (?,?,?,?,?,?)';
     const inserts = [
-      "coins",
-      "name",
-      "description",
-      "oldPrice",
-      "currentPrice",
-      "timestamp",
-      "updatedTimestamp",
+      'coins',
+      'name',
+      'description',
+      'oldPrice',
+      'currentPrice',
+      'timestamp',
+      'updatedTimestamp',
       name,
       description,
       oldPrice,
@@ -33,8 +33,8 @@ const create = async ({ name, description, oldPrice, currentPrice }) => {
       error: null,
     };
   } catch (error) {
-    console.error("Error inserting coin - data model - error", error);
-    logger.error("Error inserting coin - data model", error.message);
+    console.error('Error inserting coin - data model - error', error);
+    logger.error('Error inserting coin - data model', error.message);
     return {
       result: [],
       error,
@@ -49,8 +49,8 @@ const create = async ({ name, description, oldPrice, currentPrice }) => {
  */
 const get = async (id) => {
   try {
-    const sql = "SELECT * FROM ?? WHERE ?? = ?";
-    const inserts = ["coins", "id", id];
+    const sql = 'SELECT * FROM ?? WHERE ?? = ?';
+    const inserts = ['coins', 'id', id];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
@@ -59,7 +59,7 @@ const get = async (id) => {
       error: null,
     };
   } catch (error) {
-    logger.error("Error fetching single coin - data model", error.message);
+    logger.error('Error fetching single coin - data model', error.message);
     return {
       result: [],
       error,
@@ -73,8 +73,8 @@ const get = async (id) => {
  */
 const getAll = async () => {
   try {
-    const sql = "SELECT * FROM ??";
-    const inserts = ["coins"];
+    const sql = 'SELECT * FROM ??';
+    const inserts = ['coins'];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
 
@@ -83,7 +83,7 @@ const getAll = async () => {
       error: null,
     };
   } catch (error) {
-    logger.error("Error fetching all coins - data model", error.message);
+    logger.error('Error fetching all coins - data model', error.message);
     return {
       result: [],
       error,
@@ -96,26 +96,27 @@ const getAll = async () => {
  * @param {number} id - ID of the coin to update
  * @param {string} name - New name of the coin
  * @param {string} description - New description of the coin
- * @param {number} oldPrice - Old price of the coin 
+ * @param {number} oldPrice - Old price of the coin
  * @param {number} currentPrice - Current price of the coin
  * @returns {Object} - Object with result and error as keys
  */
 const update = async (id, name, description, oldPrice, currentPrice) => {
   try {
-    const sql = "UPDATE ?? SET ?? = ?, ?? = ?, ?? = ?, ?? = ?, ?? = ? WHERE ?? = ?";
+    const sql =
+      'UPDATE ?? SET ?? = ?, ?? = ?, ?? = ?, ?? = ?, ?? = ? WHERE ?? = ?';
     const inserts = [
-      "coins",
-      "name",
+      'coins',
+      'name',
       name,
-      "description",
+      'description',
       description,
-      "oldPrice",
+      'oldPrice',
       oldPrice,
-      "currentPrice",
+      'currentPrice',
       currentPrice,
-      "updatedTimestamp",
+      'updatedTimestamp',
       getTimestampInZone(),
-      "id",
+      'id',
       id,
     ];
     const formattedQuery = formatSqlQuery(sql, inserts);
@@ -126,7 +127,7 @@ const update = async (id, name, description, oldPrice, currentPrice) => {
       error: null,
     };
   } catch (error) {
-    logger.error("Error updating coin - data model", error.message);
+    logger.error('Error updating coin - data model', error.message);
     return {
       result: [],
       error,
@@ -136,18 +137,18 @@ const update = async (id, name, description, oldPrice, currentPrice) => {
 
 /**
  * Get a coin by its name
- * @param {*} name 
+ * @param {*} name
  * @returns {Object} - Object with result and error as keys
  */
 const getByName = async (name) => {
   try {
-    const sql = "SELECT * FROM ?? WHERE ?? = ?";
-    const inserts = ["coins", "name", name];
+    const sql = 'SELECT * FROM ?? WHERE ?? = ?';
+    const inserts = ['coins', 'name', name];
     const formattedQuery = formatSqlQuery(sql, inserts);
     const result = await executeQuery(formattedQuery);
     return { result, error: null };
   } catch (error) {
-    logger.error("Error fetching coin by name - data model", error.message);
+    logger.error('Error fetching coin by name - data model', error.message);
     return { result: [], error };
   }
 };
