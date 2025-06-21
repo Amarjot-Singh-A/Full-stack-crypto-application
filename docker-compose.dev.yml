@@ -30,6 +30,7 @@ services:
       - ./server:/app/server
       - ./package.json:/app/package.json
       - ./package-lock.json:/app/package-lock.json
+      - ./logs:/app/logs
 
   client:
     build:
