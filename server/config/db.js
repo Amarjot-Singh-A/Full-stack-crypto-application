@@ -1,4 +1,5 @@
 // Set up db connection
+require('dotenv').config();
 const mysql = require('mysql2');
 const sessions = require('express-session');
 const MySQLStore = require('express-mysql-session')(sessions);

@@ -14,7 +14,9 @@ services:
       - db_data:/var/lib/mysql
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     environment:
       DB_HOST: db
       DB_USER: ${MYSQL_USER}
@@ -24,13 +26,20 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    volumes:
+      - ./server:/app/server
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
 
   client:
-    build: ./client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
     ports:
-      - "8080:80"
+      - "8080:3000"
     depends_on:
       - app
-
+    volumes:
+      - ./client:/app
 volumes:
   db_data:

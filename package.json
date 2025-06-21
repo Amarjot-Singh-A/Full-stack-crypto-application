@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon server/server.js ",
+    "dev": "nodemon server/server.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
@@ -35,7 +36,8 @@
     "luxon": "^3.6.1",
     "mysql2": "^3.14.1",
     "save": "^2.4.0",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "ws": "^8.18.2"
   },
   "devDependencies": {
     "eslint": "^9.29.0",
