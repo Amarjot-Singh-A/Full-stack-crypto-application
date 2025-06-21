@@ -7,7 +7,7 @@ export default function DisplayBalance() {
   useEffect(() => {
     let mounted = true;
     async function getBalance() {
-      let url = 'http://localhost:5000/ledger';
+      let url = `${process.env.REACT_APP_API_URL}/ledger`;
       let result = await fetch(url, {
         method: 'GET',
         credentials: 'include',

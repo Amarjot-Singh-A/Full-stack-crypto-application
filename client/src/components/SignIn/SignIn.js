@@ -29,7 +29,7 @@ export default function SignIn() {
   const history = useHistory();
   const [dataRetrieve, setDataRetrieve] = useState(false);
 
-  const signInURL = 'http://localhost:5000/users/signin';
+  const signInURL = `${process.env.REACT_APP_API_URL}/users/signin`;
 
   const formik = useFormik({
     initialValues: {

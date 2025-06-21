@@ -102,7 +102,7 @@ export default function DashboardContent() {
   const handleLogOut = async (event) => {
     event.preventDefault();
     console.log('logout clicked');
-    await fetch('http://localhost:5000/users/logout', {
+    await fetch(`${process.env.REACT_APP_API_URL}/users/logout`, {
       method: 'GET',
       credentials: 'include',
     })

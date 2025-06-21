@@ -2,9 +2,9 @@
   "dev": {
     "driver": "mysql",
     "host": "db",
-    "database": { "ENV": "MYSQL_DATABASE" },
-    "user": { "ENV": "MYSQL_USER" },
-    "password": { "ENV": "MYSQL_PASSWORD" },
+    "database": "crypto",
+    "user": "user",
+    "password": "password",
     "port": 3306
   },
   "test": {

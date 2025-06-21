@@ -123,11 +123,6 @@ const logOut = (req, res) => {
         error: `error logging out: ${error.message}`,
       });
     }
-    //clear the cookie
-    logger.info('user session destroyed successfully', {
-      userId: req.session.userId,
-      email: req.session.email,
-    });
     // clear the cookie
     return res
       .clearCookie(process.env.SESSION_COOKIE_NAME, {
