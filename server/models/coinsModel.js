@@ -33,7 +33,6 @@ const create = async ({ name, description, oldPrice, currentPrice }) => {
       error: null,
     };
   } catch (error) {
-    console.error('Error inserting coin - data model - error', error);
     logger.error('Error inserting coin - data model', error.message);
     return {
       result: [],

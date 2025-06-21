@@ -19,9 +19,13 @@ function createConnectionWithRetry(retries = 0) {
     connection.connect((err) => {
       if (err) {
         if (retries < MAX_RETRIES) {
-          console.log(`DB connection failed. Retrying in 2s... (${retries + 1}/${MAX_RETRIES})`);
+          console.log(
+            `DB connection failed. Retrying in 2s... (${retries + 1}/${MAX_RETRIES})`,
+          );
           setTimeout(() => {
-            createConnectionWithRetry(retries + 1).then(resolve).catch(reject);
+            createConnectionWithRetry(retries + 1)
+              .then(resolve)
+              .catch(reject);
           }, RETRY_DELAY);
         } else {
           console.error('Could not connect to DB after retries:', err);
@@ -53,7 +57,7 @@ const executeQuery = async (sqlQuery) => {
 };
 
 const sessionStorePromise = connectionPromise.then(
-  (connection) => new MySQLStore({}, connection.promise())
+  (connection) => new MySQLStore({}, connection.promise()),
 );
 
 module.exports = {

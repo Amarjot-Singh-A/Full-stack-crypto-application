@@ -13,12 +13,12 @@ const wss = new WebSocket.Server({ server, path: '/ws' });
 
 wss.on('connection', (ws) => {
   console.log('WebSocket client connected');
-  ws.send(JSON.stringify({ message : 'WebSocket connection established!'}));
+  ws.send(JSON.stringify({ message: 'WebSocket connection established!' }));
 
   ws.on('message', (message) => {
     console.log('Received:', message.toString());
     // Echo the message back
-    ws.send(JSON.stringify({message :`Server received: ${message}`}));
+    ws.send(JSON.stringify({ message: `Server received: ${message}` }));
   });
 
   ws.on('close', () => {
