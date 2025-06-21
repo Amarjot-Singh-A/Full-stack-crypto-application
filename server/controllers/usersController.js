@@ -30,10 +30,7 @@ const signIn = async (req, res) => {
       req.session.isLogged = true;
       req.session.email = email;
       req.session.userId = userId;
-      logger.info('User signed in successfully', {
-        userId,
-        email,
-      });
+      logger.info(`User signed in successfully: userId=${userId}, email=${email}`);
       res.status(200).send({
         loggedIn: true,
         error: '',
