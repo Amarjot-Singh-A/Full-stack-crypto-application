@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
+  test-lint-format:
     runs-on: ubuntu-latest
 
     steps:
