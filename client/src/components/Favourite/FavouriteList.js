@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import FavouriteItem from './FavouriteItem';
 import CircularProgress from '@mui/material/CircularProgress';
+import PropTypes from 'prop-types';
 
 const axios = require('axios');
 
@@ -43,3 +44,7 @@ export default function FavouriteList({ favCoinsLists }) {
     </>
   );
 }
+
+FavouriteList.propTypes = {
+  favCoinsLists: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

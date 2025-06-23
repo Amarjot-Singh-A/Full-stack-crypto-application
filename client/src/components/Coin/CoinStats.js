@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import Title from '../Title/Title';
+import PropTypes from 'prop-types';
 
 export default function CoinStats({ stats }) {
   let tableData =
@@ -63,3 +64,34 @@ export default function CoinStats({ stats }) {
     )
   );
 }
+CoinStats.propTypes = {
+  stats: PropTypes.shape({
+    image: PropTypes.shape({
+      small: PropTypes.string.isRequired,
+    }).isRequired,
+    name: PropTypes.string.isRequired,
+    symbol: PropTypes.string.isRequired,
+    market_data: PropTypes.shape({
+      ath: PropTypes.shape({
+        cad: PropTypes.number.isRequired,
+      }).isRequired,
+      atl: PropTypes.shape({
+        cad: PropTypes.number.isRequired,
+      }).isRequired,
+      market_cap: PropTypes.shape({
+        cad: PropTypes.number.isRequired,
+      }).isRequired,
+      total_volume: PropTypes.shape({
+        cad: PropTypes.number.isRequired,
+      }).isRequired,
+      high_24h: PropTypes.shape({
+        cad: PropTypes.number.isRequired,
+      }).isRequired,
+      low_24h: PropTypes.shape({
+        cad: PropTypes.number.isRequired,
+      }).isRequired,
+      circulating_supply: PropTypes.number.isRequired,
+      max_supply: PropTypes.number,
+    }).isRequired,
+  }).isRequired,
+};

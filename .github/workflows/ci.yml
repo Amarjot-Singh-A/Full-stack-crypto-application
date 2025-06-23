@@ -2,10 +2,10 @@ name: PR Checks
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-  test:
+  test-lint-format:
     runs-on: ubuntu-latest
 
     steps:

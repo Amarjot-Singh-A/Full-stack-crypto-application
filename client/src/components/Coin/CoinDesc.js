@@ -1,5 +1,6 @@
 import React from 'react';
 import Title from '../Title/Title';
+import PropTypes from 'prop-types';
 
 export default function CoinDesc({ stats }) {
   return (
@@ -12,3 +13,11 @@ export default function CoinDesc({ stats }) {
     </div>
   );
 }
+
+CoinDesc.propTypes = {
+  stats: PropTypes.shape({
+    description: PropTypes.shape({
+      en: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};

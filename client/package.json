@@ -30,12 +30,6 @@
     "format": "prettier --check .",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -51,6 +45,7 @@
   "proxy": "http://app:3000",
   "devDependencies": {
     "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
     "prettier": "^3.5.3"
   }
 }

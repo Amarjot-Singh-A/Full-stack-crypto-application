@@ -8,7 +8,9 @@
     "start": "nodemon server/server.js ",
     "dev": "nodemon server/server.js",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "pr-check": "npm test -- --watchAll=false && npm run lint && npm run format && cd client && npm test -- --watchAll=false && npm run lint && npm run format"
   },
   "keywords": [
     "crypto",
@@ -45,8 +47,10 @@
     "eslint-plugin-prettier": "^5.5.0",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.2.0",
+    "husky": "^9.1.7",
     "jest": "26.6.0",
     "jest-mock": "^30.0.0",
+    "lint-staged": "^16.1.2",
     "nodemon": "^2.0.13",
     "prettier": "^3.5.3",
     "supertest": "^6.2.2"

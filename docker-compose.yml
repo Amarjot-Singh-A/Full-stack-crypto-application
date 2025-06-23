@@ -9,7 +9,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - '3306:3306'
     volumes:
       - db_data:/var/lib/mysql
 
@@ -21,14 +21,14 @@ services:
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_NAME: ${MYSQL_DATABASE}
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - db
 
   client:
     build: ./client
     ports:
-      - "8080:80"
+      - '8080:80'
     depends_on:
       - app
 
