@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 const interactions = require('../../services/dataInteraction');
+import PropTypes from 'prop-types';
 
 export default function CoinFav({ id }) {
   const [isFav, setIsFav] = useState(() => {
@@ -60,3 +61,7 @@ export default function CoinFav({ id }) {
     </button>
   );
 }
+
+CoinFav.propTypes = {
+  id: PropTypes.string.isRequired,
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function CoinGraphInterval({ graphInterval, setGraphInterval }) {
   const graphIntervals = [
@@ -29,3 +30,8 @@ export default function CoinGraphInterval({ graphInterval, setGraphInterval }) {
     </div>
   );
 }
+
+CoinGraphInterval.propTypes = {
+  graphInterval: PropTypes.string.isRequired,
+  setGraphInterval: PropTypes.func.isRequired,
+};

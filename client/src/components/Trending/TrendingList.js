@@ -1,6 +1,7 @@
 import React from 'react';
 import TableBody from '@mui/material/TableBody';
 import TrendingItem from './TrendingItem';
+import PropTypes from 'prop-types';
 
 export default function TrendingList({ trendings }) {
   const iterateTrendings = (trendings) => {
@@ -14,3 +15,16 @@ export default function TrendingList({ trendings }) {
 
   return <TableBody>{iterateTrendings(trendings)}</TableBody>;
 }
+TrendingList.propTypes = {
+  trendings: PropTypes.arrayOf(
+    PropTypes.shape({
+      item: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        symbol: PropTypes.string.isRequired,
+        thumb: PropTypes.string.isRequired,
+        price_btc: PropTypes.number.isRequired,
+      }).isRequired,
+    }),
+  ).isRequired,
+};

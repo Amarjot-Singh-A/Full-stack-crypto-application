@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import CircularProgress from '@mui/material/CircularProgress';
+import PropTypes from 'prop-types'; 
 
 export default function PortfolioItem({ obj }) {
   const { coin_name, coin_price, amount_invested, quantity_bought, id } = obj;
@@ -51,3 +52,13 @@ export default function PortfolioItem({ obj }) {
     </TableRow>
   );
 }
+
+PortfolioItem.propTypes = {
+  obj: PropTypes.shape({
+    coin_name: PropTypes.string.isRequired,
+    coin_price: PropTypes.number.isRequired,
+    amount_invested: PropTypes.number.isRequired,
+    quantity_bought: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+};

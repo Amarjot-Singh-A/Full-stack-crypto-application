@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 const axios = require('axios');
+import PropTypes from 'prop-types';
 
 export default function CoinPrice({ id }) {
   const [price, setPrice] = useState(0);
@@ -31,3 +32,7 @@ export default function CoinPrice({ id }) {
     </div>
   );
 }
+
+CoinPrice.propTypes = {
+  id: PropTypes.string.isRequired,
+};

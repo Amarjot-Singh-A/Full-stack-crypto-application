@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { Link } from 'react-router-dom';
 import Title from '../Title/Title';
+import PropTypes from 'prop-types';
 
 export default function FavouriteItem({ coins }) {
   return (
@@ -42,3 +43,11 @@ export default function FavouriteItem({ coins }) {
     </>
   );
 }
+
+FavouriteItem.propTypes = {
+  coins: PropTypes.arrayOf(
+    PropTypes.shape({
+      [PropTypes.string.isRequired]: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-
+import PropTypes from 'prop-types';
 const axios = require('axios');
 
 export default function TrendingItem({ obj }) {
@@ -35,3 +35,15 @@ export default function TrendingItem({ obj }) {
     </TableRow>
   );
 }
+
+TrendingItem.propTypes = {
+  obj: PropTypes.shape({
+    item: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      symbol: PropTypes.string.isRequired,
+      thumb: PropTypes.string.isRequired,
+      price_btc: PropTypes.number.isRequired,
+    }).isRequired,
+  }).isRequired,
+};

@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import PropTypes from 'prop-types';
 
 const axios = require('axios');
 
@@ -66,3 +67,8 @@ export default function CoinGraph({ id, graphInterval }) {
     </ResponsiveContainer>
   );
 }
+
+CoinGraph.propTypes = {
+  id: PropTypes.string.isRequired,
+  graphInterval: PropTypes.string.isRequired,
+};

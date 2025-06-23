@@ -1,6 +1,7 @@
 import React from 'react';
 import TableBody from '@mui/material/TableBody';
 import PortfolioItem from './PortfolioItem';
+import PropTypes from 'prop-types';
 
 function combineRep(arrayOfObj) {
   let skip = false;
@@ -71,3 +72,15 @@ export default function PortfolioList({ transactions }) {
 
   return <TableBody>{item(transactions)}</TableBody>;
 }
+
+PortfolioList.propTypes = {
+  transactions: PropTypes.arrayOf(
+    PropTypes.shape({
+      coin_name: PropTypes.string.isRequired,
+      coin_price: PropTypes.number.isRequired,
+      amount_invested: PropTypes.number.isRequired,
+      quantity_bought: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
