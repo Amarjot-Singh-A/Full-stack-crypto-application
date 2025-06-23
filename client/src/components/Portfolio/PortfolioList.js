@@ -81,6 +81,6 @@ PortfolioList.propTypes = {
       amount_invested: PropTypes.number.isRequired,
       quantity_bought: PropTypes.number.isRequired,
       id: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
 };

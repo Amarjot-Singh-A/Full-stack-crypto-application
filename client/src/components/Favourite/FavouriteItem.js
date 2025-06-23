@@ -48,6 +48,6 @@ FavouriteItem.propTypes = {
   coins: PropTypes.arrayOf(
     PropTypes.shape({
       [PropTypes.string.isRequired]: PropTypes.number.isRequired,
-    })
+    }),
   ).isRequired,
 };
