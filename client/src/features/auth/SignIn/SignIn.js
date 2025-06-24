@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { login } from '../../../app/store';
+import { useHistory } from 'react-router';
+import { useFormik } from 'formik';
+import { signInSchema } from './SignInSchema';
+import Swal from 'sweetalert2';
+import { useSignIn } from './useSignIn';
+import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -11,25 +18,14 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useHistory } from 'react-router';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signInSchema } from './SignInSchema';
-import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
-const interactions = require('../../../services/dataInteraction');
 const theme = createTheme();
 
-/**
- * todo - use <Alert severity="error">This is an error alert — check it out!</Alert> to show errors
- * in both signin and signup
- */
 export default function SignIn() {
   const history = useHistory();
-  const [dataRetrieve, setDataRetrieve] = useState(false);
-
-  const signInURL = `${process.env.REACT_APP_API_URL}/users/signin`;
+  const dispatch = useDispatch();
+  const signInMutation = useSignIn();
 
   const formik = useFormik({
     initialValues: {
@@ -38,35 +34,51 @@ export default function SignIn() {
     },
     validationSchema: signInSchema,
     onSubmit: async (values) => {
-      const dataReturn = await interactions.sendData(values, signInURL);
-      console.log('datareturn', dataReturn);
-      if (Boolean(dataReturn.error)) {
-        setDataRetrieve(dataReturn.loggedIn.toString());
-        Swal.fire({
-          title: 'Login Attempt Failed',
-          icon: 'error',
-          html: 'Please login again',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-      } else {
-        setDataRetrieve(dataReturn.loggedIn.toString());
-        Swal.fire({
-          title: 'Login Successful',
-          icon: 'success',
-          html: 'Redirecting to Home',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        }).then((result) => {
-          history.push('/dashboard', { isLogged: `${dataReturn.loggedIn}` });
-        });
-      }
+      signInMutation.mutate(values, {
+        onSuccess: (dataReturn) => {
+          if (dataReturn.error) {
+            Swal.fire({
+              title: 'Login Attempt Failed',
+              icon: 'error',
+              html: 'Please login again',
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
+          } else {
+            dispatch(login({ email: values.email }));
+            Swal.fire({
+              title: 'Login Successful',
+              icon: 'success',
+              html: 'Redirecting to Home',
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            }).then(() => {
+              history.push('/dashboard', {
+                isLogged: `${dataReturn.loggedIn}`,
+              });
+            });
+          }
+        },
+        onError: (error) => {
+          console.error('Login error:', error);
+          Swal.fire({
+            title: 'Login Attempt Failed',
+            icon: 'error',
+            html: 'Please try again later',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+        },
+      });
     },
   });
 
@@ -158,9 +170,6 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </Box>
-          <Typography component="h5" variant="h5">
-            {dataRetrieve}
-          </Typography>
         </Box>
       </Container>
     </ThemeProvider>

@@ -18,6 +18,6 @@ router.post('/signup', userController.signUp);
  * Route - /logout
  * @summary - Destroy the user session and clear the cookie
  */
-router.get('/logout', userController.logOut);
+router.post('/logout', userController.logOut);
 
 module.exports = router;
