@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from '../Title/Title';
+import Title from '../../Title/Title';
 import PropTypes from 'prop-types';
 
 export default function CoinDesc({ stats }) {

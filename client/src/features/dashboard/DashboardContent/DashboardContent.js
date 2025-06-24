@@ -24,7 +24,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
-import ListItems from '../ListItems/ListItems';
+import ListItems from '../../ListItems/ListItems';
 import Trending from '../Trending/Trending';
 import Coins from '../Coins/Coins';
 import Coin from '../Coin/Coin';

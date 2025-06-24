@@ -1,9 +1,9 @@
-import './App.css';
+import './styles/App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import DashboardContent from './components/DashboardContent/DashboardContent';
-import SignIn from './components/SignIn/SignIn';
-import SignUp from './components/SignUp/SignUp';
-import Lost from './components/Lost/Lost';
+import DashboardContent from './features/dashboard/DashboardContent/DashboardContent';
+import SignIn from './features/auth/SignIn/SignIn';
+import SignUp from './features/auth/SignUp/SignUp';
+import Lost from './features/Lost/Lost';
 
 function App() {
   return (

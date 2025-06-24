@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
-import Title from '../Title/Title';
+import Title from '../../Title/Title';
 import PropTypes from 'prop-types';
 
 export default function CoinStats({ stats }) {

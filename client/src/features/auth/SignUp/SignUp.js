@@ -9,13 +9,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { signUpSchema } from '../../schemas/SignUpSchema';
+import { signUpSchema } from './SignUpSchema';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-const interactions = require('../../services/dataInteraction');
+const interactions = require('../../../services/dataInteraction');
 const theme = createTheme();
 
 export default function SignUp() {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-const interactions = require('../../services/dataInteraction');
+const interactions = require('../../../services/dataInteraction');
 import PropTypes from 'prop-types';
 
 export default function CoinFav({ id }) {
