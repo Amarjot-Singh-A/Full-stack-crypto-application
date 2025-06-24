@@ -35,6 +35,7 @@ import DisplayBalance from '../Balance/DisplayBalance';
 import Buy from '../Buy/Buy';
 import Sell from '../Sell/Sell';
 import Portfolio from '../Portfolio/Portfolio';
+import LogOut from '../../auth/LogOut/LogOut';
 
 const drawerWidth = 240;
 
@@ -99,61 +100,7 @@ export default function DashboardContent() {
     : false;
   console.log('islogged ', isLogged);
 
-  const handleLogOut = async (event) => {
-    event.preventDefault();
-    console.log('logout clicked');
-    await fetch(`${process.env.REACT_APP_API_URL}/users/logout`, {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log("logoutdata", data);
-        if (data.isLogged) {
-          Swal.fire({
-            title: 'Logout Attempt Failed',
-            icon: 'error',
-            html: 'Please try to logout again',
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-        } else {
-          if (!data.isLogged && Boolean(data.error)) {
-            Swal.fire({
-              title: 'Logout Attempt Failed',
-              icon: 'error',
-              html: 'User session doesnt exist',
-              timer: 2000,
-              timerProgressBar: true,
-              didOpen: () => {
-                Swal.showLoading();
-              },
-            }).then((result) => {
-              history.push('/');
-            });
-          } else if (!data.isLogged) {
-            Swal.fire({
-              title: 'Logout Successful',
-              icon: 'success',
-              html: 'Redirecting to Sign In ',
-              timer: 2000,
-              timerProgressBar: true,
-              didOpen: () => {
-                Swal.showLoading();
-              },
-            }).then((result) => {
-              history.push('/');
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        console.log('error fetching logout component', err);
-      });
-  };
+  const handleLogOut = LogOut();
 
   const dashBoardRender = () => {
     if (isLogged) {
