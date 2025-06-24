@@ -14,7 +14,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 
-const interactions = require('../../services/dataInteraction');
+const interactions = require('../../../services/dataInteraction');
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

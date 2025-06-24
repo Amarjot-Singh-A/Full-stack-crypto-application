@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
-import Title from '../Title/Title';
+import Title from '../../Title/Title';
 import TrendingList from './TrendingList';
 
 const axios = require('axios');
