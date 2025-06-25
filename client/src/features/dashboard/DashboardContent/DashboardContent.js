@@ -95,15 +95,16 @@ export default function DashboardContent() {
   };
   let { path } = useRouteMatch();
   const history = useHistory();
-  const isLogged = history.location.state?.isLogged
-    ? JSON.parse(history.location.state.isLogged)
-    : false;
-  console.log('islogged ', isLogged);
+  const isLoggedIn =
+    history.location.state?.isLoggedIn &&
+    history.location.state.isLoggedIn != 'undefined'
+      ? JSON.parse(history.location.state.isLoggedIn)
+      : false;
 
   const handleLogOut = LogOut();
 
   const dashBoardRender = () => {
-    if (isLogged) {
+    if (isLoggedIn) {
       return (
         <Router>
           <ThemeProvider theme={mdTheme}>

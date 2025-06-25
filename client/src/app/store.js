@@ -12,10 +12,14 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.email = '';
     },
+    signUp(state, action) {
+      state.isLoggedIn = true;
+      state.email = action.payload.email;
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, signUp } = authSlice.actions;
 
 export const store = configureStore({
   reducer: {

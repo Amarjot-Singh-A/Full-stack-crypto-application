@@ -60,7 +60,7 @@ export default function SignIn() {
               },
             }).then(() => {
               history.push('/dashboard', {
-                isLogged: `${dataReturn.loggedIn}`,
+                isLoggedIn: `${dataReturn.isLoggedIn}`,
               });
             });
           }

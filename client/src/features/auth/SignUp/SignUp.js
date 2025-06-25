@@ -11,20 +11,18 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { signUpSchema } from './SignUpSchema';
 import { useFormik } from 'formik';
-import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { useSignUp } from './useSignUp';
+import { signUp } from '../../../app/store';
 
-const interactions = require('../../../services/dataInteraction');
 const theme = createTheme();
 
 export default function SignUp() {
-  const [dataResp, setDataResp] = useState('');
-  const [signUpError, setSignUpError] = useState('');
   const history = useHistory();
-
-  const SignUpURL = 'http://localhost:5000/users/signup';
-
+  const signUpMutation = useSignUp();
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -34,35 +32,51 @@ export default function SignUp() {
     },
     validationSchema: signUpSchema,
     onSubmit: async (values) => {
-      const dataReturn = await interactions.sendData(values, SignUpURL);
-      if (Boolean(dataReturn.error) && !dataReturn.loggedIn) {
-        setDataResp(dataReturn.loggedIn.toString());
-        setSignUpError(dataReturn.error);
-        Swal.fire({
-          title: 'Sign Up Attempt Failed',
-          icon: 'error',
-          html: 'Please sign up again',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-      } else {
-        setDataResp(dataReturn.loggedIn.toString());
-        Swal.fire({
-          title: 'Sign Up Successful',
-          icon: 'success',
-          html: 'Redirecting to Home',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        }).then((result) => {
-          history.push('/dashboard', { isLogged: `${dataReturn.loggedIn}` });
-        });
-      }
+      signUpMutation.mutate(values, {
+        onSuccess: (dataReturn) => {
+          if (dataReturn.error && !dataReturn.isLoggedIn) {
+            Swal.fire({
+              title: 'Sign Up Attempt Failed',
+              icon: 'error',
+              html: 'Please sign up again',
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
+          } else {
+            dispatch(signUp({ email: values.email }));
+            Swal.fire({
+              title: 'Sign Up Successful',
+              icon: 'success',
+              html: 'Redirecting to Home',
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            }).then(() => {
+              history.push('/dashboard', {
+                isLoggedIn: `${dataReturn.isLoggedIn}`,
+              });
+            });
+          }
+        },
+        onError: (error) => {
+          console.error('Sign Up error:', error);
+          Swal.fire({
+            title: 'Sign Up Attempt Failed',
+            icon: 'error',
+            html: 'Please try again later',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+        },
+      });
     },
   });
 
@@ -179,12 +193,6 @@ export default function SignUp() {
               </Grid>
             </Grid>
           </Box>
-          <Typography component="h5" variant="h5" style={{ color: 'green' }}>
-            Sign up Successful = {dataResp}
-          </Typography>
-          <Typography component="h5" variant="h5" style={{ color: 'red' }}>
-            {signUpError}
-          </Typography>
         </Box>
       </Container>
     </ThemeProvider>
