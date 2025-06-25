@@ -6,7 +6,8 @@
  * @returns
  */
 const checkAuth = (req, res, next) => {
-  if (!req.session.isLogged && !req.session.userName && !req.session.email) {
+  console.log('checkAuth => ', req.session);
+  if (!req.session.isLoggedIn && !req.session.userName && !req.session.email) {
     res.redirect('/signin');
     return;
   }

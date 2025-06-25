@@ -7,27 +7,37 @@ export default function DisplayBalance() {
   useEffect(() => {
     let mounted = true;
     async function getBalance() {
-      let url = `${process.env.REACT_APP_API_URL}/ledger`;
-      let result = await fetch(url, {
-        method: 'GET',
-        credentials: 'include',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          return data;
-        })
-        .catch((error) => console.error('error inside getbalance', error));
-
-      return result;
+      const url = `${process.env.REACT_APP_API_URL}/ledger`;
+      try {
+        const res = await fetch(url, {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Not authenticated or invalid response');
+        }
+        const data = await res.json();
+        return data;
+      } catch (error) {
+        console.error('error inside getbalance', error);
+      }
+      return null;
     }
 
-    let balanceInAcc = getBalance();
+    const balanceInAcc = getBalance();
 
     if (mounted) {
       balanceInAcc.then((data) => {
-        if (data.result && data.result.length > 0 && data.error == null) {
+        if (
+          data &&
+          data.result &&
+          data.result.length > 0 &&
+          data.error == null
+        ) {
           setBalance(data.result[0]['balance'].toFixed(2));
         } else {
+          setBalance(0);
           console.log('balance', 0);
         }
       });
